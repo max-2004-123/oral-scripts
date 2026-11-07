@@ -1,0 +1,921 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>報告完整指南｜離線版</title><style>*{box-sizing:border-box}body{margin:0;background:#f5f4f6;color:#222;font-family:Microsoft JhengHei,system-ui,sans-serif;line-height:1.8}main{max-width:1000px;margin:auto;background:#fff;padding:32px 40px}h1,h2,h3{line-height:1.4;overflow-wrap:anywhere}h2{margin-top:2em;color:#65006e;border-bottom:1px solid #ddd}p,li{overflow-wrap:anywhere}img{max-width:100%;height:auto}table{display:block;overflow-x:auto;border-collapse:collapse}td,th{border:1px solid #ddd;padding:8px;min-width:100px}pre{overflow:auto;padding:14px;background:#f2f2f2;white-space:pre}blockquote{border-left:4px solid #aaa;margin-left:0;padding-left:14px}a{overflow-wrap:anywhere}@media(max-width:600px){body{background:white}main{padding:20px 16px}body{font-size:17px}h1{font-size:25px}h2{font-size:21px}h3{font-size:19px}}</style></head><body><main><p><strong>離線版：</strong>正文與圖片可離線閱讀；公式以原始 LaTeX 文字呈現，流程圖以原始文字呈現。</p><p>﻿# 結合跨建築用電預測與智慧代理人之辦公建築能源管理決策支援框架 — 完整報告指南與圖文補充手冊</p>
+<blockquote>
+<p>[!IMPORTANT]
+<strong>報告核心主軸（一句話總結）</strong>：
+本研究針對辦公建築能源管理「<strong>跨建築泛化驗證不足</strong>」、「<strong>異常判定依賴單一規則</strong>」與「<strong>預測結果難以轉化為具體行動</strong>」三大痛點，以 <strong>BDG2 資料集（13 個場站、279 棟辦公建築）</strong> 為實證基礎，結合 <strong>Temporal Fusion Transformer (TFT)</strong> 機率區間預測、<strong>三層次異常判定規則（即時／排程／長期同儕）</strong> 與 <strong>LangGraph 智慧代理人（異常偵測 $\rightarrow$ 決策推理 $\rightarrow$ 建議生成）</strong>，打造從「數據預測」到「可執行節能決策」的端到端決策支援框架。</p>
+</blockquote>
+<hr>
+<h2>一、 報告時間配置與結構鳥瞰（共 34 頁）</h2>
+<p>建議依工工年會／口試常見之 <strong>15～20 分鐘</strong> 進行配速（若為 12～15 分鐘年會發表，文獻探討與評估指標公式頁可加速帶過，將重點放在 <strong>研究架構、雙重泛化結果、三層次異常規則與 AI Agent 輸出展示</strong>）：</p>
+<table>
+<thead>
+<tr>
+<th align="left">章節區塊</th>
+<th align="center">投影片頁碼</th>
+<th align="center">建議時間</th>
+<th align="left">報告重點與聽眾記憶點</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>0. 開場與大綱</strong></td>
+<td align="center">Slide 1–2</td>
+<td align="center">0.5 min</td>
+<td align="left">題目定位：跨建築預測 + 多層次異常 + AI Agent 決策支援</td>
+</tr>
+<tr>
+<td align="left"><strong>1. 研究背景與動機</strong></td>
+<td align="center">Slide 3–5</td>
+<td align="center">2.0 min</td>
+<td align="left">IEA 30% 能耗 / 34% 碳排；從「Forecast」到「Action」的斷鏈與三大研究目標</td>
+</tr>
+<tr>
+<td align="left"><strong>2. 文獻探討</strong></td>
+<td align="center">Slide 6–8</td>
+<td align="center">2.0 min</td>
+<td align="left">三大領域缺口：單一建築點預測、單一尺度異常、代理人集中於電網/控制端</td>
+</tr>
+<tr>
+<td align="left"><strong>3. 研究方法</strong></td>
+<td align="center">Slide 9–18</td>
+<td align="center">5.0 min</td>
+<td align="left">四階段架構、EUI 轉換與正規化、TFT 與 GRN 原理、三層異常規則、四大評估指標、LangGraph 三節點分工</td>
+</tr>
+<tr>
+<td align="left"><strong>4. 案例研究與實驗結果</strong></td>
+<td align="center">Slide 19–30</td>
+<td align="center">6.5 min</td>
+<td align="left">BDG2 279 棟資料與 $K=3$ 雙重泛化切分、TFT 點預測與機率區間表現、合成異常注入 Recall 驗證、BERTScore 與 UI Demo</td>
+</tr>
+<tr>
+<td align="left"><strong>5. 結論、貢獻與展望</strong></td>
+<td align="center">Slide 31–34</td>
+<td align="center">2.0 min</td>
+<td align="left">五維度文獻比較表、三大實務與學術貢獻、四大研究限制與未來發展（遷移學習／自適應門檻）</td>
+</tr>
+</tbody></table>
+<pre><code class="language-mermaid">flowchart LR
+    subgraph S1[&quot;第一階段：資料前處理 (Slide 10, 19-21)&quot;]
+        A1[&quot;BDG2 資料集\n13場站 / 279棟辦公建築&quot;] --&gt; A2[&quot;特徵工程與補值\nEUI轉換 + lag_1h/24h/168h&quot;]
+        A2 --&gt; A3[&quot;雙重泛化資料切分\n時間切分 + Group K-Fold (K=3)&quot;]
+    end
+
+    subgraph S2[&quot;第二階段：跨建築用電預測 (Slide 11-12, 22-26)&quot;]
+        B1[&quot;TFT 時序融合轉換器\nVSN + LSTM + Multi-Head Attention + GRN&quot;] --&gt; B2[&quot;點預測 (q50)\nMAE / RMSE / R²&quot;]
+        B1 --&gt; B3[&quot;機率預測區間 (q10~q90)\n80% PI / CRPS / Coverage&quot;]
+    end
+
+    subgraph S3[&quot;第三階段：LangGraph 智慧代理人 (Slide 13, 18, 27-30)&quot;]
+        C1[&quot;節點1：異常偵測節點\n規則一：預測區間超出 (即時)\n規則二：時段違常 (排程)\n規則三：同儕落後 (長期)&quot;] --&gt; C2[&quot;節點2：決策推理節點\n解析數值證據 → 推論成因\n生成決策理由與情境指令&quot;]
+        C2 --&gt; C3[&quot;節點3：建議生成節點\n依情境指令生成具體節能建議\n(近期檢查 / 排程調整 / 參考效益)&quot;]
+    end
+
+    S1 --&gt; S2 --&gt; S3
+</code></pre>
+<hr>
+<h2>二、 逐頁完整資訊整理、精修講稿與圖表補充（Slide 1 ~ Slide 34）</h2>
+<h3>Slide 1–2：封面與報告大綱</h3>
+<ul>
+<li><strong>投影片資訊</strong>：<ul>
+<li>題目：結合跨建築用電預測與智慧代理人之辦公建築能源管理決策支援框架 (<em>An AI Agent-Based Decision Support Framework for Office Building Energy Management Integrating Cross-Building Electricity Forecasting</em>)</li>
+<li>報告者：陳姵頤｜指導教授：邱銘傳 教授（國立清華大學工業工程與工程管理學系）</li>
+<li>五大章節：01 研究背景、02 文獻探討、03 研究方法、04 案例研究、05 結論與貢獻。</li>
+</ul>
+</li>
+<li><strong>精修口頭講稿</strong>：<blockquote>
+<p>「各位委員／老師、各位先進好，我是清華大學工工系的陳姵頤，指導教授是邱銘傳教授。今天要報告的題目是『結合跨建築用電預測與智慧代理人之辦公建築能源管理決策支援框架』。本次報告將依序從研究背景與動機、文獻探討、研究方法、案例研究實證結果，以及最後的結論與貢獻向各位進行介紹。」</p>
+</blockquote>
+</li>
+</ul>
+<hr>
+<h3>Slide 3：研究背景 — 建築能源管理與淨零排放</h3>
+<ul>
+<li><strong>核心數據與背景知識（背誦重點）</strong>：<ul>
+<li><strong>全球能源消耗占比</strong>：根據國際能源總署（IEA, 2024）統計，建築部門用電量約占全球能源總消耗量的 <strong>30%</strong>。</li>
+<li><strong>全球碳排放占比</strong>：2023 年建築部門貢獻全球能源相關 $\text{CO}_2$ 排放量的 <strong>34%</strong>，達到 <strong>98 億公噸（$9.8\text{ GtCO}_2$）</strong> 的歷史新高。</li>
+<li><strong>為什麼鎖定「辦公建築」？（論文第 1 章補充）</strong>：商業與公共建築約占建築部門總能耗之 <strong>30%</strong>；其中辦公建築受人員作息、設備排程與空調系統（HVAC）運作影響極大，用電波動與異常頻繁，管理挑戰性高且節能潛力大。</li>
+</ul>
+</li>
+<li><strong>精修口頭講稿</strong>：<blockquote>
+<p>「首先是研究背景。隨著全球能源需求持續攀升與氣候變遷加劇，根據國際能源總署 IEA 統計，建築部門耗電量約占全球能源總消耗的 30%，而在 2023 年更貢獻了全球能源相關二氧化碳排放量的 34%，達到 98 億公噸的歷史新高。其中，辦公建築受人員作息、空調與排程影響大，因此如何做好辦公建築的用電管理，已成為提升能源效率與達成淨零排放的關鍵議題。」</p>
+</blockquote>
+</li>
+</ul>
+<hr>
+<h3>Slide 4：研究動機 — 從「預測」到「行動」的斷鏈</h3>
+<ul>
+<li><strong>核心概念鏈</strong>：<blockquote>
+<p><strong>數據 (Data)</strong> $\longrightarrow$ <strong>預測 (Forecast)</strong> $\longrightarrow$ <strong>異常判定 (Anomaly)</strong> $\longrightarrow$ <strong>❓（目前斷鏈處）</strong> $\longrightarrow$ <strong>採取行動 (Action)</strong></p>
+</blockquote>
+</li>
+</ul>
+<pre><code class="language-mermaid">flowchart LR
+    D[&quot;📊 數據 (Data)&quot;] --&gt; F[&quot;📈 預測 (Forecast)&quot;]
+    F --&gt; A[&quot;⚠️ 異常判定 (Anomaly)&quot;]
+    A -. &quot;❓ 目前斷鏈處\n(缺乏具體決策轉譯)&quot; .-&gt; Act[&quot;🛠️ 採取行動 (Action)&quot;]
+    style Act stroke-dasharray: 5 5,stroke:#d9534f,stroke-width:2px
+</code></pre>
+<ul>
+<li><strong>現有建築能源管理的三項限制</strong>：<ol>
+<li><strong>跨建築泛化能力之驗證不足</strong>：現有研究多以單一或少量建築訓練與驗證，當新建築導入能源管理平台、缺乏歷史資料時，模型表現未知。</li>
+<li><strong>異常判定多依賴單一規則</strong>：用電異常其實涵蓋「突發設備異常」、「下班未關機排程異常」與「長期設備老舊能效落後」等不同時間尺度，單一門檻無法全面捕捉。</li>
+<li><strong>預測結果尚未充分銜接為具體行動</strong>：管理人員拿到的是「明日預測幾度電」的數值，但不知道「何時算異常、原因是什麼、該檢查哪裡」。</li>
+</ol>
+</li>
+<li><strong>精修口頭講稿</strong>：<blockquote>
+<p>「然而，檢視目前的建築能源管理流程，從數據收集、用電預測、異常判定到最終採取行動，仍存在三項主要限制：第一，現有研究多針對單一或少數建築進行驗證，對『未見新建築』的跨建築泛化能力驗證不足；第二，異常判定多依賴單一片面規則，忽略了用電異常其實具有不同時間尺度與樣態；第三，也是最關鍵的，預測結果尚未充分銜接為具體的節能行動。換言之，現在的研究挑戰已經不只是『能不能準確預測』，而是『預測之後能不能轉化為可執行的管理決策』。」</p>
+</blockquote>
+</li>
+</ul>
+<hr>
+<h3>Slide 5：研究目標</h3>
+<ul>
+<li><strong>三大研究目標對應關係</strong>：<ol>
+<li><strong>建構具跨建築泛化能力之用電預測模型</strong>：整合建築靜態屬性（樓地板面積、建築／場站 ID）、氣象資訊與歷史用電特徵，預測辦公建築未來用電量，並驗證於「已見建築」與「未見建築」之表現。</li>
+<li><strong>建立多層次異常用電判定機制</strong>：結合 <strong>預測區間（即時偏離）</strong>、<strong>離峰用電基準（時段排程違常）</strong> 與 <strong>同儕比較（長期結構性能效落後）</strong>，辨識不同層級之異常用電。</li>
+<li><strong>整合智慧代理人生成可執行之節能建議</strong>：依據異常類型與數值證據推理可能成因，產生具體之節能改善方案，降低能源管理者之判讀門檻。</li>
+</ol>
+</li>
+<li><strong>精修口頭講稿</strong>：<blockquote>
+<p>「基於上述動機，本研究設定三個核心目標：第一，整合建築靜態屬性、氣象與歷史用電特徵，建構具跨建築泛化能力的用電預測模型；第二，結合預測區間、離峰用電基準與同儕比較，建立涵蓋短、中、長期的多層次異常判定機制；第三，將預測與異常數值證據輸入智慧代理人，推理異常成因並生成具體可執行的節能建議。」</p>
+</blockquote>
+</li>
+</ul>
+<hr>
+<h3>Slide 6–8：文獻探討（1/3 ~ 3/3）</h3>
+<ul>
+<li><strong>三頁文獻脈絡與研究缺口總整理</strong>：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">面向</th>
+<th align="left">代表文獻與核心方法</th>
+<th align="left">既有研究缺口（Research Gap）與本研究突破點</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>1. 建築能源預測</strong><br>(Slide 6)</td>
+<td align="left">• <strong>Kong et al. (2017)</strong>：採用 LSTM 進行住宅短期負載預測，捕捉長期時間依賴。<br>• <strong>Fan et al. (2017/2018)</strong>：以深度學習建立短期建築空調負載預測，掌握非線性特性。<br>• <strong>Lim et al. (2021)</strong>：提出 <strong>TFT</strong>，整合變數選擇、LSTM、自注意力與分位數輸出，可同時做點預測與不確定性估計。</td>
+<td align="left"><strong>缺口</strong>：多聚焦於單一建築點預測，較少同時驗證對「未見建築」之泛化能力，亦鮮少將機率式預測區間串接至異常判定與決策支援。<br><strong>突破</strong>：驗證時間＋建築雙重泛化，並以 TFT 80% 預測區間作為異常判定基準。</td>
+</tr>
+<tr>
+<td align="left"><strong>2. 異常用電分析</strong><br>(Slide 7)</td>
+<td align="left">• <strong>Fan et al. (2018)</strong>：將自編碼器（Autoencoder）用於建築能耗非監督式異常偵測（利用重建誤差，免標註）。<br>• <strong>Zhang et al. (2023)</strong>：結合圖卷積網路（GCN）與圖注意力機制（GAT）進行多變量時間序列異常偵測。<br>• <strong>Mao et al. (2024/2025)</strong>：結合預測模組與隨機森林偵測模組，處理非穩態、非線性用電序列。</td>
+<td align="left"><strong>缺口</strong>：多採單一層次異常偵測，未同時涵蓋即時突發、非營業排程與長期同儕能效落後。<br><strong>突破</strong>：設計三層次異常判定機制（規則一～三），並透過合成異常注入驗證敏感度。</td>
+</tr>
+<tr>
+<td align="left"><strong>3. 智慧代理人於能源管理</strong><br>(Slide 8)</td>
+<td align="left">• <strong>McArthur et al. (2007/2017)</strong>：整理多代理人系統（MAS）於電力工程之概念、架構與標準。<br>• <strong>Yao et al. (2023)</strong>：提出 <strong>ReAct 框架</strong>（Reasoning + Acting），交錯生成推理過程與行動指令。<br>• <strong>Ji et al. (2025)</strong>：提出結合 LLM 與多代理人之電網服務異常偵測框架（LEMAD），進行日誌解析與異常決策。</td>
+<td align="left"><strong>缺口</strong>：現有能源代理人多聚焦於供給端電網異常或底層控制調度，缺乏在需求端（辦公建築）整合用電預測、異常判定與節能建議生成的決策支援流程。<br><strong>突破</strong>：以 LangGraph 實作三節點分工（規則數值判定 + LLM 語意推理與生成）。</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>精修口頭講稿（Slide 6–8 連貫講法）</strong>：<blockquote>
+<p>「文獻探討分為三個面向。首先是建築能源預測（Slide 6）：過去學者如 Kong 與 Fan 分別驗證了 LSTM 與深度學習在短期負載預測的有效性；而 Lim 等人於 2021 年提出的 Temporal Fusion Transformer (TFT)，結合了變數選擇、LSTM、自注意力與分位數輸出，也是本研究採用的核心模型。然而，既有研究多聚焦單一建築，較少檢驗對『未見新建築』的泛化能力，也少將機率區間用於後續決策。
+接著在異常用電分析方面（Slide 7）：Fan、Zhang 與 Mao 等學者分別透過自編碼器重建誤差、圖注意力網路與隨機森林進行異常偵測；但多聚焦於單一時間尺度的異常，因此本研究設計了涵蓋即時、排程與長期同儕的三層次異常判定機制。
+最後在智慧代理人方面（Slide 8）：從早期 McArthur 的電力多代理人系統，到近年 Yao 等人提出的 ReAct『推理—行動』框架，以及 Ji 等人將 LLM 用於電網異常偵測；可以發現既有研究多集中於供給端電網或設備控制，較少在需求端建築場域提供整合『預測、異常判定到建議生成』的決策支援，這正是本研究欲填補的缺口。」</p>
+</blockquote>
+</li>
+</ul>
+<hr>
+<h3>Slide 9：研究方法 — 研究架構</h3>
+<p><img src="./%E5%A0%B1%E5%91%8A%E8%A3%9C%E5%85%85%E5%9C%96%E7%89%87/docx_image6.png" alt="研究整體架構圖（論文圖 3.1.1 與簡報架構對照）"></p>
+<ul>
+<li><strong>投影片四大階段流程（配合動畫 <code>(按)</code> 節奏）</strong>：<ol>
+<li><strong>資料前處理</strong>：整合建築歷史用電、氣候數據、建築靜態屬性 $\rightarrow$ 缺失值處理、正規化與 EUI 轉換 $\rightarrow$ 切分為訓練集、驗證集、已見建築測試集、未見建築測試集。</li>
+<li><strong>用電預測模型（模型訓練）</strong>：以 <strong>TFT (Temporal Fusion Transformer)</strong> 為核心，輸出「實際觀測數據比對基準」與「<strong>機率預測區間</strong>」。</li>
+<li><strong>智慧代理人（LangGraph 架構）</strong>：串接三個獨立節點：<ul>
+<li><strong>異常偵測節點（規則判定）</strong>：接收實際值與預測區間，執行三層規則判定。</li>
+<li><strong>決策推理節點（Reasoning Engine）</strong>：接收異常類型與數值證據，推理可能成因並生成情境指令。</li>
+<li><strong>建議生成節點（ChatGPT-4o mini）</strong>：依決策理由與情境指令生成具體節能建議。</li>
+</ul>
+</li>
+<li><strong>使用者介面（介面輸出）</strong>：視覺化呈現「異常相關資訊」與「節能建議生成」。</li>
+</ol>
+</li>
+</ul>
+<blockquote>
+<p>[!NOTE]
+<strong>簡報與論文小差異提醒（口試防禦必知）</strong>：
+簡報 Slide 9 與 Slide 18 標示建議生成模型為 <strong>ChatGPT-4o mini</strong>；而完整碩士論文文稿中，亦包含導入 <strong>Gemma 4 + CAG（Cache-Augmented Generation 固定上下文增強生成）</strong> 以及 <strong>跨場站階層式分群（Hierarchical Clustering）</strong> 的延伸實驗。報告時請依簡報講述「ChatGPT-4o mini 與三節點分工」，若委員追問如何防止幻覺或跨場站氣候差異，即可補充論文中的 CAG 固定上下文約束與場站分群消融實驗！</p>
+</blockquote>
+<ul>
+<li><strong>精修口頭講稿</strong>：<blockquote>
+<p>「本研究架構分為四個階段。首先在資料前處理階段，我們整合建築歷史用電、氣候數據與建築靜態屬性，經過缺值插值與正規化後，切分為訓練集、驗證集，以及『已見測試集』與『未見測試集』。（按）第二階段模型訓練以 TFT 為核心，除了點預測外，關鍵在於輸出『機率預測區間』。（按）第三階段由 LangGraph 建構智慧代理人，串接『異常偵測節點』、『決策推理節點』與『建議生成節點』。（按）最終透過使用者介面，向能源管理者輸出結構化的異常診斷資訊與具體的節能行動建議。」</p>
+</blockquote>
+</li>
+</ul>
+<hr>
+<h3>Slide 10：研究方法 — 資料前處理</h3>
+<ul>
+<li><strong>四大核心處理步驟</strong>：<ol>
+<li><strong>資料集來源</strong>：The Building Data Genome 2 (BDG2) 資料集，整合三類資料（建築靜態資料、歷史用電、氣象資料）。</li>
+<li><strong>缺值處理（線性插值法）</strong>：</li>
+</ol>
+</li>
+</ul>
+<p>$$\hat{x}<em>t = x</em>{t_1} + \frac{t - t_1}{t_2 - t_1}(x_{t_2} - x_{t_1})$$</p>
+<pre><code> 依各建築或場站自身時間序列進行線性插值，序列首尾以最近有效觀測值前向／後向遞補（ffill / bfill）。
+</code></pre>
+<ol start="3">
+<li><strong>特徵正規化設計</strong>：<ul>
+<li><strong>已知連續特徵（如氣象變數、樓地板面積）</strong>：採全域 <strong>Min-Max 正規化</strong> 縮放至一致尺度。</li>
+<li><strong>預測目標（單位面積用電強度 EUI, <code>load_intensity</code>）</strong>：採用 <code>pytorch_forecasting</code> 的 <strong>EncoderNormalizer</strong>（搭配 <code>softplus</code> 轉換確保還原值恆為非負），依各樣本自身的**編碼歷史窗格（過去 168 小時）**進行正規化，使模型在面對未見新建築時，不需依賴該建築的全期歷史極值即可推論！</li>
+</ul>
+</li>
+<li><strong>雙層級資料切分</strong>：同時依「時間順序」與「建築群組」切分，評估跨時間與跨建築泛化能力。</li>
+</ol>
+<ul>
+<li><strong>精修口頭講稿</strong>：<blockquote>
+<p>「在資料前處理部分，我們使用 BDG2 公開資料集，整合建築靜態屬性、歷史用電與氣象三類資料。首先透過線性插值法補齊時間序列缺值；針對氣象與樓地板面積等已知特徵，採用全域 Min-Max 正規化；而預測目標『單位面積用電強度』，則採用 EncoderNormalizer 依據各樣本自身的編碼歷史窗格進行正規化，確保面對新建築時仍能穩定推論。最後再依建築層級與時間層級進行切分。」</p>
+</blockquote>
+</li>
+</ul>
+<hr>
+<h3>Slide 11：研究方法 — 模型訓練 (1/2)：Temporal Fusion Transformer (TFT)</h3>
+<p><img src="./%E5%A0%B1%E5%91%8A%E8%A3%9C%E5%85%85%E5%9C%96%E7%89%87/pptx_image20.png" alt="Temporal Fusion Transformer (TFT) 架構圖"></p>
+<ul>
+<li><strong>TFT 核心組件與選用三大理由（配合簡報動畫 <code>(按)</code>）</strong>：<ol>
+<li><strong>變數選擇網路（Variable Selection Network, VSN）</strong>：在每個時間點動態計算不同輸入特徵的重要性權重（$\xi_t = \sum_j v_t^{(j)} \tilde{\xi}_t^{(j)}$），自動過濾冗餘或無關特徵，專注於最具影響力的氣候與歷史延遲數據。</li>
+<li><strong>LSTM 編碼解碼器 + 遮罩式多頭自注意力機制（Masked Multi-Head Attention）</strong>：<ul>
+<li><strong>LSTM Encoder-Decoder</strong>：捕捉局部時序與<strong>短期用電慣性</strong>（如前幾小時的負載波動）。</li>
+<li><strong>Multi-Head Attention</strong>：學習<strong>一週以上（168 小時歷史窗格）的長期排程依賴</strong>（如工作日 vs. 假日週期）。</li>
+<li><strong>Static Covariate Encoders（靜態特徵增強）</strong>：將 <code>building_id</code>、<code>site_id</code>、<code>sqm</code> 編碼為上下文向量，調節時間特徵。</li>
+</ul>
+</li>
+<li><strong>機率區間輸出（Quantile Forecasts）</strong>：透過分位數損失函數（Quantile Loss），在單次前向傳播中同時輸出多個分位數（$q \in {0.1, 0.5, 0.9}$），其中 $q_{0.5}$ 作為點預測，而 $[q_{0.1}, q_{0.9}]$ 構成 <strong>80% 預測區間</strong>，作為後續異常判定的科學基準。</li>
+</ol>
+</li>
+<li><strong>精修口頭講稿</strong>：<blockquote>
+<p>「本研究選用 TFT 作為核心預測模型，它主要由變數選擇網路、LSTM 編碼解碼器、靜態特徵增強、時間自注意力機制與位置前饋層所組成，能同時處理靜態特徵、歷史觀測特徵與已知未來特徵。選用 TFT 有三個關鍵原因：第一，變數選擇網路能在每個時間點動態計算特徵權重，自動過濾冗餘變數；第二，結合 LSTM 與多頭自注意力機制，能同時捕捉短期用電慣性與一週以上的長期排程依賴；第三，TFT 除了輸出點預測外，還能同時輸出多個分位數形成『機率預測區間』，這正是本研究後續異常判定的核心科學基準。」</p>
+</blockquote>
+</li>
+</ul>
+<hr>
+<h3>Slide 12：研究方法 — 模型訓練 (2/2)：門控殘差網路 (GRN)</h3>
+<p><img src="./%E5%A0%B1%E5%91%8A%E8%A3%9C%E5%85%85%E5%9C%96%E7%89%87/pptx_image21.png" alt="Gated Residual Network (GRN) 結構圖"></p>
+<ul>
+<li><strong>GRN 數學公式與五個步驟解析（對應簡報表格由下往上之資料流）</strong>：</li>
+</ul>
+<p>$$\text{GRN}(a, c) = \text{LayerNorm}\left(a + \text{GLU}(\eta_1)\right), \quad \eta_1 = W_1 \eta_2 + b_1, \quad \eta_2 = \text{ELU}(W_2 a + W_3 c + b_2)$$</p>
+<ol>
+<li><strong>主要輸入 $a$（Primary Input）</strong>：進入 GRN 的原始輸入向量（如某時間點之氣溫或歷史用電特徵），作為非線性轉換與殘差連接的基礎。</li>
+<li><strong>上下文向量 $c$（External Context）</strong>：由靜態共變數編碼器提供的建築靜態屬性情境資訊，可選擇性地與主要輸入 $a$ 一同影響轉換結果。</li>
+<li><strong>$\text{ELU}$ 非線性轉換（Dense + ELU）</strong>：將 $a$ 與 $c$ 線性投影後，透過 $\text{ELU}$（Exponential Linear Unit）活化函數產生非線性中間表示 $\eta_2$，捕捉特徵間的非線性交互關係。</li>
+<li><strong>$\text{GLU}$ 閘門（Gated Linear Unit）</strong>：透過 $\text{GLU}(\gamma) = \sigma(W_4 \gamma + b_4) \odot (W_5 \gamma + b_5)$ 控制此次非線性轉換要「放行或抑制多少」（輸出介於 $0 \sim 1$ 的閘控權重）。若資料情境簡單、不需要複雜非線性轉換，GLU 可將權重壓近於 $0$，等效跳過該層，<strong>抑制不必要的模型複雜度並防止過擬合</strong>。</li>
+<li><strong>$\text{Add &amp; Norm}$（殘差連接 + 層正規化）</strong>：將閘門輸出與原始輸入 $a$ 做殘差相加（Residual Connection），再進行 Layer Normalization，確保深層網路訓練穩定、保留原始資訊並避免梯度消失。</li>
+</ol>
+<ul>
+<li><strong>精修口頭講稿</strong>：<blockquote>
+<p>「這頁進一步說明在 TFT 架構中反覆出現的核心組件——GRN 門控殘差網路，它在變數選擇與靜態特徵增強中都扮演關鍵角色。看著右圖由下往上：（按）首先輸入某時間點的主要特徵向量 $a$，（按）同時將建築靜態屬性編碼後的上下文向量 $c$ 一併輸入；（按）接著透過 ELU 激活函數將主要輸入與上下文整合，做非線性轉換；（按）轉換後經過 GLU 閘門，讓模型能依資料情境動態決定要保留多少非線性轉換結果，抑制不必要的複雜度；（按）最後將 GLU 輸出與原始輸入 $a$ 進行殘差相加並做層正規化（Add &amp; Norm），確保訓練穩定並避免梯度消失。」</p>
+</blockquote>
+</li>
+</ul>
+<hr>
+<h3>Slide 13：研究方法／案例研究 — 多層次異常判定規則</h3>
+<ul>
+<li><strong>三層次異常判定機制完整對照表</strong>：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">規則名稱</th>
+<th align="center">時間尺度</th>
+<th align="left">邏輯與數學條件</th>
+<th align="left">物理與管理意義（可能成因与改善方向）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>規則一：預測區間超出</strong><br>(<em>Prediction Interval Exceeded</em>)</td>
+<td align="center"><strong>即時性</strong><br>(Real-time / Hourly)</td>
+<td align="left">實際用電強度落在 TFT 80% 預測區間外：<br>$y_{i,t} &gt; \hat{y}<em>{i,t}^{(0.9)}$（高異常）或 $y</em>{i,t} &lt; \hat{y}_{i,t}^{(0.1)}$（低異常）</td>
+<td align="left"><strong>突發性設備異常或感測失效</strong>：如大型機電／空調設備異常啟動、感測器讀值突變、電表校正異常或當日臨時高耗能作業。</td>
+</tr>
+<tr>
+<td align="left"><strong>規則二：時段違常</strong><br>(<em>Time Period Anomaly</em>)</td>
+<td align="center"><strong>排程性</strong><br>(Off-hours / Daily)</td>
+<td align="left">於非辦公／離峰時段（$t \in \mathcal{T}<em>{\text{off}}$，如深夜或週末假日），實際用電強度顯著高於該建築自身離峰基準 $B</em>{i,\text{off}}$</td>
+<td align="left"><strong>排程設定錯誤或人為疏漏</strong>：下班後人員未關閉空調／照明設備、加班未做分區控制、或 BAS／定時器排程關閉時間延遲。</td>
+</tr>
+<tr>
+<td align="left"><strong>規則三：同儕落後</strong><br>(<em>Peer Lag</em>)</td>
+<td align="center"><strong>長期結構性</strong><br>(Structural / Weekly~Long-term)</td>
+<td align="left">觀察期間內建築累積／平均單位面積用電強度（EUI）排名落於同規模／同場站同儕建築之 <strong>$&gt; 80\text{th}$ 百分位</strong>（$P_i &gt; 0.8$）</td>
+<td align="left"><strong>長期結構性耗能問題</strong>：空調主機或照明系統老舊效率低落、外殼隔熱不佳，需進行能效盤點、硬體汰換（如導入 VRF 變頻系統）或 EMS 導入。</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>精修口頭講稿</strong>：<blockquote>
+<p>「為了克服單一異常規則的限制，本研究設計了多層次異常判定機制，涵蓋三種不同時間尺度的異常樣態：
+『規則一：預測區間超出』是當實際用電大於 TFT 預測的 80% 區間上限，對應即時性的突發設備異常或感測器失效；
+『規則二：時段違常』是針對深夜或假日等非辦公時段，用電強度顯著高於該建築自身離峰基準，對應人員下班未關設備或排程設定錯誤；
+『規則三：同儕落後』則是比較一段期間內的單位面積用電強度 EUI，若排名落後於同規模同儕建築的第 80 百分位以上，則對應長期結構性的耗能問題，需從設備汰換或系統改善著手。」</p>
+</blockquote>
+</li>
+</ul>
+<hr>
+<h3>Slide 14–17：研究方法 — 評估指標 (1/4 ~ 4/4)</h3>
+<ul>
+<li><strong>四頁評估指標公式、特性與判讀標準總整理</strong>：</li>
+</ul>
+<h4>1. 點預測效能指標（Slide 14）— 評估預測準確度（反正規化後之真實物理單位 $\text{kWh/m}^2$）</h4>
+<ul>
+<li><strong>均方根誤差 (RMSE)</strong>：$\text{RMSE} = \sqrt{\frac{1}{n}\sum_{k=1}^{n}(y_k - \hat{y}_k)^2}$ —— 因誤差平方，<strong>對極端誤差（尖峰預測失準）較敏感</strong>，單位與原始 EUI 一致（越小越好）。</li>
+<li><strong>平均絕對誤差 (MAE)</strong>：$\text{MAE} = \frac{1}{n}\sum_{k=1}^{n}|y_k - \hat{y}_k|$ —— 反映<strong>一般正常時段下的平均預測偏差</strong>，不受單一極端值過度放大（越小越好）。</li>
+<li><strong>決定係數 ($R^2$)</strong>：$R^2 = 1 - \frac{\sum_{k=1}^{n}(y_k - \hat{y}<em>k)^2}{\sum</em>{k=1}^{n}(y_k - \bar{y})^2}$ —— 反映模型對<strong>實際用電變異趨勢的整體解釋能力</strong>（越接近 $1$ 越好）。</li>
+</ul>
+<h4>2. 機率預測效能指標（Slide 15）— 評估 TFT 預測分布與區間可靠度</h4>
+<ul>
+<li><strong>連續分級機率評分 (CRPS)</strong>：</li>
+</ul>
+<p>$$\text{CRPS}(F_k, y_k) = \int_{-\infty}^{\infty} \left[F_k(z) - \mathbf{1}(z \ge y_k)\right]^2 dz$$</p>
+<p>  衡量模型輸出的<strong>完整累積機率分布 $F_k(z)$ 與實際觀測值 $y_k$ 之間的差異</strong>（可視為機率版的 MAE，同時評估準確度與分布集中度，<strong>數值越小越好</strong>）。</p>
+<ul>
+<li><strong>80% 預測區間覆蓋率 (PICP / Coverage)</strong>：</li>
+</ul>
+<p>$$\text{Coverage}<em>{80%} = \frac{1}{n}\sum</em>{k=1}^{n} \mathbf{1}\left(\hat{y}_k^{(0.1)} \le y_k \le \hat{y}_k^{(0.9)}\right)$$</p>
+<p>  計算實際觀測值落在 $[q_{0.1}, q_{0.9}]$ 區間內的比例，檢驗區間校準能力（Calibration），<strong>越接近理論值 80% 代表區間校準越佳</strong>。</p>
+<ul>
+<li><em>口試補充（講稿備忘）</em>：CRPS 評估整個機率分布有沒有準確落在真實值附近；80% 覆蓋率則是單純檢驗 $[q_{0.1}, q_{0.9}]$ 這一個特定區間的校準程度。</li>
+</ul>
+<h4>3. 異常判定效能指標（Slide 16）— 合成異常注入測試（Synthetic Anomaly Injection）</h4>
+<ul>
+<li><strong>為什麼採用合成異常注入且只算 Recall？（必考防衛題！）</strong>：<ul>
+<li>BDG2 屬於真實建築電表資料，<strong>缺乏人工標註的異常真實標籤（Ground Truth）</strong>。</li>
+<li>參考 <strong>Darban et al. (2024)</strong> 在時間序列異常偵測綜述中的驗證方法，透過在資料中人工注入不同嚴重度（輕度／中度／重度）的合成異常（$y_t^{\text{inj}} = \alpha \cdot y_t$），我們能確知「注入點」必為異常，因此可準確計算 <strong>TP（成功抓到的注入異常）</strong> 與 <strong>FN（漏掉的注入異常）</strong>。</li>
+<li>至於未注入的背景資料屬於「未標記（Unlabeled）」而非「確認 100% 正常」，因此無法可靠計算 FP（False Positive）與 Precision。故採用 <strong>偵測率（Recall）</strong> 檢驗規則對不同異常強度的敏感度：</li>
+</ul>
+</li>
+</ul>
+<p>$$\text{Recall} = \frac{\text{TP}}{\text{TP} + \text{FN}}$$</p>
+<p>  數值越接近 $1$，代表漏報越少、對異常事件敏感度越高。</p>
+<h4>4. 文本語意一致性指標（Slide 17）— BERTScore</h4>
+<ul>
+<li><strong>為什麼不用 BLEU / ROUGE，而用 BERTScore？</strong>：自然語言建議不需要與專家範例逐字相同（字面重疊度低不代表語意錯），BERTScore 透過預訓練語言模型將詞元轉為上下文語意向量（Contextual Embeddings），計算餘弦相似度：<ul>
+<li>$P_{\text{BERT}} = \frac{1}{|\hat{y}|}\sum_{\hat{y}<em>i \in \hat{y}} \max</em>{y_j \in y} \cos(\mathbf{e}(\hat{y}_i), \mathbf{e}(y_j))$：衡量<strong>生成文本內容有多少能在參考文本中找到語意對應</strong>（精確度）。</li>
+<li>$R_{\text{BERT}} = \frac{1}{|y|}\sum_{y_j \in y} \max_{\hat{y}_i \in \hat{y}} \cos(\mathbf{e}(\hat{y}_i), \mathbf{e}(y_j))$：衡量<strong>參考文本的重點有多少被生成文本涵蓋</strong>（覆蓋率）。</li>
+<li>$F1_{\text{BERT}} = \frac{2 P_{\text{BERT}} R_{\text{BERT}}}{P_{\text{BERT}} + R_{\text{BERT}}}$：綜合語意相似度（$&gt;0.85$ 代表語意一致性良好）。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3>Slide 18：研究方法 — 模型輸出（智慧代理人三節點分工）</h3>
+<pre><code class="language-mermaid">sequenceDiagram
+    autonumber
+    participant TFT as TFT 預測模型
+    participant N1 as 節點1：異常偵測節點&lt;br/&gt;(Rule-based 規則判定)
+    participant N2 as 節點2：決策推理節點&lt;br/&gt;(Reasoning Engine)
+    participant N3 as 節點3：情境/建議生成節點&lt;br/&gt;(LLM: ChatGPT-4o mini)
+    participant UI as 能源管理者介面 (UI)
+
+    TFT-&gt;&gt;N1: 輸入實際用電值 y_t 與 80% 預測區間 [q10, q90]
+    Note over N1: 比對三層次規則&lt;br/&gt;(避免讓 LLM 直接做算術比較)
+    N1-&gt;&gt;N2: 輸出結構化異常結果 E&lt;br/&gt;(異常類型、發生時間、偏離幅度數值證據)
+    Note over N2: 數值證據 → 語意判斷&lt;br/&gt;結合固定上下文 C 進行成因推論
+    N2-&gt;&gt;N3: 輸出決策理由 (R) + 動態情境指令 (Prompt I)
+    Note over N3: 語意判斷 → 具體行動建議&lt;br/&gt;依節能文獻與引用限制生成方案
+    N3-&gt;&gt;UI: 輸出最終結果：異常診斷 + 近期檢查/排程調整 + 量化參考效益
+</code></pre>
+<ul>
+<li><strong>為什麼要拆成三個獨立節點？（分工設計的核心貢獻）</strong>：<ol>
+<li><strong>規避 LLM 數值運算弱點与幻覺</strong>：大型語言模型不擅長直接對長序列浮點數進行門檻比對（He &amp; Jazizadeh, 2025; Liu et al., 2025），因此將「是否異常、超出多少百分比」完全交由確定性的 <strong>規則式異常偵測節點</strong> 負責。</li>
+<li><strong>提升可控性與可解釋性（呼應 ReAct 先推理、後行動）</strong>：讓 LLM 在每次呼叫時只專注單一任務——<strong>決策推理節點</strong>負責「由數值證據推論成因並組裝 Prompt（數值證據 $\rightarrow$ 語意判斷）」，<strong>建議生成節點</strong>負責「將語意判斷轉為具體檢查與排程步驟（語意判斷 $\rightarrow$ 具體行動建議）」，中間狀態保存在 LangGraph Shared State 中，全程可追溯。</li>
+</ol>
+</li>
+</ul>
+<hr>
+<h3>Slide 19–20：案例研究 — 資料前處理 (1/3 &amp; 2/3)</h3>
+<ul>
+<li><strong>資料集規模與篩選細節（論文表 4.1.1 &amp; 4.1.3 補充）</strong>：<ul>
+<li><strong>資料期間与頻率</strong>：2016 年 1 月至 2017 年 12 月（共 2 年），每小時一筆（Hourly）。</li>
+<li><strong>建築數量篩選</strong>：BDG2 原始有 307 棟辦公建築（14 個場站），排除整站資料品質不佳的 <code>Shrew</code> 場站及缺漏／異常過高之個別建築後，最終保留 <strong>279 棟辦公建築、涵蓋 13 個場站</strong>。</li>
+<li><strong>五大類輸入特徵與前處理流程</strong>：<ol>
+<li><strong>建築靜態資料</strong>：樓地板面積 <code>sqm</code>（全域 Min-Max 正規化）、<code>building_id</code> 與 <code>site_id</code>（Entity Embedding 實體嵌入）。</li>
+<li><strong>氣象資料（4 項）</strong>：氣溫 <code>airTemperature</code>（缺值 0.287%）、露點溫度 <code>dewTemperature</code>（缺值 0.321%）、風速 <code>windSpeed</code>（缺值 0.423%）、風向 <code>windDirection</code>（缺值 4.83%）。依各場站時間序列線性插值 + 首尾前後向遞補（註：海平面氣壓 <code>seaLvlPressure</code> 因單一場站完全缺漏，插值後仍缺 4.66% 故剔除）。</li>
+<li><strong>歷史用電與衍生特徵</strong>：<ul>
+<li>原始用電量 <code>meter_reading</code>（缺值 2.90%，依各建築線性插值 + 前後向遞補）。</li>
+<li><strong>預測目標 <code>load_intensity</code>（單位面積用電強度 EUI，單位：$\text{kWh/m}^2$）</strong>：</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<p>$$\text{EUI}<em>{i,t} = \frac{\text{meter_reading}</em>{i,t}}{\text{sqm}_i}$$</p>
+<pre><code>     **關鍵目的**：消除不同建築規模（大面積 vs. 小面積）差異，實現跨建築可比性，並以 `EncoderNormalizer` + `softplus` 轉換。
+   * **三組歷史延遲特徵（Lag Features）**：`lag_1h`（前 1 小時，捕捉短期負載慣性）、`lag_24h`（前 1 天，捕捉日週期）、`lag_168h`（前 1 週，捕捉週週期規律）。
+</code></pre>
+<hr>
+<h3>Slide 21：案例研究 — 資料前處理 (3/3)：雙重泛化資料切分策略</h3>
+<ul>
+<li><strong>雙重泛化驗證架構（Temporal Generalization + Building Generalization）</strong>：<ul>
+<li><strong>建築層級切分（Group K-Fold, $K=3$）</strong>：依場站分層，將 279 棟建築分為 3 組（每組約 93 棟）。每一輪固定以 2 組（約 186 棟）為「<strong>已見建築</strong>」，1 組（約 93 棟）為「<strong>未見建築</strong>」，輪替三輪使三輪未見建築互斥且完整涵蓋全部 279 棟建築，最終取三輪平均。</li>
+<li><strong>時間層級切分（依時間先後順序，避免資料洩漏 Data Leakage）</strong>：</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">資料集名稱</th>
+<th align="center">建築範圍</th>
+<th align="center">時間範圍</th>
+<th align="center">樣本筆數（占比）</th>
+<th align="left">驗證目的</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>訓練集 (Train)</strong></td>
+<td align="center">已見建築 (~186棟)</td>
+<td align="center">2016/01 – 2017/05 (17個月)</td>
+<td align="center">2,276,000 筆 (69.4%)</td>
+<td align="left">模型參數訓練</td>
+</tr>
+<tr>
+<td align="left"><strong>驗證集 (Validation)</strong></td>
+<td align="center">已見建築 (~186棟)</td>
+<td align="center">2017/06 – 2017/09 (4個月)</td>
+<td align="center">544,600 筆 (16.6%)</td>
+<td align="left">Optuna 超參數調整與 EarlyStopping</td>
+</tr>
+<tr>
+<td align="left"><strong>已見測試期 (Seen Test)</strong></td>
+<td align="center">已見建築 (~186棟)</td>
+<td align="center"><strong>2017/10 – 2017/12 (3個月)</strong></td>
+<td align="center">410,700 筆 (12.5%)</td>
+<td align="left"><strong>時間泛化驗證</strong>（已知建築預測未來）</td>
+</tr>
+<tr>
+<td align="left"><strong>未見測試期 (Unseen Test)</strong></td>
+<td align="center">未見建築 (~93棟)</td>
+<td align="center"><strong>2017/10 – 2017/12 (3個月)</strong></td>
+<td align="center">205,300 筆 (6.3%)</td>
+<td align="left"><strong>建築泛化驗證</strong>（全新建築零歷史導入）</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>[!TIP]
+<strong>關鍵設計巧思（委員超愛問）</strong>：</p>
+<ol>
+<li><strong>為什麼「已見測試集」與「未見測試集」都固定在 2017/10–2017/12？</strong>
+為了<strong>控制季節與氣候條件一致</strong>！這樣兩組測試集的表現差異，就會純粹反映「模型對新建築的跨建築泛化能力」，而不會混入季節或氣候差異的干擾。</li>
+<li><strong>為什麼 Group K-Fold 選 $K=3$ 而不是 $K=5$ 或 $10$？</strong>
+在<strong>評估穩健性與百萬筆時序資料訓練成本之間取得平衡</strong>。TFT 在 227 萬筆資料上訓練成本高，$K=3$ 已能確保全部 279 棟建築都輪替作為未見建築測試一次；若委員建議，可回答未來運算資源充裕時可擴展至 $K=5$ 進行敏感度分析。</li>
+</ol>
+</blockquote>
+<hr>
+<h3>Slide 22：案例研究 — 模型訓練（Optuna 超參數搜尋）</h3>
+<ul>
+<li><strong>四種比較模型之定位與最佳超參數表</strong>：<ul>
+<li><strong>比較基準定位</strong>：LSTM 與 GRU 代表循環神經網路（捕捉短期局部序列）；Vanilla Transformer 代表純自注意力架構；TFT 則結合兩者並具備變數選擇與靜態特徵整合。</li>
+<li><strong>Optuna 自動調參設定</strong>：四模型採用相同搜尋次數、最大訓練回合數與隨機種子，搭配 <strong>TPE Sampler</strong> 與 <strong>Median Pruner</strong>（初期表現不佳即提前終止試驗）。</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">模型</th>
+<th align="left">最佳超參數設定（Dropout 均為 0.1）</th>
+<th align="center">Learning Rate</th>
+<th align="center">Minimum Validation Loss</th>
+<th align="left">損失函數說明（關鍵！）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>LSTM</strong></td>
+<td align="left"><code>hidden_size=32</code>, <code>rnn_layers=2</code></td>
+<td align="center">$6.92 \times 10^{-5}$</td>
+<td align="center">$0.0171$</td>
+<td align="left">使用 <strong>RMSE Loss</strong></td>
+</tr>
+<tr>
+<td align="left"><strong>GRU</strong></td>
+<td align="left"><code>hidden_size=32</code>, <code>rnn_layers=2</code></td>
+<td align="center">$3.63 \times 10^{-5}$</td>
+<td align="center">$0.0147$</td>
+<td align="left">使用 <strong>RMSE Loss</strong></td>
+</tr>
+<tr>
+<td align="left"><strong>Vanilla Transformer</strong></td>
+<td align="left"><code>d_model=64</code>, <code>nhead=4</code>, <code>num_layers=2</code>, <code>dim_feedforward=128</code></td>
+<td align="center">$8.32 \times 10^{-5}$</td>
+<td align="center">$0.0123$</td>
+<td align="left">使用 <strong>RMSE Loss</strong></td>
+</tr>
+<tr>
+<td align="left"><strong>TFT (本研究)</strong></td>
+<td align="left"><code>hidden_size=32</code>, <code>lstm_layers=1</code>, <code>attention_head_size=1</code>, <code>hidden_continuous_size=16</code></td>
+<td align="center">$1.29 \times 10^{-5}$</td>
+<td align="center"><strong>$0.0074$</strong></td>
+<td align="left">使用 <strong>Quantile Loss</strong></td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>報告重點提醒</strong>：投影片右下角特別標註「<strong>計算方式不同</strong>」——因為前三者訓練損失是 RMSE Loss，而 TFT 是多組分位數加總的 Quantile Loss，所以這欄的 Validation Loss <strong>僅供各模型自身挑選最佳超參數與 EarlyStopping，不能直接跨模型比大小</strong>！真正的跨模型公平比較在下一頁（反正規化後的統一指標）。</li>
+</ul>
+<hr>
+<h3>Slide 23–24：案例研究 — 評估指標 (1/6 &amp; 2/6)：時間泛化 vs. 建築泛化點預測結果</h3>
+<ul>
+<li><strong>四模型於「時間泛化」與「建築泛化」之完整績效對照表</strong>：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">模型 (Model)</th>
+<th align="center">【時間泛化】MAE</th>
+<th align="center">【時間泛化】RMSE</th>
+<th align="center">【時間泛化】$R^2$</th>
+<th align="center">【建築泛化】MAE</th>
+<th align="center">【建築泛化】RMSE</th>
+<th align="center">【建築泛化】$R^2$</th>
+<th align="center">跨建築 RMSE 增幅 ($\Delta\text{RMSE}$)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>LSTM</strong></td>
+<td align="center">$0.0086$</td>
+<td align="center">$0.0198$</td>
+<td align="center">$0.882$</td>
+<td align="center">$0.0406$</td>
+<td align="center">$0.0582$</td>
+<td align="center">$0.783$</td>
+<td align="center">$+0.0384$</td>
+</tr>
+<tr>
+<td align="left"><strong>GRU</strong></td>
+<td align="center">$0.0115$</td>
+<td align="center">$0.0229$</td>
+<td align="center">$0.853$</td>
+<td align="center">$0.0624$</td>
+<td align="center">$0.0744$</td>
+<td align="center">$0.751$</td>
+<td align="center">$+0.0515$</td>
+</tr>
+<tr>
+<td align="left"><strong>Vanilla Transformer</strong></td>
+<td align="center">$0.0180$</td>
+<td align="center">$0.0363$</td>
+<td align="center">$0.719$</td>
+<td align="center">$0.0525$</td>
+<td align="center">$0.0809$</td>
+<td align="center">$0.694$</td>
+<td align="center">$+0.0446$</td>
+</tr>
+<tr>
+<td align="left"><strong>TFT (本研究)</strong></td>
+<td align="center"><strong>$0.0081$</strong></td>
+<td align="center"><strong>$0.0189$</strong></td>
+<td align="center"><strong>$0.903$</strong></td>
+<td align="center"><strong>$0.0350$</strong></td>
+<td align="center"><strong>$0.0543$</strong></td>
+<td align="center"><strong>$0.809$</strong></td>
+<td align="center"><strong>$+0.0354$ (最小)</strong></td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>關鍵數據解讀（Slide 23 &amp; 24 報告亮點）</strong>：<ol>
+<li><strong>時間泛化（Slide 23，已見建築未來時段）</strong>：TFT 的 MAE ($0.0081$)、RMSE ($0.0189$) 為四模型最低，$R^2$ 高達 <strong>$0.903$</strong>，證明其結合 LSTM 與自注意力機制能精準掌握已知建築的短期用電變化。</li>
+<li><strong>建築泛化（Slide 24，完全未見的新建築）</strong>：<ul>
+<li>四個模型的誤差皆比時間泛化上升（例如 TFT 的 RMSE 從 $0.0189$ 升至 $0.0543$），證實「零歷史資料的跨建築預測」確實更具挑戰性。</li>
+<li>然而，<strong>TFT 在建築泛化下依然全面奪冠</strong>（MAE $0.0350$、RMSE $0.0543$、$R^2 = 0.809$），且跨建築 RMSE 誤差增幅（$\Delta\text{RMSE} = 0.0354$）也是四模型中最小！這歸功於 TFT 的<strong>變數選擇網路（過濾雜訊）<strong>與</strong>靜態特徵上下文融合（Static Enrichment）</strong>，使其具備最穩定的跨建築泛化能力。</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<hr>
+<h3>Slide 25：案例研究 — 評估指標 (3/6)：TFT 機率預測與區間校準評估</h3>
+<p><img src="./%E5%A0%B1%E5%91%8A%E8%A3%9C%E5%85%85%E5%9C%96%E7%89%87/pptx_image36.png" alt="TFT 80% 預測區間實際覆蓋率比較圖"></p>
+<ul>
+<li><strong>CRPS 與 80% 預測區間覆蓋率數據</strong>：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">測試集情境</th>
+<th align="center">CRPS（越小越佳）</th>
+<th align="center">CRPS 相對上升倍數</th>
+<th align="center">80% 預測區間實際覆蓋率（理論值 80%）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>時間泛化（Seen Test）</strong></td>
+<td align="center"><strong>$0.0073$</strong></td>
+<td align="center">$1.00\times$ (基準)</td>
+<td align="center"><strong>$77.79%$</strong>（非常接近理論值 80%）</td>
+</tr>
+<tr>
+<td align="left"><strong>建築泛化（Unseen Test）</strong></td>
+<td align="center"><strong>$0.0281$</strong></td>
+<td align="center"><strong>$3.85\times$</strong></td>
+<td align="center"><strong>$70.67%$</strong>（下降約 7.12 個百分點）</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>深度洞察與方法論定位（非常重要！）</strong>：<ul>
+<li>在「時間泛化」下，實際覆蓋率達 <strong>77.79%</strong>，貼近理論值 80%，區間校準良好。</li>
+<li>在「建築泛化」下，受未見建築特徵分布偏移（<strong>Covariate Shift / Distribution Shift</strong>）影響，CRPS 上升 $3.85$ 倍，且 80% 預測區間覆蓋率降至 <strong>70.67%</strong>（代表約有 29.3% 的點會落在區間外，略高於預期的 20%）。</li>
+<li><strong>決策支援上的關鍵定位</strong>：正因未見建築存在分布偏移，本研究<strong>將 TFT 預測區間定位為「異常判定的輔助基準（異常候選觸發器）」，而非絕對標準</strong>！當用電超出區間時，交由後續智慧代理人結合時段與情境進行綜合推理與排查建議，而非直接武斷認定設備故障。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3>Slide 26：案例研究 — 評估指標 (4/6)：一日 24 小時用電強度預測曲線視覺化</h3>
+<p><img src="./%E5%A0%B1%E5%91%8A%E8%A3%9C%E5%85%85%E5%9C%96%E7%89%87/pptx_image37.png" alt="【時間泛化】已見建築 (Bobcat_office_Justine) 24 小時用電強度預測曲線"></p>
+<p><img src="./%E5%A0%B1%E5%91%8A%E8%A3%9C%E5%85%85%E5%9C%96%E7%89%87/pptx_image38.png" alt="【建築泛化】未見建築 (Bobcat_office_Melody) 24 小時用電強度預測曲線"></p>
+<ul>
+<li><strong>視覺化圖表關鍵觀察（左圖：時間泛化 <code>Bobcat_office_Justine</code> vs. 右圖：建築泛化 <code>Bobcat_office_Melody</code>）</strong>：<ol>
+<li><strong>紅線 GRU 的「尖峰系統性高估現象」</strong>：在左圖第 1、9、15 小時，以及右圖未見建築的第 3、10–12、17 小時尖峰處，GRU 明顯大幅高估用電強度。</li>
+<li><strong>綠線 Vanilla Transformer 的「過度平滑（Over-smoothing）現象」</strong>：綠線幾乎拉成一條平緩曲線，對日內尖峰與低谷轉折反應極度遲鈍（傾向輸出平均化結果），解釋了為何其 $R^2$ 最低（$0.719 / 0.694$）。</li>
+<li><strong>紫線 TFT 與橘線 LSTM 的穩定追蹤能力</strong>：即使在右圖「完全沒見過的新建築」上，上述 GRU 高估與 Transformer 過度平滑的缺陷被進一步放大，但 <strong>TFT（紫星線）仍能緊貼藍線（Actual 實際值）的日內升降波峰與波谷</strong>，直觀印證了量化指標的結論。</li>
+</ol>
+</li>
+</ul>
+<hr>
+<h3>Slide 27：案例研究 — 評估指標 (5/6)：合成異常注入測試偵測表現</h3>
+<p><img src="./%E5%A0%B1%E5%91%8A%E8%A3%9C%E5%85%85%E5%9C%96%E7%89%87/pptx_image40.png" alt="簡報版：三項異常規則於合成異常注入測試下之 Recall 表現"></p>
+<p><img src="./%E5%A0%B1%E5%91%8A%E8%A3%9C%E5%85%85%E5%9C%96%E7%89%87/docx_image18.png" alt="論文詳細版（圖 4.3.5）：區分規則二「尖峰型」與「持續型」之四條單調遞增曲線"></p>
+<ul>
+<li><strong>三項規則之注入設計與 Recall 數據（論文表 4.3.1 完整補充，委員問細節時直接回答）</strong>：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">異常規則</th>
+<th align="left">合成異常注入方法與樣本數</th>
+<th align="center">輕度異常 (Mild)</th>
+<th align="center">中度異常 (Moderate)</th>
+<th align="center">重度異常 (Severe)</th>
+<th align="left">表現特性與管理意涵</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>規則一：預測區間超出</strong></td>
+<td align="left">用電強度人為驟降調降（-80% / -90% / -95%），各 5,000 筆</td>
+<td align="center"><strong>$96.08%$</strong></td>
+<td align="center"><strong>$97.34%$</strong></td>
+<td align="center"><strong>$98.22%$</strong></td>
+<td align="left"><strong>表現最穩定、敏感度最高</strong>，即使輕度偏移也能即時捕捉突發異常。</td>
+</tr>
+<tr>
+<td align="left"><strong>規則二：時段違常（尖峰型）</strong></td>
+<td align="left">離峰時段單點放大（1.7倍 / 2.3倍 / 5倍，依 ASHRAE FDD 百分位校準），各 120 筆</td>
+<td align="center"><strong>$61.7%$</strong></td>
+<td align="center"><strong>$68.3%$</strong></td>
+<td align="center"><strong>$91.7%$</strong></td>
+<td align="left">隨異常倍率增加，偵測率顯著爬升。</td>
+</tr>
+<tr>
+<td align="left"><strong>規則二：時段違常（持續型）</strong></td>
+<td align="left">離峰時段連續 36 小時放大（1.7倍 / 2.3倍 / 5倍），各 120 筆</td>
+<td align="center"><strong>$63.9%$</strong></td>
+<td align="center"><strong>$82.4%$</strong></td>
+<td align="center"><strong>$94.6%$</strong></td>
+<td align="left">持續性排程未關機在中度以上即可達 &gt;82% 偵測率。</td>
+</tr>
+<tr>
+<td align="left"><strong>規則三：同儕落後</strong></td>
+<td align="left">60 棟未標記建築（每級 20 棟）訓練期 EUI 放大（1.7倍 / 2.3倍 / 5倍）重算排名</td>
+<td align="center"><strong>$35.0%$</strong></td>
+<td align="center"><strong>$50.0%$</strong></td>
+<td align="center"><strong>$95.0%$</strong></td>
+<td align="left"><strong>輕中度判定較保守，重度達 95%</strong>——完美貼合「篩選長期結構性能效嚴重落後、避免短期波動誤報」的定位！</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>精修口頭講稿</strong>：<blockquote>
+<p>「這頁呈現三項異常規則在合成異常注入測試下的 Recall 偵測表現。可以看到三條曲線皆隨著異常強度由輕度、中度到重度而單調遞增，證明規則設計具備合理的異常敏感度。（按）其中，規則一（預測區間超出）在各強度下都維持 96% 以上的高偵測率，適合捕捉即時偏離；而規則三（同儕落後）在輕度異常時較為保守（35%），直到重度異常時躍升至 95%，這樣的特性反而非常貼合它辨識『長期結構性能效落後』的定位，能避免把輕微波動誤判為需要汰換硬體的長期問題。」</p>
+</blockquote>
+</li>
+</ul>
+<hr>
+<h3>Slide 28：案例研究 — 評估指標 (6/6)：文本生成評估（BERTScore 與實際對照）</h3>
+<ul>
+<li><strong>10 筆案例之 BERTScore 平均結果（論文表 4.4.1）</strong>：<ul>
+<li><strong>Precision（評估預測語意精確度）</strong>：<strong>$0.877$</strong>（論文精確值 $0.8770$）</li>
+<li><strong>Recall（衡量真實語意覆蓋率）</strong>：<strong>$0.859$</strong>（論文精確值 $0.8588$）</li>
+<li><strong>F1-score（綜合語意相似度指標）</strong>：<strong>$0.866$</strong>（論文精確值 $0.8675$，各案例介於 $0.7860 \sim 0.9649$）</li>
+<li><strong>判讀基準</strong>：$0.85 \sim 0.90$ 屬於「<strong>語意一致性良好</strong>」（$&gt;0.90$ 為非常高）。</li>
+</ul>
+</li>
+<li><strong>案例對照解析（<code>Panther_office_Jesus</code>，離峰時段用電超出基準約 15%，對應論文案例 R2-4）</strong>：
+<img src="./%E5%A0%B1%E5%91%8A%E8%A3%9C%E5%85%85%E5%9C%96%E7%89%87/pptx_image42.png" alt="系統生成建議（Generated）">
+<img src="./%E5%A0%B1%E5%91%8A%E8%A3%9C%E5%85%85%E5%9C%96%E7%89%87/pptx_image41.png" alt="人工撰寫範例答案（Reference）"><ul>
+<li><strong>共同點</strong>：兩者皆準確識別「離峰時段高用電（超出 15%）」與「排程調整＋導入變頻（VRF）搭配時段控制年省電費約 30%」之核心語意。</li>
+<li><strong>細部差異（展現客觀分析能力）</strong>：系統生成建議在近期檢查先從「<strong>人為因素</strong>（確認是否有加班人員導致部分區域運作）」切入，再建議檢查恆溫器與照明排程並導入分區時段控制；而人工範例答案則直接從「<strong>系統設定</strong>（重新檢視下班至隔日上班前之設備排程、加裝時控器或 BAS 連動）」切入。兩者改善方向一致，僅切入視角有些微差異。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3>Slide 29–30：案例研究 — 智慧代理人系統輸出畫面與 Demo</h3>
+<ul>
+<li><p><strong>Slide 29 介面三大區塊導覽（以 <code>Bobcat_office_Justine</code> 2017-11-14 14:00 預測區間超出為例）</strong>：</p>
+<ol>
+<li><strong>左側【異常類型 &amp; 數值資訊（異常偵測節點輸出）】</strong>：<ul>
+<li>建築：<code>Bobcat_office_Justine</code>（場站：<code>Bobcat</code>）</li>
+<li>異常類型：<strong>預測區間超出</strong>｜實際用電強度：$0.058\text{ kWh/m}^2$｜TFT 預測中位數：$0.041\text{ kWh/m}^2$｜80% 預測區間：$0.032\text{–}0.048\text{ kWh/m}^2$（<strong>超出上界約 20.8%</strong>）。</li>
+</ul>
+</li>
+<li><strong>右上【決策推理過程（決策推理節點輸出）】</strong>：<ul>
+<li><strong>決策推論</strong>：指出 TFT 已納入時段與星期特徵，故超出上界 20.8% 非一般日內波動，較可能反映設備異常啟動或感測器讀值突變等技術性成因。</li>
+<li><strong>情境指令</strong>：自動組裝給下一節點的 Prompt（聚焦於設備異常啟動、感測器讀值準確性與量表校正三個面向）。</li>
+</ul>
+</li>
+<li><strong>右下【節能建議內容（建議生成節點輸出）】</strong>：<ul>
+<li><strong>異常診斷說明</strong> + <strong>具體建議行動</strong>：(1) <strong>近期檢查</strong>：調閱空調主機、電梯、大型機電啟動紀錄與感測器／量表誤差；(2) <strong>排程調整</strong>：評估導入變頻（VRF）空調搭配時段控制；(3) <strong>參考效益</strong>：明確標註資料來源（台中市冷凍空調技師公會／台電雲林區營業處案例，年省電費約 30%），避免無根據之數字幻覺。</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p><strong>論文延伸四大情境完整圖卡（含未來 24 小時前瞻預警，口試提問時可隨時展示）</strong>：</p>
+</li>
+</ul>
+<p><img src="./%E5%A0%B1%E5%91%8A%E8%A3%9C%E5%85%85%E5%9C%96%E7%89%87/docx_image14.png" alt="案例一（規則一：預測區間超出）：Bobcat_office_Justine（含未來24小時尖峰預警與蓄冷建議）"></p>
+<p><img src="./%E5%A0%B1%E5%91%8A%E8%A3%9C%E5%85%85%E5%9C%96%E7%89%87/docx_image15.png" alt="案例二（規則二：時段違常）：Panther_office_Jesus（週日19:00離峰超出基準15%）"></p>
+<p><img src="./%E5%A0%B1%E5%91%8A%E8%A3%9C%E5%85%85%E5%9C%96%E7%89%87/docx_image16.png" alt="案例三（規則三：同儕落後）：Eagle_office_Marcus（近7日EUI高於同儕中位數36.8%，未來24小時有19小時持續高於同儕）"></p>
+<p><img src="./%E5%A0%B1%E5%91%8A%E8%A3%9C%E5%85%85%E5%9C%96%E7%89%87/docx_image17.png" alt="案例四（正常情境例行巡檢）：Fox_office_Diana（當下三規則未觸發，但針對明日14:00預測逼近尖峰基準主動提出例行保養建議）"></p>
+<ul>
+<li><strong>Slide 30（AI Agent Demo 影片頁）講稿</strong>：<blockquote>
+<p>「這頁是我們系統的實際操作 Demo 影片。當管理人員上傳測試資料後，系統會依序自動觸發 TFT 用電預測、異常偵測、決策推理與建議生成四個步驟，並在每個節點完成後即時在前端呈現對應的判斷結果與節能建議。」</p>
+</blockquote>
+</li>
+</ul>
+<hr>
+<h3>Slide 31：文獻比較</h3>
+<ul>
+<li><strong>五維度系統性文獻比較表</strong>：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">研究文獻</th>
+<th align="center">建築用電預測</th>
+<th align="center">異常判定</th>
+<th align="center">智慧代理人</th>
+<th align="center">泛化驗證</th>
+<th align="center">節能建議生成</th>
+<th align="left">各文獻定位與本研究差異補充</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Zaboli et al. (2025)</strong></td>
+<td align="center">$\checkmark$</td>
+<td align="center">$\checkmark$</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="left">聚焦電力系統 EMS 資安與多模態異常偵測，未做跨建築泛化與節能建議生成。</td>
+</tr>
+<tr>
+<td align="left"><strong>Bernadić et al. (2025)</strong></td>
+<td align="center">$\checkmark$</td>
+<td align="center"></td>
+<td align="center">$\checkmark$</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="left">探討 LLM 代理人於電力系統控制與決策，未整合建築異常規則與具體節能建議。</td>
+</tr>
+<tr>
+<td align="left"><strong>Moveh et al. (2025)</strong></td>
+<td align="center">$\checkmark$</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">$\checkmark$</td>
+<td align="center"></td>
+<td align="left">以階層式 Transformer 預測 3 氣候區 100 棟商業建築，但僅止於預測，無異常判定與代理人建議。</td>
+</tr>
+<tr>
+<td align="left"><strong>Papaioannou et al. (2025)</strong></td>
+<td align="center">$\checkmark$</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">$\checkmark$</td>
+<td align="center">$\checkmark$</td>
+<td align="left">以 LLM 為智慧建築生成節能建議並以語意指標評估，但缺乏正式機率區間異常判定與多節點代理人推理。</td>
+</tr>
+<tr>
+<td align="left"><strong>本研究方法</strong></td>
+<td align="center"><strong>$\checkmark$</strong></td>
+<td align="center"><strong>$\checkmark$</strong></td>
+<td align="center"><strong>$\checkmark$</strong></td>
+<td align="center"><strong>$\checkmark$</strong></td>
+<td align="center"><strong>$\checkmark$</strong></td>
+<td align="left"><strong>首次將跨建築機率預測、三層次異常判定與 LangGraph 智慧代理人節能建議生成整合為端到端框架。</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h3>Slide 32：研究貢獻（學術貢獻 vs. 實務貢獻）</h3>
+<ul>
+<li><strong>三大學術貢獻</strong>：<ol>
+<li><strong>雙重泛化驗證架構</strong>：建立「時間泛化」與「建築泛化（Group K-Fold, $K=3$）」雙重驗證架構，系統性檢驗深度學習模型對未見新建築之預測與區間穩定性。</li>
+<li><strong>機率預測結合多層次異常規則</strong>：整合 TFT 分位數預測與三層次異常規則（即時、排程、長期同儕），並透過合成異常注入驗證敏感度，將預測數值轉化為具能源管理意義之異常類型。</li>
+<li><strong>先推理後行動之智慧代理人框架</strong>：建構 LangGraph 三節點代理人框架，將「規則數值判定」與「LLM 語意推理／建議生成」職責明確分工，將建築能源研究從單純預測延伸至可解釋的決策支援。</li>
+</ol>
+</li>
+<li><strong>三大實務貢獻</strong>：<ol>
+<li><strong>事前預警與即時排查</strong>：協助能源管理者掌握建築未來用電變化與可能異常時點，進行初步監測與排查，無須等到月底帳單異常才事後發現。</li>
+<li><strong>分級分類的管理行動指引</strong>：依據即時偏離（查設備／感測器）、時段違常（調下班排程／分區控制）與同儕落後（長期硬體汰換），提供對應時間尺度的改善方向。</li>
+<li><strong>降低資訊理解門檻</strong>：將複雜的分位數預測與異常數據轉譯為自然語言說明與具體建議，讓不具資料科學背景的物業與能源管理人員也能立即執行。</li>
+</ol>
+</li>
+</ul>
+<hr>
+<h3>Slide 33–34：研究限制與未來發展、結語</h3>
+<ul>
+<li><strong>四項研究限制與對應之未來發展方向（一對一精準扣合）</strong>：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">研究限制（Limitations）</th>
+<th align="left">未來發展方向（Future Work）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>1. 研究對象集中於辦公建築</strong>：尚未驗證教育、醫療、零售或住宿等不同用電型態建築之適用性。</td>
+<td align="left"><strong>$\rightarrow$ 擴展至不同建築類型與實際場域</strong>：進一步檢驗跨建築類型、跨營運作息情境下之泛化能力，或納入設備級分項電表（Sub-metering）資料。</td>
+</tr>
+<tr>
+<td align="left"><strong>2. 未見建築之預測區間校準不足</strong>：建築泛化下 80% 區間覆蓋率降至 $70.67%$，增加後續複查與推理判讀負擔。</td>
+<td align="left"><strong>$\rightarrow$ 改善未見建築之預測區間校準</strong>：引入**遷移學習（Transfer Learning / Domain Adaptation）**或 <strong>Conformal Prediction（保形預測）</strong> 協助模型快速適應新建築分布。</td>
+</tr>
+<tr>
+<td align="left"><strong>3. 異常判定仍依賴門檻設定</strong>：目前百分位與倍數門檻仍須依資料情境與管理需求預先設定。</td>
+<td align="left"><strong>$\rightarrow$ 強化異常判定之自適應性</strong>：依各建築動態用電型態與季節變化<strong>動態調整判定門檻</strong>，降低人工設定限制並提升彈性。</td>
+</tr>
+<tr>
+<td align="left"><strong>4. 智慧代理人與節能效益尚待實務驗證</strong>：目前以 BERTScore 進行語意評估，尚未透過專家與實際場域長期追蹤驗證節能度數。</td>
+<td align="left"><strong>$\rightarrow$ 導入專家評估與長期節能追蹤</strong>：結合能源管理專家審查（Human-in-the-loop）、使用者回饋與實際電費／節能量追蹤，驗證系統實務效益。</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>三、 論文隱藏版王牌補充：跨場站分群消融實驗（Q&amp;A 必殺技）</h2>
+<blockquote>
+<p>[!TIP]
+<strong>什麼時候拿出來用？</strong>
+雖然 34 頁簡報為了控制報告時間沒有放「跨場站分群消融實驗（論文第 4.2.5 節）」，但如果口試委員或台下聽眾問到：
+<em>「BDG2 的 13 個場站分布在不同氣候區、建築規模也不同，單一 Global TFT 怎麼處理跨場站異質性？」</em>
+您可以立刻展現這組論文中的實證數據，證明您已經做過深入研究！</p>
+</blockquote>
+<p><img src="./%E5%A0%B1%E5%91%8A%E8%A3%9C%E5%85%85%E5%9C%96%E7%89%87/docx_image11.png" alt="場站 Ward 階層式分群樹狀圖（論文圖 4.2.4）"></p>
+<p><img src="./%E5%A0%B1%E5%91%8A%E8%A3%9C%E5%85%85%E5%9C%96%E7%89%87/docx_image12.png" alt="場站分群結果之 PCA 主成分投影圖（論文圖 4.2.5）"></p>
+<p><img src="./%E5%A0%B1%E5%91%8A%E8%A3%9C%E5%85%85%E5%9C%96%E7%89%87/docx_image13.png" alt="E1（無分群）與 E2（加入 cluster_id）逐棟 RMSE 散點比較圖（論文圖 4.2.6）"></p>
+<ul>
+<li><strong>實驗設計與三大發現（30 秒回答精華）</strong>：<ol>
+<li><strong>Ward 階層式分群（$K=3$）</strong>：依各場站氣候特徵（均溫、HDD 暖房度日、CDD 冷房度日等）與規模特徵將 13 個場站分為三群：<strong>Cluster 1 溫和氣候</strong>（7 場站 101 棟）、<strong>Cluster 2 炎熱高冷房需求</strong>（4 場站 65 棟，CDD 高達 $2,464\text{–}3,694$）、<strong>Cluster 3 寒冷大規模場站</strong>（2 場站 85 棟，HDD 高達 $3,041\text{–}5,585$）。</li>
+<li><strong>Kruskal-Wallis 異質性檢定</strong>：證實原始 Global TFT (E1) 在三群間的測試集 RMSE 存在極顯著差異（$H = 14.674, p = 0.000651$），其中炎熱氣候的 Cluster 2 誤差明顯最高。</li>
+<li><strong>加入 <code>cluster_id</code> 靜態特徵後（E2 vs. E1）</strong>：<ul>
+<li>測試集整體 RMSE 由 $0.0226$ 降至 <strong>$0.0183$（改善約 19%）</strong>，$R^2$ 由 $0.900$ 提升至 <strong>$0.933$</strong>，CRPS 由 $0.0081$ 降至 <strong>$0.0063$</strong>。</li>
+<li>逐棟 Wilcoxon 配對符號檢定達極顯著（$p = 5.05 \times 10^{-21}$），高達 <strong>77.3%～79.7% 的建築預測誤差皆獲得改善</strong>，尤以原本誤差最大的炎熱場站群（Cluster 2）改善最顯著！</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<hr>
+<h2>四、 明天報告必考 Q&amp;A 題庫與滿分回答模板（Top 8）</h2>
+<ol>
+<li><p><strong>Q1：為什麼近年有 Informer、Autoformer、PatchTST、iTransformer 等新型 Transformer，本研究卻選擇 2021 年的 TFT？</strong></p>
+<ul>
+<li><strong>滿分回答</strong>：新型架構（如 Informer、PatchTST）主要針對「極長序列預測（Long-term forecasting）」的運算效率進行優化，且原生設計多針對同質性變數輸出「單一點預測」。然而本研究為 168 小時預測未來 24 小時之中短期任務，運算效率非主要瓶頸；相反地，本研究有兩大核心需求：(1) <strong>必須原生整合靜態特徵（建築／場站屬性）、已知未來特徵（氣象／行事曆）與未知歷史特徵</strong>以支援跨建築泛化；(2) <strong>必須在單次推論輸出校準後的機率分位數區間</strong>作為異常判定基準。TFT 原生具備變數選擇網路、靜態共變數編碼器與 Quantile Loss 輸出，且具可解釋性，最契合本決策支援框架之需求。</li>
+</ul>
+</li>
+<li><p><strong>Q2：為什麼在資料前處理中，氣象資料屬於「時間已知連續變數（Known Future Inputs）」？實務上未來 24 小時的精確氣象怎麼預先知道？</strong></p>
+<ul>
+<li><strong>滿分回答</strong>：在本研究離線實證中，我們遵循 BDG2 相關文獻慣例，將目標時段之氣象觀測值視為已知外部條件（或代表已取得氣象局未來 24 小時逐時氣象預報），使模型評估聚焦於「給定外部環境條件下之建築用電反應建模能力」。在實務部署時，此欄位可直接串接中央氣象署或商業氣象 API 之未來 24 小時數值天氣預報（NWP）。</li>
+</ul>
+</li>
+<li><p><strong>Q3：為什麼預測目標 <code>load_intensity</code>（EUI）要用 <code>EncoderNormalizer</code> 而不是跟氣象變數一樣用全域 Min-Max 正規化？</strong></p>
+<ul>
+<li><strong>滿分回答</strong>：雖然我們已經除以樓地板面積轉為 EUI，但不同辦公建築的基礎耗能密度（例如有無附設機房或全天候空調）仍有差異。使用 <code>EncoderNormalizer</code>（搭配 <code>softplus</code> 確保正值）能根據該建築樣本自身過去 168 小時編碼窗格（Encoder window）動態計算平均與尺度進行正規化；這讓模型在面對「訓練階段完全沒見過的新建築（Unseen Buildings）」時，只要有過去一週的短期運轉資料就能自動對齊尺度，大幅提升跨建築泛化能力。</li>
+</ul>
+</li>
+<li><p><strong>Q4：Slide 25 提到建築泛化下 80% 預測區間覆蓋率從 77.79% 掉到 70.67%，這代表規則一在未見建築上會有很多誤報（False Alarm）嗎？你們怎麼處理？</strong></p>
+<ul>
+<li><strong>滿分回答</strong>：是的，覆蓋率降至 70.67% 代表在未見建築上約有 29.3% 的時間點會落在 80% 預測區間外（高於理論預期的 20%），這是受到未見建築分布偏移（Covariate Shift）的影響。因此我們在框架設計上有兩個防範機制：第一，我們<strong>將 TFT 預測區間定位為「異常候選的輔助基準」而非絕對斷言</strong>；第二，觸發後會進入 LangGraph 的決策推理節點，結合超出幅度（如超出上界多少 %）、是否為尖峰／離峰時段以及未來 24 小時預測趨勢進行綜合語意診斷，引導管理人員先做低成本的近期檢查。未來亦可引入 <strong>Conformal Prediction（保形預測）</strong> 在新建築上做無分布假設的區間重新校準。</li>
+</ul>
+</li>
+<li><p><strong>Q5：合成異常注入測試（Slide 16, 27）為什麼只看 Recall（偵測率），不看 Precision 或 F1-score？會不會規則把所有點都判成異常，Recall 也是 100%？</strong></p>
+<ul>
+<li><strong>滿分回答</strong>：這是時間序列異常偵測領域的重要方法論問題。如 Darban et al. (2024) 指出，BDG2 原始資料屬於「未標記資料（Unlabeled data）」，裡面可能原本就隱藏著真實但未標註的異常用電。當我們人工注入異常時，只有「被注入的樣本」是 100% 確知的 Ground Truth Positive（可算 TP 與 FN），而背景資料若觸發規則，無法區分究竟是「誤報（FP）」還是「抓到了原本隱藏的真實異常」，因此 Precision 的計算基礎並不成立。為了證明規則不是無腦全判異常，我們設計了<strong>輕度、中度、重度三種強度等級</strong>，結果顯示三項規則的 Recall 呈現隨異常強度增加而上升的<strong>單調遞增趨勢</strong>（例如規則三從 35% $\rightarrow$ 50% $\rightarrow$ 95%），證實規則具備合理的門檻鑑別力與敏感度。</li>
+</ul>
+</li>
+<li><p><strong>Q6：為什麼不把歷史用電數據直接丟給 ChatGPT-4o mini / LLM，讓它一次做完「預測＋異常判斷＋建議生成」？</strong></p>
+<ul>
+<li><strong>滿分回答</strong>：根據近期文獻（如 Liu et al., 2025; He &amp; Jazizadeh, 2025），大型語言模型直接處理數值型時間序列與算術比較時，容易出現數值幻覺（Hallucination）與門檻判斷不一致的問題，且 Token 成本極高。因此本研究採取「<strong>神經符號／規則與語言模型分工</strong>」加上「<strong>LangGraph 三節點拆分</strong>」：由 TFT 專責機率時序預測、由確定性規則節點專責數值比對，再將結構化的數值證據交由決策推理節點與建議生成節點進行成因推論與自然語言轉譯，兼顧數值嚴謹性與語意可解釋性。</li>
+</ul>
+</li>
+<li><p><strong>Q7：你們如何避免 AI Agent 在生成節能建議時「胡亂編造節能百分比（幻覺）」？</strong></p>
+<ul>
+<li><strong>滿分回答</strong>：我們在智慧代理人中採用了 <strong>固定上下文約束（CAG / Context-constrained Prompting）</strong>。我們預先整理了台電節能手冊、冷凍空調技師公會案例等具公信力的參考文獻作為固定上下文（Context $C$），並在 Prompt 規則中嚴格限制：「<em>僅能根據提供的數值證據推理，且引用之量化效益必須完全出自給定的參考文獻並標明出處，禁止自行捏造數據</em>」。這也是為什麼我們的生成結果能精確標註「年省電費約 30%（台電雲林區營業處案例分享）」，且在 10 個案例中與專家參考文本之 BERTScore F1 達到 $0.867$ 的高一致性。</li>
+</ul>
+</li>
+<li><p><strong>Q8：如果三項異常規則都沒有被觸發（也就是建築目前用電完全正常），這個 AI Agent 系統會做什麼？</strong></p>
+<ul>
+<li><strong>滿分回答</strong>：系統不會只是空白或停止運作！在我們的完整框架設計中（如論文圖 4.3.4 <code>Fox_office_Diana</code> 案例），當下三項規則均未觸發時，系統會給出「目前用電正常、無需事後異常處置」的結論，但同時會<strong>切換為「前瞻性預防維護模式」</strong>——自動檢視 TFT 對<strong>未來 24 小時的機率預測區間上界</strong>是否逼近該建築近 4 週尖峰基準。若有逼近趨勢，系統會主動提出例行保養與事前蓄冷／負載錯開建議，實現從「事後診斷（Reactive）」到「事前預警（Proactive）」的全天候決策支援。</li>
+</ul>
+</li>
+</ol>
+</main></body></html>
