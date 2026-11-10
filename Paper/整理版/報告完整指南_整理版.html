@@ -1,11 +1,12 @@
-<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>報告完整指南｜離線版</title><style>*{box-sizing:border-box}body{margin:0;background:#f5f4f6;color:#222;font-family:Microsoft JhengHei,system-ui,sans-serif;line-height:1.8}main{max-width:1000px;margin:auto;background:#fff;padding:32px 40px}h1,h2,h3{line-height:1.4;overflow-wrap:anywhere}h2{margin-top:2em;color:#65006e;border-bottom:1px solid #ddd}p,li{overflow-wrap:anywhere}img{max-width:100%;height:auto}table{display:block;overflow-x:auto;border-collapse:collapse}td,th{border:1px solid #ddd;padding:8px;min-width:100px}pre{overflow:auto;padding:14px;background:#f2f2f2;white-space:pre}blockquote{border-left:4px solid #aaa;margin-left:0;padding-left:14px}a{overflow-wrap:anywhere}@media(max-width:600px){body{background:white}main{padding:20px 16px}body{font-size:17px}h1{font-size:25px}h2{font-size:21px}h3{font-size:19px}}</style></head><body><main><p><strong>離線版：</strong>正文與圖片可離線閱讀；公式以原始 LaTeX 文字呈現，流程圖以原始文字呈現。</p><p>﻿# 結合跨建築用電預測與智慧代理人之辦公建築能源管理決策支援框架 — 完整報告指南與圖文補充手冊</p>
-<blockquote>
-<p>[!IMPORTANT]
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>研究報告指南｜跨建築用電預測與智慧代理人</title><style>
+:root{--ink:#182d39;--muted:#526976;--brand:#12665f;--gold:#e9ae59;--paper:#f3f6f4}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--ink);background:var(--paper);font:16px/1.85 system-ui,"Microsoft JhengHei",sans-serif}a{color:#07665f;overflow-wrap:anywhere}a:focus-visible{outline:3px solid #d48325;outline-offset:3px}.hero{background:#123d3c;color:white;padding:64px max(24px,calc((100% - 1120px)/2));position:relative}.eyebrow{letter-spacing:.16em;color:#bfe1d3;font-size:.78rem;font-weight:700}.hero h1{font-size:clamp(2rem,4.2vw,3.6rem);line-height:1.22;max-width:900px;letter-spacing:.02em;margin:16px 0}.hero p{max-width:760px;color:#d8e9e2}.wrap{max-width:1120px;margin:auto;padding:0 24px 80px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#d6e3dd;border:1px solid #d6e3dd;border-radius:12px;overflow:hidden;margin-top:-22px;position:relative;box-shadow:0 12px 30px #203c3010}.stat{background:white;padding:22px}.stat b{display:block;font-size:1.65rem;color:var(--brand);line-height:1.2}.stat small{color:var(--muted)}.note{background:#fff9ec;border-left:4px solid var(--gold);padding:16px 20px;margin:26px 0;border-radius:4px}.layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:32px;margin-top:40px}.toc{align-self:start;position:sticky;top:24px;background:white;padding:22px;border:1px solid #e1ebe6;border-radius:12px}.toc strong{display:block;font-size:.8rem;letter-spacing:.1em;color:var(--muted);margin-bottom:10px}.toc a{display:block;text-decoration:none;padding:5px 0;font-size:.9rem}.content{background:white;border:1px solid #e1ebe6;border-radius:14px;padding:clamp(22px,4vw,50px);min-width:0;box-shadow:0 12px 32px #1b483608}.content>h2{font-size:1.45rem;line-height:1.4;margin:2.5em 0 1em;padding:0 0 12px;border-bottom:2px solid #b5d6c5;color:#125b56;scroll-margin-top:25px}.content>h2:first-child{margin-top:0}.content h3{font-size:1.13rem;line-height:1.45;color:#173f40;background:#eef6f2;border-left:4px solid #3b8a77;padding:13px 16px;margin:2.2em 0 1em;scroll-margin-top:20px}.content p,.content li{overflow-wrap:anywhere}.content li{margin:.35em 0}.content img{max-width:100%;height:auto;display:block;margin:1.5rem auto;border-radius:8px}table{display:block;overflow-x:auto;border-collapse:collapse;max-width:100%;font-size:.92rem;margin:1.3em 0}th,td{border:1px solid #dbe7e1;padding:10px 13px;min-width:100px;vertical-align:top}th{background:#edf5f0;color:#20463e}tr:nth-child(even){background:#fafcfb}blockquote{margin:1.2em 0;padding:12px 20px;border-left:4px solid #7eb3a2;background:#f4f9f6;border-radius:0 8px 8px 0}blockquote p{margin:.35em 0}pre{overflow:auto;background:#edf3f0;padding:16px;border-radius:8px;white-space:pre}code{font-family:Consolas,monospace;font-size:.9em}hr{border:0;border-top:1px solid #e7eeea;margin:2em 0}.flow{display:flex;gap:10px;flex-wrap:wrap;margin:1.4em 0}.flow span{flex:1 1 150px;background:#eef6f2;border:1px solid #d4e9df;border-radius:9px;padding:14px;font-weight:650;color:#28544c}.flow span:not(:last-child):after{content:' →';color:#b17b32}.foot{color:#61766d;font-size:.85rem;margin-top:30px}@media(max-width:800px){.stats{grid-template-columns:repeat(2,1fr)}.layout{display:block}.toc{position:static;margin-bottom:22px}.toc a{display:inline-block;margin-right:16px}.hero{padding:45px 24px 55px}}@media(max-width:450px){.wrap{padding-left:14px;padding-right:14px}.stat{padding:15px}.stat b{font-size:1.4rem}.content{padding:20px}.hero h1{font-size:1.9rem}}@media print{body{background:white}.hero{padding:20px;color:#123d3c;background:white}.hero p,.eyebrow{color:#123d3c}.toc{position:static}.layout{display:block}.content{border:0;box-shadow:none;padding:0}.stats{margin:0}a{color:inherit}}
+</style><script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]},options:{skipHtmlTags:['script','noscript','style','textarea','pre','code']}};</script><script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script></head><body><header class="hero"><div class="eyebrow">RESEARCH PRESENTATION GUIDE · 研究報告指南</div><h1>從用電預測<br>到節能決策</h1><p>結合跨建築用電預測與智慧代理人之辦公建築能源管理決策支援框架<br>逐頁講稿、研究結果與問答準備</p></header><div class="wrap"><section class="stats" aria-label="論文重點結果"><div class="stat"><b>279 棟</b><small>辦公建築，涵蓋 13 個場站</small></div><div class="stat"><b>0.903</b><small>TFT 建築泛化測試 R²</small></div><div class="stat"><b>13–20%</b><small>分群特徵實驗整體 RMSE 改善</small></div><div class="stat"><b>0.8675</b><small>10 筆案例 BERTScore 平均 F1</small></div></section><div class="note"><strong>閱讀提醒</strong>：指標來自論文所述實驗，分群比較與建築泛化評估為不同實驗設定。建議仍需管理者確認；尚未於實際場域驗證節能效果。公式需連線載入 MathJax，離線時保留原始公式。</div><div class="layout"><nav class="toc" aria-label="頁面導覽"><strong>快速導覽</strong><a href="#overview">報告時間配置</a><a href="#slides">逐頁講稿與圖表</a><a href="#paper">論文補充</a><a href="#qa">常見問答</a></nav><main class="content"><blockquote>
+<p>
 <strong>報告核心主軸（一句話總結）</strong>：
 本研究針對辦公建築能源管理「<strong>跨建築泛化驗證不足</strong>」、「<strong>異常判定依賴單一規則</strong>」與「<strong>預測結果難以轉化為具體行動</strong>」三大痛點，以 <strong>BDG2 資料集（13 個場站、279 棟辦公建築）</strong> 為實證基礎，結合 <strong>Temporal Fusion Transformer (TFT)</strong> 機率區間預測、<strong>三層次異常判定規則（即時／排程／長期同儕）</strong> 與 <strong>LangGraph 智慧代理人（異常偵測 $\rightarrow$ 決策推理 $\rightarrow$ 建議生成）</strong>，打造從「數據預測」到「可執行節能決策」的端到端決策支援框架。</p>
 </blockquote>
 <hr>
-<h2>一、 報告時間配置與結構鳥瞰（共 34 頁）</h2>
+<h2 id="overview">一、 報告時間配置與結構鳥瞰（共 34 頁）</h2>
 <p>建議依工工年會／口試常見之 <strong>15～20 分鐘</strong> 進行配速（若為 12～15 分鐘年會發表，文獻探討與評估指標公式頁可加速帶過，將重點放在 <strong>研究架構、雙重泛化結果、三層次異常規則與 AI Agent 輸出展示</strong>）：</p>
 <table>
 <thead>
@@ -53,26 +54,9 @@
 <td align="left">五維度文獻比較表、三大實務與學術貢獻、四大研究限制與未來發展（遷移學習／自適應門檻）</td>
 </tr>
 </tbody></table>
-<pre><code class="language-mermaid">flowchart LR
-    subgraph S1[&quot;第一階段：資料前處理 (Slide 10, 19-21)&quot;]
-        A1[&quot;BDG2 資料集\n13場站 / 279棟辦公建築&quot;] --&gt; A2[&quot;特徵工程與補值\nEUI轉換 + lag_1h/24h/168h&quot;]
-        A2 --&gt; A3[&quot;雙重泛化資料切分\n時間切分 + Group K-Fold (K=3)&quot;]
-    end
-
-    subgraph S2[&quot;第二階段：跨建築用電預測 (Slide 11-12, 22-26)&quot;]
-        B1[&quot;TFT 時序融合轉換器\nVSN + LSTM + Multi-Head Attention + GRN&quot;] --&gt; B2[&quot;點預測 (q50)\nMAE / RMSE / R²&quot;]
-        B1 --&gt; B3[&quot;機率預測區間 (q10~q90)\n80% PI / CRPS / Coverage&quot;]
-    end
-
-    subgraph S3[&quot;第三階段：LangGraph 智慧代理人 (Slide 13, 18, 27-30)&quot;]
-        C1[&quot;節點1：異常偵測節點\n規則一：預測區間超出 (即時)\n規則二：時段違常 (排程)\n規則三：同儕落後 (長期)&quot;] --&gt; C2[&quot;節點2：決策推理節點\n解析數值證據 → 推論成因\n生成決策理由與情境指令&quot;]
-        C2 --&gt; C3[&quot;節點3：建議生成節點\n依情境指令生成具體節能建議\n(近期檢查 / 排程調整 / 參考效益)&quot;]
-    end
-
-    S1 --&gt; S2 --&gt; S3
-</code></pre>
+<div class="flow" role="group" aria-label="研究流程"><span>資料前處理與雙重泛化切分</span><span>TFT 點預測與區間預測</span><span>三項規則辨識異常</span><span>代理人推理與建議</span></div>
 <hr>
-<h2>二、 逐頁完整資訊整理、精修講稿與圖表補充（Slide 1 ~ Slide 34）</h2>
+<h2 id="slides">二、 逐頁完整資訊整理、精修講稿與圖表補充（Slide 1 ~ Slide 34）</h2>
 <h3>Slide 1–2：封面與報告大綱</h3>
 <ul>
 <li><strong>投影片資訊</strong>：<ul>
@@ -108,12 +92,7 @@
 </blockquote>
 </li>
 </ul>
-<pre><code class="language-mermaid">flowchart LR
-    D[&quot;📊 數據 (Data)&quot;] --&gt; F[&quot;📈 預測 (Forecast)&quot;]
-    F --&gt; A[&quot;⚠️ 異常判定 (Anomaly)&quot;]
-    A -. &quot;❓ 目前斷鏈處\n(缺乏具體決策轉譯)&quot; .-&gt; Act[&quot;🛠️ 採取行動 (Action)&quot;]
-    style Act stroke-dasharray: 5 5,stroke:#d9534f,stroke-width:2px
-</code></pre>
+<div class="flow" role="group" aria-label="研究流程"><span>資料</span><span>用電預測</span><span>異常判定</span><span>管理行動</span></div>
 <ul>
 <li><strong>現有建築能源管理的三項限制</strong>：<ol>
 <li><strong>跨建築泛化能力之驗證不足</strong>：現有研究多以單一或少量建築訓練與驗證，當新建築導入能源管理平台、缺乏歷史資料時，模型表現未知。</li>
@@ -195,9 +174,9 @@
 </li>
 </ul>
 <blockquote>
-<p>[!NOTE]
+<p>
 <strong>簡報與論文小差異提醒（口試防禦必知）</strong>：
-簡報 Slide 9 與 Slide 18 標示建議生成模型為 <strong>ChatGPT-4o mini</strong>；而完整碩士論文文稿中，亦包含導入 <strong>Gemma 4 + CAG（Cache-Augmented Generation 固定上下文增強生成）</strong> 以及 <strong>跨場站階層式分群（Hierarchical Clustering）</strong> 的延伸實驗。報告時請依簡報講述「ChatGPT-4o mini 與三節點分工」，若委員追問如何防止幻覺或跨場站氣候差異，即可補充論文中的 CAG 固定上下文約束與場站分群消融實驗！</p>
+簡報 Slide 9 與 Slide 18 標示建議生成模型為 <strong>ChatGPT-4o mini</strong>；而完整碩士論文文稿中，採用 <strong>Gemma 4 與固定上下文</strong>，並已完成 <strong>跨場站階層式分群（Hierarchical Clustering）</strong> 消融實驗。報告時請依簡報講述「ChatGPT-4o mini 與三節點分工」，若委員追問如何防止幻覺或跨場站氣候差異，即可補充論文中的 CAG 固定上下文約束與場站分群消融實驗！</p>
 </blockquote>
 <ul>
 <li><strong>精修口頭講稿</strong>：<blockquote>
@@ -360,22 +339,7 @@
 </ul>
 <hr>
 <h3>Slide 18：研究方法 — 模型輸出（智慧代理人三節點分工）</h3>
-<pre><code class="language-mermaid">sequenceDiagram
-    autonumber
-    participant TFT as TFT 預測模型
-    participant N1 as 節點1：異常偵測節點&lt;br/&gt;(Rule-based 規則判定)
-    participant N2 as 節點2：決策推理節點&lt;br/&gt;(Reasoning Engine)
-    participant N3 as 節點3：情境/建議生成節點&lt;br/&gt;(LLM: ChatGPT-4o mini)
-    participant UI as 能源管理者介面 (UI)
-
-    TFT-&gt;&gt;N1: 輸入實際用電值 y_t 與 80% 預測區間 [q10, q90]
-    Note over N1: 比對三層次規則&lt;br/&gt;(避免讓 LLM 直接做算術比較)
-    N1-&gt;&gt;N2: 輸出結構化異常結果 E&lt;br/&gt;(異常類型、發生時間、偏離幅度數值證據)
-    Note over N2: 數值證據 → 語意判斷&lt;br/&gt;結合固定上下文 C 進行成因推論
-    N2-&gt;&gt;N3: 輸出決策理由 (R) + 動態情境指令 (Prompt I)
-    Note over N3: 語意判斷 → 具體行動建議&lt;br/&gt;依節能文獻與引用限制生成方案
-    N3-&gt;&gt;UI: 輸出最終結果：異常診斷 + 近期檢查/排程調整 + 量化參考效益
-</code></pre>
+<div class="flow" role="group" aria-label="研究流程"><span>TFT 預測與實際值</span><span>規則判定異常</span><span>推理可能成因</span><span>生成建議供管理者確認</span></div>
 <ul>
 <li><strong>為什麼要拆成三個獨立節點？（分工設計的核心貢獻）</strong>：<ol>
 <li><strong>規避 LLM 數值運算弱點与幻覺</strong>：大型語言模型不擅長直接對長序列浮點數進行門檻比對（He &amp; Jazizadeh, 2025; Liu et al., 2025），因此將「是否異常、超出多少百分比」完全交由確定性的 <strong>規則式異常偵測節點</strong> 負責。</li>
@@ -851,7 +815,7 @@
 </tr>
 </tbody></table>
 <hr>
-<h2>三、 論文隱藏版王牌補充：跨場站分群消融實驗（Q&amp;A 必殺技）</h2>
+<h2 id="paper">三、 論文隱藏版王牌補充：跨場站分群消融實驗（Q&amp;A 必殺技）</h2>
 <blockquote>
 <p>[!TIP]
 <strong>什麼時候拿出來用？</strong>
@@ -875,7 +839,7 @@
 </li>
 </ul>
 <hr>
-<h2>四、 明天報告必考 Q&amp;A 題庫與滿分回答模板（Top 8）</h2>
+<h2 id="qa">四、 明天報告必考 Q&amp;A 題庫與滿分回答模板（Top 8）</h2>
 <ol>
 <li><p><strong>Q1：為什麼近年有 Informer、Autoformer、PatchTST、iTransformer 等新型 Transformer，本研究卻選擇 2021 年的 TFT？</strong></p>
 <ul>
@@ -918,4 +882,4 @@
 </ul>
 </li>
 </ol>
-</main></body></html>
+</main></div><p class="foot">內容依研究論文與原有簡報指南整理，報告頁碼請以實際使用的簡報版本為準。</p></div></body></html>
