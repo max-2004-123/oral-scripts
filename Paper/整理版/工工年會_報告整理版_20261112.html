@@ -76,6 +76,11 @@ details p{margin:8px 0 0}
 .foot{font-size:.82rem;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
 @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
 @media (max-width:480px){.slide{grid-template-columns:32px 1fr;gap:8px}h1{font-size:1.4rem}}
+
+.wrap{max-width:1200px}
+.slide-content{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start;margin-top:14px}
+.slide-figure{margin:0;min-width:0}.slide-figure img{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:8px;background:white}.slide-figure figcaption{font-size:.8rem;color:var(--muted);margin-top:4px}.slide-copy{min-width:0}.slide-figure .unavailable{padding:16px;border:1px dashed var(--line);border-radius:8px;color:var(--muted);font-size:.9rem}
+@media(max-width:760px){.slide-content{grid-template-columns:minmax(0,1fr);gap:12px}.wrap{padding-block:18px 60px}}
 </style>
 
 </head>
@@ -223,6 +228,7 @@ const Q = [
  ["（錄音）只有整棟總用電，怎麼知道是空調還是照明的問題？","沒辦法直接知道。我們的建議是列出應該優先檢查的設備與排程，不是判定哪個設備故障。這是資料面的限制，未來若能取得分項電表資料可以改善。"],
  ["（錄音）超參數調整有沒有用到測試資料？","沒有。Optuna 只用驗證集（2017/06–09，已見建築）找最佳超參數，三輪 K 折都沿用同一組，不重新搜尋，測試期與未見建築沒有參與調參。"]
 ];
+const slideMap = {1:1,2:2,3:3,4:4,5:5,6:6,7:7,8:8,10:9,11:10,12:11,13:12,15:13,16:14,17:15,18:16,19:17,20:18,21:19,22:20,23:21,24:22,25:23,26:24,27:25};
 function render(list, el){
   el.innerHTML = list.map(s => {
     const paras = s.p.map(x => "<p>" + x.replace(/\[▶\]/g,'<span class="clk">▶</span>') + "</p>").join("");
@@ -230,9 +236,11 @@ function render(list, el){
     const sec = Math.round(chars/4.5);
     return `<article class="slide" id="s${s.n}"><div class="no">${s.n}</div><div class="body">
       <div class="ttl"><h3>${s.t}</h3><span class="sec">約 ${sec} 秒</span></div>
+      ${el.id === "slides" ? `<div class="slide-content"><figure class="slide-figure">${slideMap[s.n] ? `<img loading="lazy" src="slides_20261113/${String(slideMap[s.n]).padStart(2,"0")}.jpg" alt="目前簡報第 ${slideMap[s.n]} 頁：${s.t}"><figcaption>目前簡報第 ${slideMap[s.n]} 頁</figcaption>` : `<div class="unavailable">此段講稿在目前簡報中沒有獨立頁面。</div>`}</figure><div class="slide-copy">` : ""}
       <div class="say">${paras}</div>
       ${s.fix ? `<div class="fix">已修改：${s.fix}</div>` : ""}
       ${s.note ? `<div class="note">${s.note}</div>` : ""}
+      ${el.id === "slides" ? "</div></div>" : ""}
     </div></article>`;
   }).join("");
   return list.reduce((a,s)=>a+s.p.join("").replace(/\[▶\]|\s/g,"").length,0);
