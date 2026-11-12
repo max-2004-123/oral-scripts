@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>工工年會報告小抄</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one reading column; sticky section bar; slides as numbered rows (order = real slide order) */
+:root{
+  --bg:#f5f7f6; --surface:#ffffff; --fg:#17211f; --muted:#5b6a66; --line:#d9e1de;
+  --accent:#0f766e; --accent-soft:#e0f2ef; --warn:#a14a07; --warn-soft:#fdf0e3;
+  --click:#7c3aed; --click-soft:#efe9fd;
+  --f-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1514; --surface:#17201e; --fg:#e4ecea; --muted:#9aaba6; --line:#2a3734;
+  --accent:#5eead4; --accent-soft:#12302c; --warn:#fdba74; --warn-soft:#3a2513;
+  --click:#c4b5fd; --click-soft:#2a2340; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1514; --surface:#17201e; --fg:#e4ecea; --muted:#9aaba6; --line:#2a3734;
+  --accent:#5eead4; --accent-soft:#12302c; --warn:#fdba74; --warn-soft:#3a2513;
+  --click:#c4b5fd; --click-soft:#2a2340; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.8;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:760px;margin:0 auto;padding-block:28px 80px}
+h1{font-size:1.65rem;line-height:1.35;font-weight:900;margin:0 0 6px;text-wrap:balance}
+h2{font-size:1.25rem;font-weight:900;margin:0 0 14px;text-wrap:balance}
+.eyebrow{font-size:.78rem;letter-spacing:.12em;color:var(--accent);font-weight:700}
+.sub{color:var(--muted);margin:0}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);
+  display:flex;gap:6px;flex-wrap:wrap;padding-block:10px;margin-block:18px 24px}
+nav a{color:var(--fg);text-decoration:none;font-size:.9rem;padding:4px 10px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+nav a:hover,nav a:focus-visible{border-color:var(--accent);outline:none}
+section{margin-bottom:44px;scroll-margin-top:70px}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:18px}
+.fact{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.fact b{display:block;font-family:var(--f-mono);font-size:1.25rem;color:var(--accent);font-variant-numeric:tabular-nums}
+.fact span{font-size:.82rem;color:var(--muted);line-height:1.5;display:block}
+.tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px;font-size:.9rem;color:var(--muted)}
+button{font:inherit;font-size:.88rem;cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--fg);padding:4px 12px;border-radius:8px}
+button[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.slide{display:grid;grid-template-columns:44px 1fr;gap:12px;padding-block:18px;border-top:1px solid var(--line)}
+.no{font-family:var(--f-mono);font-weight:600;color:var(--accent);font-size:1.05rem;padding-top:2px;font-variant-numeric:tabular-nums}
+.body{min-width:0}
+.ttl{display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap}
+.ttl h3{margin:0;font-size:1.02rem;font-weight:700}
+.sec{font-family:var(--f-mono);font-size:.8rem;color:var(--muted);white-space:nowrap}
+.say p{margin:8px 0}
+.clk{display:inline-block;font-size:.72rem;font-weight:700;color:var(--click);background:var(--click-soft);border-radius:4px;padding:0 5px;margin:0 3px;vertical-align:1px}
+.note{margin-top:8px;font-size:.88rem;color:var(--muted);background:var(--accent-soft);border-radius:8px;padding:8px 12px;line-height:1.7}
+.note b{color:var(--fg)}
+.fix{margin-top:8px;font-size:.85rem;color:var(--warn);background:var(--warn-soft);border-radius:8px;padding:6px 12px;line-height:1.6}
+.hide-notes .note{display:none}
+.check{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.check li{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--warn);border-radius:6px;padding:10px 14px;line-height:1.7}
+.check li.ok{border-left-color:var(--accent)}
+.check small{display:block;color:var(--muted)}
+.tbl{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:.88rem;min-width:520px}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--muted);font-weight:500;font-size:.8rem}
+td.n{font-family:var(--f-mono);font-variant-numeric:tabular-nums;text-align:right}
+tr.me td{font-weight:700;color:var(--accent)}
+details{border-top:1px solid var(--line);padding-block:12px}
+summary{cursor:pointer;font-weight:700;line-height:1.6}
+summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+details p{margin:8px 0 0}
+.src{font-size:.82rem;color:var(--muted)}
+.foot{font-size:.82rem;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+@media (max-width:480px){.slide{grid-template-columns:32px 1fr;gap:8px}h1{font-size:1.4rem}}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">2026 工工年會 · 11/14（六）報告用</div>
+  <h1>結合跨建築用電預測與智慧代理人之辦公建築能源管理決策支援框架</h1>
+  <p class="sub">報告者 劉哲辰 · 指導教授 邱銘傳 · 共同作者 陳姵頤（國立清華大學 工業工程與工程管理學系）</p>
+
+  <div class="facts">
+    <div class="fact"><b>279 棟</b><span>辦公建築，13 個場站（BDG2，2016–2017 每小時）</span></div>
+    <div class="fact"><b>R² 0.903</b><span>TFT 時間泛化；建築泛化 0.809</span></div>
+    <div class="fact"><b>77.79% → 70.67%</b><span>80% 區間覆蓋率（時間 → 建築泛化）</span></div>
+    <div class="fact"><b>F1 0.8675</b><span>BERTScore，10 筆案例平均</span></div>
+  </div>
+
+  <nav aria-label="頁內導覽">
+    <a href="#check">上台前確認</a>
+    <a href="#script">逐頁講稿</a>
+    <a href="#numbers">關鍵數字</a>
+    <a href="#qa">問答準備</a>
+    <a href="#backup">備用頁</a>
+  </nav>
+
+  <section id="check">
+    <h2>上台前要確認的 7 件事</h2>
+    <ul class="check">
+      <li><b>第 3 頁的數字和論文不一樣。</b>講稿寫 UNEP「建築佔全球能源消耗 28%、建築及營運佔碳排 37%」；論文第一章寫 IEA (2024)「建築用電約佔全球能源總消耗 30%，2023 年佔能源相關 CO₂ 排放 34%（9.8 GtCO₂）」。UNEP 報告裡的 28% 通常是指「建築營運的碳排占比」，不是能源消耗占比，講法可能弄混了。<small>建議：投影片照哪個來源，口述就照念那個，數字跟定義要一致。若沒把握，直接改用論文的 IEA 版本。</small></li>
+      <li><b>第 27 頁講稿寫「以上是我今天的口試報告」。</b>年會不是口試，下面講稿已改成「今天的報告」。<small>投影片如果也寫了口試字樣，記得一起改。</small></li>
+      <li><b>第 12 頁標題在備註裡是「資料前處理」，內容其實是評估指標。</b>講稿說「從四個面向評估」卻只列了三個，下面已補上點預測（MAE、RMSE、R²）。<small>請看投影片上實際列了哪四個，口述對齊。</small></li>
+      <li><b>建議生成用的語言模型要講哪一個？</b>論文寫決策推理節點用 Gemma 4；舊版報告指南說簡報上寫的是 ChatGPT-4o mini。<small>請確認最新投影片第 6、11 頁寫的是什麼。被問到時要能講清楚兩個節點各用哪個模型。</small></li>
+      <li><b>第 19 頁「覆蓋率下降了 7%」。</b>77.79% → 70.67% 是下降約 7.1 個<b>百分點</b>，下面講稿已改。</li>
+      <li><b>K=3 的選擇理由、合成異常曲線的數字</b>：新版口述稿標註「仍需依實驗紀錄確認」。論文第 4 章有寫 K=3 的作法與 Recall 數值，下面已對照，但「為什麼是 3」論文沒有明確寫原因，問答時用「穩健性與運算成本的取捨」回答即可。</li>
+      <li class="ok"><b>時間：</b>主講 27 頁照下面講稿念完約 <b id="tot">—</b>（以每秒 4.5 字估算）。若場次限時 10 分鐘，可在第 8、9、14 頁先縮短（下面有標示可以省略的段落）。</li>
+    </ul>
+  </section>
+
+  <section id="script">
+    <h2>逐頁講稿（依 11/12 簡報備註整理，已核對論文）</h2>
+    <div class="tools">
+      <button id="tNotes" aria-pressed="false">只顯示要念的內容</button>
+      <span><span class="clk">▶</span> = 按下一個動畫</span>
+    </div>
+    <div id="slides"></div>
+  </section>
+
+  <section id="numbers">
+    <h2>關鍵數字（論文第 4 章）</h2>
+    <p class="src">點預測：四模型於時間泛化（已見建築）與建築泛化（未見建築，K=3 三輪平均）</p>
+    <div class="tbl"><table>
+      <thead><tr><th>模型</th><th>時間 MAE</th><th>時間 RMSE</th><th>時間 R²</th><th>建築 MAE</th><th>建築 RMSE</th><th>建築 R²</th><th>RMSE 增幅</th></tr></thead>
+      <tbody>
+        <tr><td>LSTM</td><td class="n">0.0086</td><td class="n">0.0198</td><td class="n">0.882</td><td class="n">0.0406</td><td class="n">0.0582</td><td class="n">0.783</td><td class="n">+0.0384</td></tr>
+        <tr><td>GRU</td><td class="n">0.0115</td><td class="n">0.0229</td><td class="n">0.853</td><td class="n">0.0624</td><td class="n">0.0744</td><td class="n">0.751</td><td class="n">+0.0515</td></tr>
+        <tr><td>Vanilla Transformer</td><td class="n">0.0180</td><td class="n">0.0363</td><td class="n">0.719</td><td class="n">0.0525</td><td class="n">0.0809</td><td class="n">0.694</td><td class="n">+0.0446</td></tr>
+        <tr class="me"><td>TFT（本研究）</td><td class="n">0.0081</td><td class="n">0.0189</td><td class="n">0.903</td><td class="n">0.0350</td><td class="n">0.0543</td><td class="n">0.809</td><td class="n">+0.0354</td></tr>
+      </tbody>
+    </table></div>
+    <p class="src" style="margin-top:18px">機率預測（TFT）</p>
+    <div class="tbl"><table>
+      <thead><tr><th>情境</th><th>CRPS</th><th>相對倍數</th><th>80% 區間實際覆蓋率</th></tr></thead>
+      <tbody>
+        <tr><td>時間泛化</td><td class="n">0.0073</td><td class="n">1.00×</td><td class="n">77.79%</td></tr>
+        <tr><td>建築泛化</td><td class="n">0.0281</td><td class="n">3.85×</td><td class="n">70.67%</td></tr>
+      </tbody>
+    </table></div>
+    <p class="src" style="margin-top:18px">合成異常注入 Recall（輕度 / 中度 / 重度）</p>
+    <div class="tbl"><table>
+      <thead><tr><th>規則</th><th>注入方式</th><th>輕度</th><th>中度</th><th>重度</th></tr></thead>
+      <tbody>
+        <tr><td>規則一 預測區間超出</td><td>用電強度調降 80% / 90% / 95%</td><td class="n">96.08%</td><td class="n">97.34%</td><td class="n">98.22%</td></tr>
+        <tr><td>規則二 時段違常（尖峰型）</td><td>離峰單點放大 1.7 / 2.3 / 5 倍，各 120 筆</td><td class="n">61.7%</td><td class="n">68.3%</td><td class="n">91.7%</td></tr>
+        <tr><td>規則二 時段違常（持續型）</td><td>離峰連續 36 小時放大，各 120 筆</td><td class="n">63.9%</td><td class="n">82.4%</td><td class="n">94.6%</td></tr>
+        <tr><td>規則三 同儕落後</td><td>60 棟建築（每級 20 棟）訓練期 EUI 放大</td><td class="n">35%</td><td class="n">50%</td><td class="n">95%</td></tr>
+      </tbody>
+    </table></div>
+    <p class="src" style="margin-top:18px">BERTScore（10 筆案例平均）：Precision 0.8770 · Recall 0.8588 · F1 0.8675（各案例 F1 介於 0.7860–0.9649）</p>
+    <p class="src">資料切分：訓練 2016/01–2017/05、驗證 2017/06–2017/09、已見與未見建築測試皆為 2017/10–2017/12。每輪約 186 棟已見、93 棟未見。</p>
+  </section>
+
+  <section id="qa">
+    <h2>問答準備</h2>
+    <p class="src">回答已對照論文。標示「錄音」的題目是 Peggy 學姊口試時委員問過、年會也可能被問的。</p>
+    <div id="qaList"></div>
+  </section>
+
+  <section id="backup">
+    <h2>備用頁（第 28–32 頁）</h2>
+    <p class="src">簡報最後的備用頁。第 28、29、30、31 頁是第 11、13、14、21 頁的另一版本，被問到時再翻過去。</p>
+    <div id="backupSlides"></div>
+  </section>
+
+  <p class="foot">資料來源：GitHub oral-scripts（Paper/整理版）中的 11/12 新版逐頁口述稿、報告完整指南、錄音整理筆記，以及論文《結合跨建築用電預測與智慧代理人之辦公建築能源管理決策支援框架》（11/11 版）。頁碼以 11/12 簡報為準。</p>
+</div>
+
+<script>
+const S = [
+ {n:1,t:"封面",p:["各位午安，我是清華大學工業工程與工程管理學系的劉哲辰。今天的主題是「結合跨建築用電預測與智慧代理人之辦公建築能源管理決策支援框架」。"],note:"依場次時間改成「早安」或「午安」。"},
+ {n:2,t:"大綱",p:["接下來我會依這五個部分，依序向各位介紹。"]},
+ {n:3,t:"研究背景",p:["隨著能源需求持續攀升，根據聯合國環境規劃署（UNEP）今年的報告，建築部門佔全球能源消耗的 28%，建築及營運部門則佔全球碳排的 37%。","儘管近年建築能源效率持續改善，整體碳排放仍居高不下，顯示建築用電監測與能源管理已成為實現淨零排放的重要課題。"],fix:"數字與論文不一致，見上方確認清單第 1 項。論文版本：IEA (2024)，建築用電約佔全球能源總消耗 30%；2023 年佔能源相關 CO₂ 排放 34%（9.8 GtCO₂）。"},
+ {n:4,t:"研究動機",p:["在現有的技術與環境下，我們已經能夠蒐集建築用電資料，並預測未來的用電情形。但問題是，預測之後呢？","因此，我們整理出目前建築能源管理存在的三項限制：","第一，模型多以少量建築驗證，對新建築的泛化能力仍待確認。第二，異常判定多依賴單一規則，難以涵蓋不同樣態的異常現象。第三，預測結果仍然不足以成為實際的管理行動。","所以，本研究希望建立一套整合性的決策支援框架，提升跨建築泛化能力、結合多層次異常判定，並將預測與異常資訊轉化為管理者能理解、能參考的節能建議。"],note:"「預測之後呢？」停一拍，這是整場的主軸。"},
+ {n:5,t:"研究目標",p:["針對上述三項限制，我們期望能夠：第一，建立具有跨建築泛化能力的用電預測模型；第二，建立多層次的異常用電判定機制；第三，將這些資訊整合至智慧代理人，生成可執行的節能建議方案。"]},
+ {n:6,t:"研究方法 – 研究架構",p:["本研究架構分為四個階段。首先，資料前處理整合建築歷史用電、氣候數據與建築靜態屬性，經過缺值處理與正規化後再進行切分。","[▶] 接著，模型訓練以 TFT 為核心，除了預測未來的用電量，也輸出「預測用電區間」。","[▶] 接著，我們利用 LangGraph 建構三個獨立節點，整合異常判定的結果，包括異常類型與相關數值，推論可能的原因，並產生對應的節能建議。","[▶] 最終整合在使用者介面，提供管理者參考。"]},
+ {n:7,t:"研究方法 – 資料前處理",p:["資料前處理的部分，首先透過線性插值補齊時間序列的缺失值；針對氣象與樓地板面積等已知特徵，採用全域 Min-Max 正規化；而預測目標「單位面積用電強度」，則採用 EncoderNormalizer，依照各樣本自身的編碼歷史窗格進行正規化，確保面對新建築時仍能穩定推論。","最後再依建築層級與時間層級切分資料集。"],note:"編碼歷史窗格 = 過去 168 小時，用來預測未來 24 小時。"},
+ {n:8,t:"Temporal Fusion Transformer (TFT)",p:["本研究採用 TFT 作為核心預測模型。最下方有三類輸入：左側是建築的靜態屬性，中間是歷史用電與氣象觀測，右側是預測當下就能知道的未來資訊，例如小時、星期與假日。","[▶] 接著透過變數選擇網路得到各項權重，讓模型依預測當下的情境調整關注程度。這是選用 TFT 的第一個原因。","[▶] 再往上是 LSTM。編碼器整理歷史序列，解碼器結合已知的未來特徵，建立各預測時間點的表示，用來捕捉用電的時序依賴。","[▶] 這一層再融入建築靜態資訊，讓相似的時間變化，可以依不同建築條件形成不同的表示。","[▶] 接著，自注意力機制整合輸入視窗內不同時間位置的資訊，協助掌握較長的時間關聯。結合 LSTM 與注意力，是選用 TFT 的第二個原因。","[▶] 位置前饋層則對每個時間位置的特徵進行非線性轉換。","最後，模型輸出未來二十四小時的多個分位數。P50 作為點預測，P10 與 P90 形成名義 80% 的預測區間，作為後續異常判定的輔助依據。這是第三個選用原因，但區間是否可靠，仍須以實際覆蓋率檢驗。"],note:"<b>時間不夠時：</b>第 4、5 個 ▶ 的說明可以只按動畫、一句帶過。"},
+ {n:9,t:"研究方法 – 模型訓練 (2/2)：GRN",p:["接下來介紹在 TFT 架構中反覆出現的 GRN 門控殘差網路。","[▶] 首先，a 是某個時間點的特徵向量，例如氣溫或歷史用電值。[▶] c 則是建築屬性編碼後的靜態資訊，會一併輸入。","[▶] 接著，模型用 ELU 這個非線性激活函數，把主要輸入跟上下文資訊整合起來，做一次非線性轉換。轉換完並經過線性投影後，[▶] GLU 會動態決定是否要套用這層非線性轉換。","[▶] 最後，GRN 把 GLU 閘控後的結果和原始輸入做殘差連接，再做層正規化，讓梯度可以更順利地傳遞。"],note:"<b>時間不夠時：</b>這頁可以濃縮成「GRN 讓模型自己決定要不要做非線性轉換，簡單情境可以跳過，避免過擬合」。"},
+ {n:10,t:"異常判定規則",p:["接下來是本研究設計的異常判定機制：","預測區間超出，對應突發性的用電異常；時段違常，對應非典型時段的用電異常；同儕落後，則對應長期結構性的能效落後。這三種規則的目的，是捕捉不同時間尺度的異常樣態。"],note:"規則一：實際值落在 P10–P90 區間外。規則二：離峰時段高於建築自身離峰基準。規則三：EUI 排名落在同儕第 80 百分位以上。"},
+ {n:11,t:"研究方法 – 智慧代理人輸出",p:["最後是智慧代理人的運作流程。我們把流程拆成獨立節點，是為了讓每個節點只專注於自己的任務，提升各步驟輸出的穩定性與可控性。","[▶] 當 TFT 完成用電預測後，會觸發「異常偵測節點」進行規則比對。判定出異常類型後，連同對應的數值證據 [▶] 一起傳入「決策推理節點」，由它產出決策理由，並告訴下一個節點應該針對哪些問題給建議；最後由「建議生成節點」產出具體的節能建議。"],fix:"原備註這段有重複字和斷句問題（「產出產出決策理由與並告訴…」），已依第 28 頁備用版改寫。"},
+ {n:12,t:"研究方法 – 評估指標",p:["本研究從四個面向進行評估。","點預測以 MAE、RMSE 與 R² 衡量預測準確度。","預測區間透過 CRPS 及 80% 預測區間覆蓋率，檢查機率預測的品質。","異常判定部分，透過合成異常注入，以 Recall 檢驗不同強度下的偵測敏感度。","最後，以 BERTScore 比較生成建議與人工參考文本的語意一致性，但實際節能效果仍需進一步的場域驗證。"],fix:"備註標題寫成「資料前處理」，且只列三個面向；已補上點預測那一句。請對照投影片確認。"},
+ {n:13,t:"案例研究 – 資料前處理 (1/3)",p:["本研究使用的資料集涵蓋 2016 年初至 2017 年底、每小時記錄一次的建築用電資料，共 279 棟辦公建築，分布在 13 個不同區域的場站。","資料型態分為三類：樓地板面積等建築靜態資料、氣象資料，以及歷史用電資料。其中，我們把原始用電量除以樓地板面積，以降低不同建築的規模差異。"],note:"原始 BDG2 有 307 棟辦公建築、14 個場站；排除資料品質不佳的 Shrew 場站與異常比例過高的建築後剩 279 棟。"},
+ {n:14,t:"案例研究 – 資料前處理 (2/3)",p:["這個表整理各類特徵的前處理流程。","靜態連續變數，也就是樓地板面積，採全域 Min-Max 正規化。","動態連續變數，包含氣溫、露點溫度、風速、風向與用電原始量，依各建築或各場站自身的時間序列進行線性插值，序列首尾則以前向與後向遞補補齊。","預測目標單位面積用電強度，由用電原始量轉換而成，再以 EncoderNormalizer 搭配 softplus 轉換進行正規化。"],note:"<b>時間不夠時：</b>只念第一句和最後一句。缺值比例：用電 2.90%、氣溫 0.287%、露點 0.321%、風速 0.423%、風向 4.83%；海平面氣壓插值後仍缺 4.66%，所以沒用。"},
+ {n:15,t:"案例研究 – 資料前處理 (3/3)",p:["本研究的資料切分採雙重泛化驗證設計。","建築切分採分組 3 折交叉驗證，目的是降低單次隨機切分建築群組可能造成的偶然偏誤。","時間切分則依先後順序分為訓練期、驗證期與測試期，其中已見建築與未見建築都採用相同的測試期間。"],fix:"原備註裡混了一段 K=3 的問答說明和多餘符號，已移到問答準備。",note:"兩組測試期相同（2017/10–12），是為了排除季節與氣候差異，讓差距只反映跨建築泛化。"},
+ {n:16,t:"超參數優化（Optuna）",p:["在模型訓練階段，我們使用 Optuna 進行超參數搜尋，找出各模型較合適的設定。接下來看時間泛化的評估結果。"],note:"表上的 Validation Loss 不能跨模型比：LSTM、GRU、Transformer 用 RMSE Loss，TFT 用 Quantile Loss。只用來挑各自的超參數與 EarlyStopping。"},
+ {n:17,t:"案例研究 – 評估指標 (1/6)：時間泛化",p:["接著是四個模型在時間泛化情境下的評估結果。可以觀察到，TFT 的 MAE、RMSE 和 R² 都是四個模型中最佳的。","這代表在預測已見建築未來用電時段的情境下，TFT 有較佳的短期用電預測效能。"],note:"TFT：MAE 0.0081、RMSE 0.0189、R² 0.903；次佳 LSTM：0.0086 / 0.0198 / 0.882。"},
+ {n:18,t:"案例研究 – 評估指標 (2/6)：建築泛化",p:["接著是四個模型在建築泛化情境下的結果，也就是模型面對訓練階段完全沒看過的建築時的表現。","四個模型在建築泛化下的各項誤差都比時間泛化高，顯示跨建築預測確實更具挑戰性。不過即使如此，TFT 的各項指標仍優於其他三者，展現相對穩定的泛化能力，因此本研究最終選用 TFT 作為後續分析的用電預測模型。"],note:"TFT：MAE 0.0350、RMSE 0.0543、R² 0.809；RMSE 增幅 +0.0354 也是四模型最小。"},
+ {n:19,t:"連續分級機率評分 (CRPS)",p:["接下來進一步評估 TFT 的區間估計品質。","相較於時間泛化，建築泛化情境下的 CRPS 上升約 3.85 倍；80% 預測區間覆蓋率則從 77.79% 降到 70.67%，下降約 7 個百分點。顯示在預測全新建築時，模型可能受到分布偏移影響，導致機率預測品質下降。","因此，當實際用電落在區間外時，只代表該時間點的用電行為已偏離模型估計的合理範圍，可作為異常候選的依據，但實務上不能直接視為確定的異常事件。"],fix:"原稿「下降了 7%」改為「約 7 個百分點」。",note:"CRPS 看整個預測分布是否貼近實際值；80% 覆蓋率只看 P10–P90 這一個區間的校準，越接近 80% 越好。"},
+ {n:20,t:"案例研究 – 評估指標 (4/6)：24 小時曲線",p:["這裡呈現單一建築的 24 小時用電強度曲線，藍色曲線是實際用電。","在時間泛化情境中，有兩個明顯現象：紅線 GRU 在多個用電尖峰時段明顯高估；綠線 Vanilla Transformer 則過度平滑，對尖峰和低谷的反應都較遲鈍。這兩種誤差在右圖的建築泛化情境中更加放大。","而 TFT 和 LSTM 仍能維持相對穩定的預測型態，也顯示不同模型架構在泛化穩定性上的差異。"],note:"左圖 Bobcat_office_Justine（已見）、右圖 Bobcat_office_Melody（未見）。GRU 高估出現在左圖第 1、9、15 小時。"},
+ {n:21,t:"案例研究 – 評估指標 (5/6)：異常注入 Recall",p:["接下來驗證三項異常規則的偵測敏感度。目的是在缺乏標註異常資料的限制下，讓三項規則對不同異常強度的敏感度都有量化證據支持。","[▶] 首先可以看到，規則一即使注入低強度的異常，也有非常高的偵測率，適合用來捕捉即時性的偏離。","同時，規則三在異常強度較低時判定較保守，Recall 偏低；只有當異常強度明顯提升、達到重度等級時，Recall 才顯著上升。這樣的設計反而更貼合它辨識長期結構性能效落後的定位，避免把輕微或正常的波動誤判為長期問題。"],note:"規則一 96.08 / 97.34 / 98.22%；規則二尖峰型 61.7 / 68.3 / 91.7%、持續型 63.9 / 82.4 / 94.6%；規則三 35 / 50 / 95%。"},
+ {n:22,t:"案例研究 – 評估指標 (6/6)：BERTScore",p:["在文本評估指標上，本研究的平均 Precision、Recall 與 F1 都大於 0.85，反映生成建議與參考文本有一定程度的語意相似性。","以下是一個發生在離峰時段、用電強度卻高於建築自身離峰基準約 15% 的案例。系統生成的建議偏向「人為因素」的解讀，範例答案則偏向「系統排程設定」的解讀。兩者改善方向一致，但細部的成因推論仍與人工撰寫的內容有些微差異。"],note:"Precision：生成內容有多少能在參考文本找到語意相近的對應；Recall：參考文本的重點有多少被生成內容涵蓋。數值 P 0.8770、R 0.8588、F1 0.8675。案例為 Panther_office_Jesus（論文 R2-4）。"},
+ {n:23,t:"AI Agent Demo",p:["以下是 AI Agent 的 demo 影片。上傳測試資料後，系統會依序執行 TFT 用電預測、異常偵測、決策推理與建議生成四個節點，每個節點完成後即時顯示對應的判斷結果。"],note:"影片前先確認能播放、有沒有聲音。"},
+ {n:24,t:"案例研究 – 輸出",p:["這裡是智慧代理人最終的輸出畫面。","左側呈現異常偵測節點輸出的異常資訊；右上角是決策推理節點針對這個異常的成因推論，以及要送入下一個節點的情境指令；右下角則是建議生成節點最後產出的具體節能行動建議。","這樣的介面設計，是希望降低能源管理者判讀模型結果的門檻，讓使用者快速掌握異常類型、成因與處理方式，也符合智慧代理人作為決策支援的設計初衷。"],note:"例：Bobcat_office_Justine 2017-11-14 14:00，實際 0.058、預測中位數 0.041、區間 0.032–0.048 kWh/m²，超出上界約 20.8%。"},
+ {n:25,t:"研究貢獻",p:["學術貢獻方面，本研究建立時間泛化與建築泛化的雙重驗證架構，並整合分位數預測與三層次異常規則，將預測結果轉化為具有能源管理意義的異常類型，進而建構智慧代理人框架，將建築能源研究延伸至決策支援層次。","實務貢獻方面，本研究協助管理者掌握用電變化，同時透過自然語言提供不同的改善方向說明，降低能源管理決策的理解門檻。"]},
+ {n:26,t:"研究限制與未來發展",p:["[▶] 首先，本研究尚未驗證不同建築類型的適用性，未來希望擴展至不同建築場域，進一步檢驗跨類型與跨營運情境下的泛化能力。","[▶] 其次，未見建築的預測區間校準仍不足，未來希望引入遷移學習策略，協助模型更快適應新建築的用電型態。","[▶] 目前異常判定仍依賴門檻設定，未來希望導入自適應機制，依建築用電型態動態調整判定門檻。","[▶] 最後，目前尚未透過能源管理專家驗證智慧代理人的可行性，未來希望導入專家評估與長期節能追蹤，驗證整體系統的實際效益。"]},
+ {n:27,t:"感謝聆聽　敬請指教",p:["以上是我今天的報告，感謝各位的聆聽，歡迎各位提問與指教。"],fix:"原稿是「我今天的口試報告，感謝各位老師」，年會場合已改。"}
+];
+const B = [
+ {n:28,t:"研究方法 – 智慧代理人輸出（備用版）",p:["之所以將整個流程拆分成獨立節點，用意是讓各節點只專注於自身的任務，提升各步驟輸出的穩定性與可控性。","[▶] 當 TFT 完成用電預測後，會觸發異常偵測節點進行規則比對，判定出異常類型後，連同對應的數值證據 [▶] 傳入決策推理節點進行情境推理；接著決策推理節點產出推理過程，並生成下一階段 [▶] 所需要的情境指令，用來生成最終具體的節能建議。"]},
+ {n:29,t:"資料前處理 (1/3)（備用版，含特徵工程）",p:["資料集涵蓋 2016 年初至 2017 年底、每小時記錄一次的建築用電資料，共 279 棟辦公建築，分布在 13 個場站。","資料型態分三類：樓地板面積等建築靜態資料、氣象資料，以及歷史用電資料。我們針對原始用電做了特徵工程，衍生出用電強度以消除規模差異；以及三組歷史延遲特徵，捕捉不同週期的負載慣性。"],note:"三組延遲特徵：lag_1h、lag_24h、lag_168h。"},
+ {n:30,t:"資料前處理 (2/3)（備用版）",p:["內容同第 14 頁。"]},
+ {n:31,t:"評估指標 (5/6)（備用版）",p:["內容同第 21 頁。"]},
+ {n:32,t:"文獻比較",p:["本頁將本研究與先前相關文獻進行系統性的方法比較。","Zaboli 等人、Bernadić 等人和 Moveh 等人在用電預測的基礎上，分別加入異常判定、智慧代理人和泛化驗證。","Papaioannou 等人的研究涵蓋範圍較廣，同時包含用電預測、泛化驗證與節能建議生成，但尚未整合智慧代理人的自動化決策機制。","相較之下，本研究嘗試同時整合以上五個面向，作為研究的創新點。"],note:"原稿用「Z 學者、B 學者…」代稱，這裡依報告指南填入作者名，請對照投影片。"}
+];
+const Q = [
+ ["為什麼選 2021 年的 TFT，而不是 Informer、PatchTST 等較新的 Transformer？","新架構主要針對極長序列預測的運算效率，多數只輸出點預測。本研究是用過去 168 小時預測未來 24 小時，效率不是瓶頸；我們需要的是兩件事：一是原生整合建築靜態屬性、已知未來特徵與歷史觀測，支援跨建築預測；二是一次輸出分位數區間，給異常判定使用。TFT 內建變數選擇、靜態共變數編碼與 Quantile Loss，最符合這個框架。"],
+ ["氣象被當成「已知未來特徵」，實務上怎麼知道未來 24 小時的氣象？","離線實驗中，把目標時段的氣象觀測值當成已知外部條件，等同取得了未來 24 小時的氣象預報，讓評估聚焦在「給定環境條件下建築的用電反應」。實際部署時可以串接氣象署或商業氣象 API 的逐時預報。"],
+ ["已經除以樓地板面積了，為什麼預測目標還要用 EncoderNormalizer？","不同辦公建築的基礎用電密度仍有差異，例如有沒有機房或全天候空調。EncoderNormalizer 依每個樣本自己過去 168 小時的窗格做正規化，新建築只要有一週的短期資料就能對齊尺度，不需要知道它全期的極值，這對跨建築泛化很重要。"],
+ ["覆蓋率掉到 70.67%，規則一在新建築上會不會誤報很多？","會比預期多。約 29% 的時間點會落在區間外，高於設計的 20%，這是分布偏移造成的，也列在研究限制。所以我們把區間超出定位成「異常候選」，不直接判定為故障；觸發後由決策推理節點結合超出幅度、是否為離峰時段等資訊推理，先建議低成本的檢查。未來可以用遷移學習改善新建築的區間校準。"],
+ ["合成異常注入為什麼只看 Recall，不看 Precision？","BDG2 是真實電表資料，沒有異常標註。只有我們注入的點能確定是異常，可以算 TP 和 FN；背景資料被判異常時，分不出是誤報還是原本就存在的真實異常，所以 Precision 沒有可靠的計算基礎。為了證明規則不是什麼都判異常，我們分輕、中、重三種強度，Recall 隨強度單調上升，例如規則三從 35%、50% 到 95%。作法參考 Darban 等人 (2024) 的時間序列異常偵測綜述。"],
+ ["為什麼不直接把用電資料丟給 LLM，一次做完預測、判斷和建議？","文獻指出語言模型直接處理長串數值和門檻比較，容易出現數值幻覺和判斷不一致（He & Jazizadeh, 2025；Liu et al., 2025），token 成本也高。所以我們讓 TFT 負責預測、規則節點負責數值比對，語言模型只處理結構化後的數值證據，做成因推理與文字建議。"],
+ ["怎麼避免 AI 編造節能百分比？","建議生成時給定固定的參考內容，例如台電節能手冊、冷凍空調技師公會的案例，並在提示中限制：只能依數值證據推理，引用的效益數字必須來自給定資料並標明出處。所以輸出會寫「年省電費約 30%（引用案例來源）」，而不是自己估一個數字。"],
+ ["三條規則都沒觸發時，系統會做什麼？","系統會回報目前用電正常、不需要事後處置，但仍會根據 TFT 未來 24 小時的預測區間做前瞻監控。論文中 Fox_office_Diana 2017/11/15 18:00 的例子就是這種情境，系統依隔天的預測提出事前的建議。"],
+ ["分組交叉驗證為什麼選 K=3？","在評估穩健性和運算成本之間取得平衡。K=3 已能讓 279 棟建築每一棟都輪到一次當未見建築，三輪未見建築互斥且涵蓋全部。K 設成 5 或 10 要重複訓練更多輪，TFT 訓練成本不低，但穩健度提升有限。若運算資源允許，未來可以用更大的 K 做敏感度分析。"],
+ ["13 個場站氣候差很多，單一模型怎麼處理跨場站差異？","論文有做場站分群的補充實驗：依氣候與規模特徵把 13 個場站用 Ward 階層式分群分成三群。原本模型在三群間的誤差有顯著差異（Kruskal-Wallis H = 14.674，p = 0.000651）。加入 cluster_id 後，測試集 RMSE 從 0.0226 降到 0.0183，R² 從 0.900 升到 0.933，CRPS 從 0.0081 降到 0.0063，逐棟 Wilcoxon 檢定 p = 5.05×10⁻²¹，約 77% 的建築誤差下降。簡報沒放這段，被問到時再提。"],
+ ["決策推理和建議生成用的是哪個語言模型？","論文寫的是決策推理節點使用 Gemma 4。請確認簡報上寫的模型名稱後再回答，兩邊要一致（見上台前確認第 4 項）。"],
+ ["（錄音）實際值超出預測區間，就一定是異常嗎？","不一定，也可能是預測誤差，或缺少背景資訊，例如搬遷、連假。所以規則一只產生異常候選，決策推理節點給的是「可能原因，待查證」，再由管理者確認。"],
+ ["（錄音）只有整棟總用電，怎麼知道是空調還是照明的問題？","沒辦法直接知道。我們的建議是列出應該優先檢查的設備與排程，不是判定哪個設備故障。這是資料面的限制，未來若能取得分項電表資料可以改善。"],
+ ["（錄音）超參數調整有沒有用到測試資料？","沒有。Optuna 只用驗證集（2017/06–09，已見建築）找最佳超參數，三輪 K 折都沿用同一組，不重新搜尋，測試期與未見建築沒有參與調參。"]
+];
+function render(list, el){
+  el.innerHTML = list.map(s => {
+    const paras = s.p.map(x => "<p>" + x.replace(/\[▶\]/g,'<span class="clk">▶</span>') + "</p>").join("");
+    const chars = s.p.join("").replace(/\[▶\]|\s/g,"").length;
+    const sec = Math.round(chars/4.5);
+    return `<article class="slide" id="s${s.n}"><div class="no">${s.n}</div><div class="body">
+      <div class="ttl"><h3>${s.t}</h3><span class="sec">約 ${sec} 秒</span></div>
+      <div class="say">${paras}</div>
+      ${s.fix ? `<div class="fix">已修改：${s.fix}</div>` : ""}
+      ${s.note ? `<div class="note">${s.note}</div>` : ""}
+    </div></article>`;
+  }).join("");
+  return list.reduce((a,s)=>a+s.p.join("").replace(/\[▶\]|\s/g,"").length,0);
+}
+const total = render(S, document.getElementById("slides"));
+render(B, document.getElementById("backupSlides"));
+const secs = Math.round(total/4.5);
+document.getElementById("tot").textContent = Math.floor(secs/60) + " 分 " + (secs%60) + " 秒";
+document.getElementById("qaList").innerHTML = Q.map((q,i)=>`<details><summary>Q${i+1}. ${q[0]}</summary><p>${q[1]}</p></details>`).join("");
+const tb = document.getElementById("tNotes");
+function setNotes(on){ document.getElementById("script").classList.toggle("hide-notes", on); tb.setAttribute("aria-pressed", on); }
+try { setNotes(localStorage.getItem("hideNotes")==="1"); } catch(e){}
+tb.addEventListener("click", ()=>{ const on = tb.getAttribute("aria-pressed")!=="true"; setNotes(on); try{localStorage.setItem("hideNotes", on?"1":"0");}catch(e){} });
+</script>
+
+</body>
+</html>
