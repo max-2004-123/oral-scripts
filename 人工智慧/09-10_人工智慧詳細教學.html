@@ -1,10 +1,8 @@
 <!doctype html>
 <html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>非監督、自監督與深度強化學習｜詳細教學</title>
-<script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg:{fontCache:'global'}};</script>
-<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 <style>
 :root{color-scheme:light;--ink:#213144;--muted:#617185;--blue:#215c95;--line:#dce6ee;--paper:#fff;--wash:#f2f6f8}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--wash);color:var(--ink);font:16px/1.85 'Microsoft JhengHei',system-ui,sans-serif}a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}.hero{background:#143b5d;color:white;padding:52px max(24px,calc((100vw - 1260px)/2));}.eyebrow{color:#a7d9d5;letter-spacing:.16em;font-size:.8rem;font-weight:700}.hero h1{font-size:clamp(1.8rem,4vw,3rem);line-height:1.3;margin:12px 0}.hero p{color:#d9e8ed;margin:0;max-width:700px}.layout{max-width:1300px;margin:0 auto;display:grid;grid-template-columns:260px minmax(0,1fr);gap:30px;padding:28px 24px 70px}nav{align-self:start;position:sticky;top:20px;max-height:calc(100vh - 40px);overflow:auto;background:white;border:1px solid var(--line);border-radius:14px;padding:20px}nav strong{font-size:1rem}nav ol{padding-left:1.3em;margin:8px 0 0;font-size:.84rem;line-height:1.6}nav li{padding:4px 0}main{min-width:0;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:clamp(22px,5vw,64px);box-shadow:0 12px 34px #1d42580a}main>h1{font-size:1.65rem;margin-top:0}h2{font-size:1.5rem;color:#164a73;border-top:1px solid var(--line);padding-top:36px;margin:48px 0 16px;scroll-margin-top:22px}h3{color:#245e7e;margin-top:28px}p{margin:1em 0}blockquote{margin:24px 0;border-left:4px solid #45a6a0;background:#eff9f7;padding:12px 20px;border-radius:0 10px 10px 0}blockquote p{margin:.4em 0}table{display:block;overflow-x:auto;border-collapse:collapse;max-width:100%;margin:24px 0;font-size:.94rem}th,td{border:1px solid var(--line);padding:10px 14px;text-align:left;vertical-align:top}th{background:#edf4f8;white-space:nowrap}tr:nth-child(even){background:#f8fafb}mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;padding:8px 0}code{background:#eef4f7;border-radius:4px;padding:.1em .3em}hr{border:0;border-top:1px solid var(--line);margin:34px 0}footer{text-align:center;color:var(--muted);font-size:.85rem;margin:20px}@media(max-width:800px){.hero{padding:34px 22px}.layout{display:block;padding:16px 12px 40px}nav{position:static;max-height:none;margin-bottom:16px}nav ol{columns:2;column-gap:20px}nav li{break-inside:avoid}main{padding:25px 20px}}@media(max-width:450px){nav ol{columns:1}body{font-size:15px}}
-</style></head><body><header class="hero"><div class="eyebrow">AI LEARNING NOTES · CHAPTER 09 / 10</div><h1>從資料表示到智慧決策</h1><p>非監督、自監督與深度強化學習：用直覺、公式與例題，一步一步建立完整觀念。</p></header><div class="layout"><nav aria-label="教學目錄"><strong>📖 教學目錄</strong><ol><li><a href="#section-1">一、先建立整體觀念：四種學習方式差在哪？</a></li><li><a href="#section-2">二、非監督式學習：DBSCAN 如何分群？</a></li><li><a href="#section-3">三、自監督式學習真正要學的是「表示」</a></li><li><a href="#section-4">四、NLP 的第一個重點：同一個詞，意思會隨上下文改變</a></li><li><a href="#section-5">五、BERT：利用左右文理解被遮住的內容</a></li><li><a href="#section-6">六、GPT：把下一個 token 預測得好，就能逐步生成文字</a></li><li><a href="#section-7">七、影像自監督：如何讓圖片自己提供答案？</a></li><li><a href="#section-8">八、對比學習：讓同一張圖的不同版本靠近</a></li><li><a href="#section-9">九、MoCo 與 SimCLR：怎麼取得足夠的負樣本？</a></li><li><a href="#section-10">十、怎麼知道表示真的學得好？</a></li><li><a href="#section-11">十一、ViT、MAE、Swin：架構與學習任務要分開理解</a></li><li><a href="#section-12">十二、LLM、Memory 與 Agent 的關係</a></li><li><a href="#section-13">十三、強化學習：先搞清楚互動順序</a></li><li><a href="#section-14">十四、Reward 與 Return：眼前好，不代表長期好</a></li><li><a href="#section-15">十五、MDP 與 Markov property</a></li><li><a href="#section-16">十六、MATHPLACEHOLDER118END、MATHPLACEHOLDER119END、MATHPLACEHOLDER120END：三個一定要分清楚的函數</a></li><li><a href="#section-17">十七、Bellman equation：把長期問題拆成一步</a></li><li><a href="#section-18">十八、Q-learning：用一次經驗修正一格 Q-table</a></li><li><a href="#section-19">十九、Monte Carlo、TD 與 model-based 是不同分類軸</a></li><li><a href="#section-20">二十、DQN：狀態太多，改用神經網路估計 Q</a></li><li><a href="#section-21">二十一、Double DQN、Prioritized Replay、Dueling Network</a></li><li><a href="#section-22">二十二、Policy Gradient：直接調整動作機率</a></li><li><a href="#section-23">二十三、Baseline 與 Actor-Critic：用「比預期好多少」學習</a></li><li><a href="#section-24">二十四、Model-based RL、AlphaGo 與 MuZero</a></li><li><a href="#section-25">二十五、把兩章真正連起來</a></li><li><a href="#section-26">二十六、複習時，優先確認自己能回答這些問題</a></li></ol></nav><main><h1>非監督、自監督與深度強化學習：詳細教學</h1>
+</style><style>math[display="block"]{display:block;overflow-x:auto;overflow-y:hidden;padding:10px 0;max-width:100%}math{font-size:1.04em}</style></head><body><header class="hero"><div class="eyebrow">AI LEARNING NOTES · CHAPTER 09 / 10</div><h1>從資料表示到智慧決策</h1><p>非監督、自監督與深度強化學習：用直覺、公式與例題，一步一步建立完整觀念。</p></header><div class="layout"><nav aria-label="教學目錄"><strong>📖 教學目錄</strong><ol><li><a href="#section-1">一、先建立整體觀念：四種學習方式差在哪？</a></li><li><a href="#section-2">二、非監督式學習：DBSCAN 如何分群？</a></li><li><a href="#section-3">三、自監督式學習真正要學的是「表示」</a></li><li><a href="#section-4">四、NLP 的第一個重點：同一個詞，意思會隨上下文改變</a></li><li><a href="#section-5">五、BERT：利用左右文理解被遮住的內容</a></li><li><a href="#section-6">六、GPT：把下一個 token 預測得好，就能逐步生成文字</a></li><li><a href="#section-7">七、影像自監督：如何讓圖片自己提供答案？</a></li><li><a href="#section-8">八、對比學習：讓同一張圖的不同版本靠近</a></li><li><a href="#section-9">九、MoCo 與 SimCLR：怎麼取得足夠的負樣本？</a></li><li><a href="#section-10">十、怎麼知道表示真的學得好？</a></li><li><a href="#section-11">十一、ViT、MAE、Swin：架構與學習任務要分開理解</a></li><li><a href="#section-12">十二、LLM、Memory 與 Agent 的關係</a></li><li><a href="#section-13">十三、強化學習：先搞清楚互動順序</a></li><li><a href="#section-14">十四、Reward 與 Return：眼前好，不代表長期好</a></li><li><a href="#section-15">十五、MDP 與 Markov property</a></li><li><a href="#section-16">十六、<span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi></mrow><annotation encoding="application/x-tex">V</annotation></semantics></math></span>、<span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi></mrow><annotation encoding="application/x-tex">Q</annotation></semantics></math></span>、<span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi></mrow><annotation encoding="application/x-tex">A</annotation></semantics></math></span>：三個一定要分清楚的函數</a></li><li><a href="#section-17">十七、Bellman equation：把長期問題拆成一步</a></li><li><a href="#section-18">十八、Q-learning：用一次經驗修正一格 Q-table</a></li><li><a href="#section-19">十九、Monte Carlo、TD 與 model-based 是不同分類軸</a></li><li><a href="#section-20">二十、DQN：狀態太多，改用神經網路估計 Q</a></li><li><a href="#section-21">二十一、Double DQN、Prioritized Replay、Dueling Network</a></li><li><a href="#section-22">二十二、Policy Gradient：直接調整動作機率</a></li><li><a href="#section-23">二十三、Baseline 與 Actor-Critic：用「比預期好多少」學習</a></li><li><a href="#section-24">二十四、Model-based RL、AlphaGo 與 MuZero</a></li><li><a href="#section-25">二十五、把兩章真正連起來</a></li><li><a href="#section-26">二十六、複習時，優先確認自己能回答這些問題</a></li></ol></nav><main><h1>非監督、自監督與深度強化學習：詳細教學</h1>
 <p>我把兩份講義整理成「<strong>觀念 → 公式 → 例子 → 方法比較 → 常見誤解</strong>」的教學。以下以講義為主，補上理解所需的推導；部分投影片過度簡化的說法也會一起釐清。</p>
 <p>教材來源：</p>
 <ul>
@@ -52,14 +50,14 @@
 </tr>
 </tbody></table>
 <p>監督式學習通常有資料：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi mathvariant="script">D</mi><mo>=</mo><mo stretchy="false">{</mo><mo stretchy="false">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo separator="true">,</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">)</mo><msubsup><mo stretchy="false">}</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></msubsup></mrow><annotation encoding="application/x-tex">
 \mathcal D=\{(x_i,y_i)\}_{i=1}^{N}
-\]</p>
-<p>其中 \(y_i\) 是標準答案。</p>
-<p>自監督式學習則從原始資料 \(x\) 建立輸入與目標：</p>
-<p>\[
+</annotation></semantics></math></span></p>
+<p>其中 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>y</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">y_i</annotation></semantics></math></span> 是標準答案。</p>
+<p>自監督式學習則從原始資料 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span> 建立輸入與目標：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mover accent="true"><mi>x</mi><mo>~</mo></mover><mo>=</mo><mi>T</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><mspace width="2em"/><msub><mi>y</mi><mtext>self</mtext></msub><mo>=</mo><mi>g</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 \tilde{x}=T(x),\qquad y_{\text{self}}=g(x)
-\]</p>
+</annotation></semantics></math></span></p>
 <p>例如：</p>
 <ul>
 <li>原文：「我今天搭火車去新竹。」</li>
@@ -76,20 +74,20 @@
 <p>資料密集的區域形成群集，稀疏且無法接到群集的點視為雜訊。</p>
 </blockquote>
 <p>它不像 K-means 必須事先指定群數，而是依靠兩個參數：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>ε</mi><mo separator="true">,</mo><mspace width="2em"/><mrow><mi mathvariant="normal">M</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">P</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">s</mi></mrow></mrow><annotation encoding="application/x-tex">
 \varepsilon,\qquad \mathrm{MinPts}
-\]</p>
+</annotation></semantics></math></span></p>
 <ul>
-<li>\(\varepsilon\)：多近的點算鄰居。</li>
-<li>\(\mathrm{MinPts}\)：鄰域內至少要有幾個點，才算密集。</li>
+<li><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ε</mi></mrow><annotation encoding="application/x-tex">\varepsilon</annotation></semantics></math></span>：多近的點算鄰居。</li>
+<li><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">M</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">P</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">s</mi></mrow><annotation encoding="application/x-tex">\mathrm{MinPts}</annotation></semantics></math></span>：鄰域內至少要有幾個點，才算密集。</li>
 </ul>
-<p>先定義點 \(p\) 的鄰域：</p>
-<p>\[
+<p>先定義點 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi></mrow><annotation encoding="application/x-tex">p</annotation></semantics></math></span> 的鄰域：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>N</mi><mi>ε</mi></msub><mo stretchy="false">(</mo><mi>p</mi><mo stretchy="false">)</mo><mo>=</mo><mo stretchy="false">{</mo><mi>q</mi><mo>∣</mo><mi>d</mi><mo stretchy="false">(</mo><mi>p</mi><mo separator="true">,</mo><mi>q</mi><mo stretchy="false">)</mo><mo>≤</mo><mi>ε</mi><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">
 N_\varepsilon(p)
 =
 \{q\mid d(p,q)\leq\varepsilon\}
-\]</p>
-<p>其中 \(d(p,q)\) 是兩點的距離。以下採常見定義，<strong>鄰域數量包含 \(p\) 自己</strong>。</p>
+</annotation></semantics></math></span></p>
+<p>其中 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mo stretchy="false">(</mo><mi>p</mi><mo separator="true">,</mo><mi>q</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">d(p,q)</annotation></semantics></math></span> 是兩點的距離。以下採常見定義，<strong>鄰域數量包含 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi></mrow><annotation encoding="application/x-tex">p</annotation></semantics></math></span> 自己</strong>。</p>
 <p>依此將資料點分成三類：</p>
 <table>
 <thead>
@@ -101,7 +99,7 @@ N_\varepsilon(p)
 </thead>
 <tbody><tr>
 <td>核心點 Core point</td>
-<td>鄰域內至少有 \(\mathrm{MinPts}\) 個點</td>
+<td>鄰域內至少有 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">M</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">P</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">s</mi></mrow><annotation encoding="application/x-tex">\mathrm{MinPts}</annotation></semantics></math></span> 個點</td>
 <td>可以</td>
 </tr>
 <tr>
@@ -116,13 +114,13 @@ N_\varepsilon(p)
 </tr>
 </tbody></table>
 <p>核心點條件是：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi mathvariant="normal">∣</mi><msub><mi>N</mi><mi>ε</mi></msub><mo stretchy="false">(</mo><mi>p</mi><mo stretchy="false">)</mo><mi mathvariant="normal">∣</mi><mo>≥</mo><mrow><mi mathvariant="normal">M</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">P</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">s</mi></mrow></mrow><annotation encoding="application/x-tex">
 |N_\varepsilon(p)|\geq \mathrm{MinPts}
-\]</p>
+</annotation></semantics></math></span></p>
 <p>假設：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>ε</mi><mo>=</mo><mn>1</mn><mo separator="true">,</mo><mspace width="2em"/><mrow><mi mathvariant="normal">M</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">P</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">s</mi></mrow><mo>=</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">
 \varepsilon=1,\qquad \mathrm{MinPts}=4
-\]</p>
+</annotation></semantics></math></span></p>
 <p>某點在半徑 1 內，包含自己共有 5 個點，它就是核心點。另一個點附近只有 2 個點，但距離某核心點小於 1，則可以成為邊界點。</p>
 <p>分群程序可以理解為：</p>
 <ol>
@@ -135,10 +133,10 @@ N_\varepsilon(p)
 <p><strong>群集的連接依靠核心點。不能透過一長串邊界點，把兩個稀疏區域硬接成同一群。</strong></p>
 <p>參數的效果：</p>
 <ul>
-<li>\(\varepsilon\) 太小：鄰居少，容易產生很多雜訊或碎裂群集。</li>
-<li>\(\varepsilon\) 太大：原本分開的群集可能被合併。</li>
-<li>\(\mathrm{MinPts}\) 太小：少量點就能形成群集。</li>
-<li>\(\mathrm{MinPts}\) 太大：更多點會被判為非核心點。</li>
+<li><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ε</mi></mrow><annotation encoding="application/x-tex">\varepsilon</annotation></semantics></math></span> 太小：鄰居少，容易產生很多雜訊或碎裂群集。</li>
+<li><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ε</mi></mrow><annotation encoding="application/x-tex">\varepsilon</annotation></semantics></math></span> 太大：原本分開的群集可能被合併。</li>
+<li><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">M</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">P</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">s</mi></mrow><annotation encoding="application/x-tex">\mathrm{MinPts}</annotation></semantics></math></span> 太小：少量點就能形成群集。</li>
+<li><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">M</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">P</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">s</mi></mrow><annotation encoding="application/x-tex">\mathrm{MinPts}</annotation></semantics></math></span> 太大：更多點會被判為非核心點。</li>
 </ul>
 <p>DBSCAN 的主要優點，是能找到彎曲、環狀等非球形群集；主要限制，是<strong>單一密度門檻不容易同時處理非常密集與非常稀疏的群集</strong>。</p>
 <p>另一個實務重點是尺度。若用「年齡」與「年收入」計算歐氏距離，收入的數值可能主導結果，因此距離定義與特徵標準化非常重要。</p>
@@ -146,14 +144,14 @@ N_\varepsilon(p)
 <h2 id="section-3">三、自監督式學習真正要學的是「表示」</h2>
 <p><em>對應第 9 章，第 10–18 頁。</em></p>
 <p>所謂表示學習，是把原始資料轉換成比較容易利用的向量：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>h</mi><mo>=</mo><msub><mi>f</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 h=f_\theta(x)
-\]</p>
+</annotation></semantics></math></span></p>
 <p>其中：</p>
 <ul>
-<li>\(x\)：文字、圖片等原始資料。</li>
-<li>\(f_\theta\)：編碼器。</li>
-<li>\(h\)：特徵表示，也稱 embedding。</li>
+<li><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span>：文字、圖片等原始資料。</li>
+<li><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>f</mi><mi>θ</mi></msub></mrow><annotation encoding="application/x-tex">f_\theta</annotation></semantics></math></span>：編碼器。</li>
+<li><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi></mrow><annotation encoding="application/x-tex">h</annotation></semantics></math></span>：特徵表示，也稱 embedding。</li>
 </ul>
 <p>例如，一張圖片有數十萬個像素，但我們希望它的向量能保留：</p>
 <ul>
@@ -164,7 +162,7 @@ h=f_\theta(x)
 </ul>
 <p>自監督學習利用 <strong>pretext task，前置任務</strong>，迫使模型學到這些資訊。</p>
 <p>常見流程：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>大量無標籤資料</mtext><mo>→</mo><mtext>自監督預訓練</mtext><mo>→</mo><mtext>編碼器</mtext><mo>→</mo><mtext>下游任務</mtext></mrow><annotation encoding="application/x-tex">
 \text{大量無標籤資料}
 \rightarrow
 \text{自監督預訓練}
@@ -172,7 +170,7 @@ h=f_\theta(x)
 \text{編碼器}
 \rightarrow
 \text{下游任務}
-\]</p>
+</annotation></semantics></math></span></p>
 <p>下游任務可以是分類、偵測、分割、問答等。</p>
 <p>要區分兩種使用方式：</p>
 <table>
@@ -206,28 +204,28 @@ h=f_\theta(x)
 </ul>
 <p>第一個是銀行，第二個是河岸。</p>
 <p>固定詞向量會給 bank 同一個向量；上下文化表示則會得到：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>h</mi><mtext>bank, financial</mtext></msub><mo mathvariant="normal">≠</mo><msub><mi>h</mi><mtext>bank, river</mtext></msub></mrow><annotation encoding="application/x-tex">
 h_{\text{bank, financial}}
 \neq
 h_{\text{bank, river}}
-\]</p>
+</annotation></semantics></math></span></p>
 <p>ELMo 就是在學這種表示。</p>
 <p>它用雙向語言模型：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>p</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mi>t</mi></msub><mo>∣</mo><msub><mi>w</mi><mn>1</mn></msub><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>w</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 p(w_t\mid w_1,\ldots,w_{t-1})
-\]</p>
+</annotation></semantics></math></span></p>
 <p>以及：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>p</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mi>t</mi></msub><mo>∣</mo><msub><mi>w</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>w</mi><mi>T</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 p(w_t\mid w_{t+1},\ldots,w_T)
-\]</p>
+</annotation></semantics></math></span></p>
 <p>分別從左到右、從右到左預測，再結合兩個方向的 LSTM 表示。</p>
 <p>更完整地說，下游任務可以學習不同層表示的加權組合：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mrow><mi mathvariant="normal">E</mi><mi mathvariant="normal">L</mi><mi mathvariant="normal">M</mi><mi mathvariant="normal">o</mi></mrow><mi>t</mi></msub><mo>=</mo><mi>γ</mi><munderover><mo>∑</mo><mrow><mi mathvariant="normal">ℓ</mi><mo>=</mo><mn>0</mn></mrow><mi>L</mi></munderover><msub><mi>s</mi><mi mathvariant="normal">ℓ</mi></msub><msub><mi>h</mi><mrow><mi>t</mi><mo separator="true">,</mo><mi mathvariant="normal">ℓ</mi></mrow></msub></mrow><annotation encoding="application/x-tex">
 \mathrm{ELMo}_t
 =
 \gamma\sum_{\ell=0}^{L}s_\ell h_{t,\ell}
-\]</p>
-<p>其中 \(s_\ell\) 是經過正規化的層權重，\(\gamma\) 是可學習的縮放係數。</p>
+</annotation></semantics></math></span></p>
+<p>其中 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>s</mi><mi mathvariant="normal">ℓ</mi></msub></mrow><annotation encoding="application/x-tex">s_\ell</annotation></semantics></math></span> 是經過正規化的層權重，<span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>γ</mi></mrow><annotation encoding="application/x-tex">\gamma</annotation></semantics></math></span> 是可學習的縮放係數。</p>
 <p>直覺上，不同層可能保留不同資訊：有的偏字形或句法，有的偏語意。下游任務可以決定自己需要哪些層。</p>
 <hr>
 <h2 id="section-5">五、BERT：利用左右文理解被遮住的內容</h2>
@@ -243,25 +241,25 @@ p(w_t\mid w_{t+1},\ldots,w_T)
 <p>BERT 可利用「存錢」與「買房」等前後資訊，推測遮住的是「銀行」。</p>
 <p>原始 BERT 有兩個主要預訓練任務。</p>
 <p><strong>1. Masked Language Modeling，MLM</strong></p>
-<p>令 \(\mathcal M\) 為選中作為預測目標的位置集合：</p>
-<p>\[
+<p>令 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="script">M</mi></mrow><annotation encoding="application/x-tex">\mathcal M</annotation></semantics></math></span> 為選中作為預測目標的位置集合：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi mathvariant="script">L</mi><mrow><mi mathvariant="normal">M</mi><mi mathvariant="normal">L</mi><mi mathvariant="normal">M</mi></mrow></msub><mo>=</mo><mo>−</mo><munder><mo>∑</mo><mrow><mi>i</mi><mo>∈</mo><mi mathvariant="script">M</mi></mrow></munder><mi>log</mi><mo>⁡</mo><msub><mi>p</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo>∣</mo><mover accent="true"><mi>x</mi><mo>~</mo></mover><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 \mathcal L_{\mathrm{MLM}}
 =
 -\sum_{i\in\mathcal M}
 \log p_\theta(x_i\mid \tilde{x})
-\]</p>
-<p>其中 \(\tilde{x}\) 是經過擾動的輸入。</p>
+</annotation></semantics></math></span></p>
+<p>其中 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover accent="true"><mi>x</mi><mo>~</mo></mover></mrow><annotation encoding="application/x-tex">\tilde{x}</annotation></semantics></math></span> 是經過擾動的輸入。</p>
 <p>這個公式的意思是：</p>
 <blockquote>
 <p>模型給正確 token 的機率越高，loss 越小。</p>
 </blockquote>
 <p>例如正確答案的機率分別是：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>p</mi><mo>=</mo><mn>0.9</mn><mo>⇒</mo><mo>−</mo><mi>log</mi><mo>⁡</mo><mi>p</mi><mo>≈</mo><mn>0.105</mn></mrow><annotation encoding="application/x-tex">
 p=0.9\Rightarrow-\log p\approx0.105
-\]</p>
-<p>\[
+</annotation></semantics></math></span></p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>p</mi><mo>=</mo><mn>0.1</mn><mo>⇒</mo><mo>−</mo><mi>log</mi><mo>⁡</mo><mi>p</mi><mo>≈</mo><mn>2.303</mn></mrow><annotation encoding="application/x-tex">
 p=0.1\Rightarrow-\log p\approx2.303
-\]</p>
+</annotation></semantics></math></span></p>
 <p>所以模型會被訓練成提高正確答案的機率。</p>
 <p>講義說隨機遮住 15% 的 token；更精確地說，原始 BERT 是<strong>選取約 15% 作為預測目標</strong>，其中：</p>
 <ul>
@@ -279,14 +277,14 @@ p=0.1\Rightarrow-\log p\approx2.303
 </ul>
 <p>原始 BERT 使用這個任務學習句子之間的關係。要注意，它是<strong>原始 BERT 的設計</strong>，並非所有後續語言模型都需要。</p>
 <p>BERT 的輸入表示可寫成：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>e</mi><mi>i</mi></msub><mo>=</mo><msubsup><mi>e</mi><mi>i</mi><mrow><mi mathvariant="normal">t</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">k</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">n</mi></mrow></msubsup><mo>+</mo><msubsup><mi>e</mi><mi>i</mi><mrow><mi mathvariant="normal">p</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">s</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">n</mi></mrow></msubsup><mo>+</mo><msubsup><mi>e</mi><mi>i</mi><mrow><mi mathvariant="normal">s</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">g</mi><mi mathvariant="normal">m</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">t</mi></mrow></msubsup></mrow><annotation encoding="application/x-tex">
 e_i=
 e_i^{\mathrm{token}}
 +
 e_i^{\mathrm{position}}
 +
 e_i^{\mathrm{segment}}
-\]</p>
+</annotation></semantics></math></span></p>
 <p>分別提供：</p>
 <ul>
 <li>token 是什麼。</li>
@@ -294,16 +292,16 @@ e_i^{\mathrm{segment}}
 <li>token 屬於句子 A 還是 B。</li>
 </ul>
 <p>常見輸入形式為：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mo stretchy="false">[</mo><mrow><mi mathvariant="normal">C</mi><mi mathvariant="normal">L</mi><mi mathvariant="normal">S</mi></mrow><mo stretchy="false">]</mo><mo separator="true">,</mo><mi>A</mi><mo separator="true">,</mo><mo stretchy="false">[</mo><mrow><mi mathvariant="normal">S</mi><mi mathvariant="normal">E</mi><mi mathvariant="normal">P</mi></mrow><mo stretchy="false">]</mo><mo separator="true">,</mo><mi>B</mi><mo separator="true">,</mo><mo stretchy="false">[</mo><mrow><mi mathvariant="normal">S</mi><mi mathvariant="normal">E</mi><mi mathvariant="normal">P</mi></mrow><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">
 [\mathrm{CLS}],A,[\mathrm{SEP}],B,[\mathrm{SEP}]
-\]</p>
+</annotation></semantics></math></span></p>
 <p>其中 <code>[CLS]</code> 的最終表示經常用來做整段文字的分類：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>p</mi><mo stretchy="false">(</mo><mi>y</mi><mo>∣</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mi mathvariant="normal">softmax</mi><mo>⁡</mo><mrow><mo fence="true">(</mo><mi>W</mi><msub><mi>h</mi><mrow><mi mathvariant="normal">C</mi><mi mathvariant="normal">L</mi><mi mathvariant="normal">S</mi></mrow></msub><mo>+</mo><mi>b</mi><mo fence="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">
 p(y\mid x)
 =
 \operatorname{softmax}
 \left(Wh_{\mathrm{CLS}}+b\right)
-\]</p>
+</annotation></semantics></math></span></p>
 <p>不同下游任務使用不同輸出方式：</p>
 <table>
 <thead>
@@ -339,27 +337,27 @@ p(y\mid x)
 <h2 id="section-6">六、GPT：把下一個 token 預測得好，就能逐步生成文字</h2>
 <p><em>對應第 9 章，第 40–49 頁。</em></p>
 <p>GPT 使用自回歸語言建模：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>p</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><msub><mi>x</mi><mn>1</mn></msub><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>x</mi><mi>T</mi></msub><mo stretchy="false">)</mo><mo>=</mo><munderover><mo>∏</mo><mrow><mi>t</mi><mo>=</mo><mn>1</mn></mrow><mi>T</mi></munderover><msub><mi>p</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><msub><mi>x</mi><mi>t</mi></msub><mo>∣</mo><msub><mi>x</mi><mrow><mo>&lt;</mo><mi>t</mi></mrow></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 p_\theta(x_1,\ldots,x_T)
 =
 \prod_{t=1}^{T}
-p_\theta(x_t\mid x_{<t})
-\]</p>
+p_\theta(x_t\mid x_{&lt;t})
+</annotation></semantics></math></span></p>
 <p>其中：</p>
-<p>\[
-x_{<t}=(x_1,\ldots,x_{t-1})
-\]</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>x</mi><mrow><mo>&lt;</mo><mi>t</mi></mrow></msub><mo>=</mo><mo stretchy="false">(</mo><msub><mi>x</mi><mn>1</mn></msub><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>x</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
+x_{&lt;t}=(x_1,\ldots,x_{t-1})
+</annotation></semantics></math></span></p>
 <p>這個分解表示：</p>
 <blockquote>
 <p>一整段文字的機率，可以拆成每個位置在既有前文下出現的條件機率之乘積。</p>
 </blockquote>
 <p>訓練 loss 是負對數概似：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi mathvariant="script">L</mi><mrow><mi mathvariant="normal">L</mi><mi mathvariant="normal">M</mi></mrow></msub><mo>=</mo><mo>−</mo><munderover><mo>∑</mo><mrow><mi>t</mi><mo>=</mo><mn>1</mn></mrow><mi>T</mi></munderover><mi>log</mi><mo>⁡</mo><msub><mi>p</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><msub><mi>x</mi><mi>t</mi></msub><mo>∣</mo><msub><mi>x</mi><mrow><mo>&lt;</mo><mi>t</mi></mrow></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 \mathcal L_{\mathrm{LM}}
 =
 -\sum_{t=1}^{T}
-\log p_\theta(x_t\mid x_{<t})
-\]</p>
+\log p_\theta(x_t\mid x_{&lt;t})
+</annotation></semantics></math></span></p>
 <p>假設句子是：</p>
 <blockquote>
 <p>今天／天氣／很好</p>
@@ -370,27 +368,27 @@ x_{<t}=(x_1,\ldots,x_{t-1})
 <li>看到「今天 天氣」→ 預測「很好」。</li>
 </ul>
 <p>Transformer 的 attention 基本形式是：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi mathvariant="normal">Attention</mi><mo>⁡</mo><mo stretchy="false">(</mo><mi>Q</mi><mo separator="true">,</mo><mi>K</mi><mo separator="true">,</mo><mi>V</mi><mo stretchy="false">)</mo><mo>=</mo><mi mathvariant="normal">softmax</mi><mo>⁡</mo><mrow><mo fence="true">(</mo><mfrac><mrow><mi>Q</mi><msup><mi>K</mi><mi mathvariant="normal">⊤</mi></msup></mrow><msqrt><msub><mi>d</mi><mi>k</mi></msub></msqrt></mfrac><mo>+</mo><mi>M</mi><mo fence="true">)</mo></mrow><mi>V</mi></mrow><annotation encoding="application/x-tex">
 \operatorname{Attention}(Q,K,V)
 =
 \operatorname{softmax}
 \left(
 \frac{QK^\top}{\sqrt{d_k}}+M
 \right)V
-\]</p>
-<p>GPT 的 \(M\) 是因果遮罩：</p>
-<p>\[
+</annotation></semantics></math></span></p>
+<p>GPT 的 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi></mrow><annotation encoding="application/x-tex">M</annotation></semantics></math></span> 是因果遮罩：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>M</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><mrow><mo fence="true">{</mo><mtable rowspacing="0.36em" columnalign="left left" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mn>0</mn><mo separator="true">,</mo></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>j</mi><mo>≤</mo><mi>i</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mo>−</mo><mi mathvariant="normal">∞</mi><mo separator="true">,</mo></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>j</mi><mo>&gt;</mo><mi>i</mi></mrow></mstyle></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">
 M_{ij}
 =
 \begin{cases}
-0,&j\leq i\\
--\infty,&j>i
+0,&amp;j\leq i\\
+-\infty,&amp;j&gt;i
 \end{cases}
-\]</p>
+</annotation></semantics></math></span></p>
 <p>因為：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msup><mi>e</mi><mrow><mo>−</mo><mi mathvariant="normal">∞</mi></mrow></msup><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">
 e^{-\infty}=0
-\]</p>
+</annotation></semantics></math></span></p>
 <p>所以未來位置不會得到 attention 權重。</p>
 <p>這裡要區分兩種「mask」：</p>
 <ul>
@@ -469,24 +467,24 @@ e^{-\infty}=0
 </tr>
 </tbody></table>
 <p>例如將圖片旋轉成：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>y</mi><mo>∈</mo><mo stretchy="false">{</mo><msup><mn>0</mn><mo>∘</mo></msup><mo separator="true">,</mo><msup><mn>90</mn><mo>∘</mo></msup><mo separator="true">,</mo><msup><mn>180</mn><mo>∘</mo></msup><mo separator="true">,</mo><msup><mn>270</mn><mo>∘</mo></msup><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">
 y\in\{0^\circ,90^\circ,180^\circ,270^\circ\}
-\]</p>
+</annotation></semantics></math></span></p>
 <p>模型用四分類交叉熵訓練：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi mathvariant="script">L</mi><mo>=</mo><mo>−</mo><munderover><mo>∑</mo><mrow><mi>c</mi><mo>=</mo><mn>1</mn></mrow><mn>4</mn></munderover><msub><mi>y</mi><mi>c</mi></msub><mi>log</mi><mo>⁡</mo><msub><mi>p</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><mi>c</mi><mo>∣</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 \mathcal L
 =
 -\sum_{c=1}^{4}y_c\log p_\theta(c\mid x)
-\]</p>
+</annotation></semantics></math></span></p>
 <p>角度標籤是我們自己施加變換時就知道的，不需要人逐張標註。</p>
 <p>不過，<strong>一個好的自監督任務，應該迫使模型學到有用資訊，而不是找到取巧線索。</strong></p>
 <hr>
 <h2 id="section-8">八、對比學習：讓同一張圖的不同版本靠近</h2>
 <p><em>對應第 9 章，第 59–65 頁。</em></p>
-<p>對同一張圖片 \(x\) 做兩次隨機增強：</p>
-<p>\[
+<p>對同一張圖片 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span> 做兩次隨機增強：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>x</mi><mi>i</mi></msub><mo>=</mo><msub><mi>t</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><mspace width="2em"/><msub><mi>x</mi><mi>j</mi></msub><mo>=</mo><msub><mi>t</mi><mi>j</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 x_i=t_i(x),\qquad x_j=t_j(x)
-\]</p>
+</annotation></semantics></math></span></p>
 <p>例如一張狗的照片：</p>
 <ul>
 <li>版本一：裁切加顏色變化。</li>
@@ -499,12 +497,12 @@ x_i=t_i(x),\qquad x_j=t_j(x)
 <li><strong>負樣本對</strong>：通常來自其他圖片。</li>
 </ul>
 <p>令：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>q</mi><mo>=</mo><msub><mi>f</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo stretchy="false">)</mo><mo separator="true">,</mo><mspace width="2em"/><msup><mi>k</mi><mo>+</mo></msup><mo>=</mo><msub><mi>f</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><msub><mi>x</mi><mi>j</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 q=f_\theta(x_i),\qquad k^+=f_\theta(x_j)
-\]</p>
-<p>再取 \(K\) 個負樣本表示 \(k_1^-,\ldots,k_K^-\)。</p>
+</annotation></semantics></math></span></p>
+<p>再取 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi></mrow><annotation encoding="application/x-tex">K</annotation></semantics></math></span> 個負樣本表示 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>k</mi><mn>1</mn><mo>−</mo></msubsup><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msubsup><mi>k</mi><mi>K</mi><mo>−</mo></msubsup></mrow><annotation encoding="application/x-tex">k_1^-,\ldots,k_K^-</annotation></semantics></math></span>。</p>
 <p>常見 InfoNCE loss：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi mathvariant="script">L</mi><mi>q</mi></msub><mo>=</mo><mo>−</mo><mi>log</mi><mo>⁡</mo><mfrac><mrow><mi>exp</mi><mo>⁡</mo><mo stretchy="false">(</mo><mi mathvariant="normal">sim</mi><mo>⁡</mo><mo stretchy="false">(</mo><mi>q</mi><mo separator="true">,</mo><msup><mi>k</mi><mo>+</mo></msup><mo stretchy="false">)</mo><mi mathvariant="normal">/</mi><mi>τ</mi><mo stretchy="false">)</mo></mrow><mrow><mi>exp</mi><mo>⁡</mo><mo stretchy="false">(</mo><mi mathvariant="normal">sim</mi><mo>⁡</mo><mo stretchy="false">(</mo><mi>q</mi><mo separator="true">,</mo><msup><mi>k</mi><mo>+</mo></msup><mo stretchy="false">)</mo><mi mathvariant="normal">/</mi><mi>τ</mi><mo stretchy="false">)</mo><mo>+</mo><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>K</mi></munderover><mi>exp</mi><mo>⁡</mo><mo stretchy="false">(</mo><mi mathvariant="normal">sim</mi><mo>⁡</mo><mo stretchy="false">(</mo><mi>q</mi><mo separator="true">,</mo><msubsup><mi>k</mi><mi>j</mi><mo>−</mo></msubsup><mo stretchy="false">)</mo><mi mathvariant="normal">/</mi><mi>τ</mi><mo stretchy="false">)</mo></mrow></mfrac></mrow><annotation encoding="application/x-tex">
 \mathcal L_q
 =
 -\log
@@ -516,45 +514,45 @@ q=f_\theta(x_i),\qquad k^+=f_\theta(x_j)
 \sum_{j=1}^{K}
 \exp(\operatorname{sim}(q,k_j^-)/\tau)
 }
-\]</p>
+</annotation></semantics></math></span></p>
 <p>其中：</p>
 <ul>
-<li>\(\operatorname{sim}\)：相似度，常用正規化向量的內積。</li>
-<li>\(\tau>0\)：temperature，溫度參數。</li>
+<li><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">sim</mi><mo>⁡</mo></mrow><annotation encoding="application/x-tex">\operatorname{sim}</annotation></semantics></math></span>：相似度，常用正規化向量的內積。</li>
+<li><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>τ</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\tau&gt;0</annotation></semantics></math></span>：temperature，溫度參數。</li>
 <li>分母包含正樣本與全部負樣本。</li>
 </ul>
 <p>它可以視為：</p>
 <blockquote>
-<p>給模型 \(K+1\) 個候選項，請它找出與 query 配對的正樣本。</p>
+<p>給模型 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">K+1</annotation></semantics></math></span> 個候選項，請它找出與 query 配對的正樣本。</p>
 </blockquote>
-<p>若正樣本相似度為 \(0.8\)，兩個負樣本為 \(0.2\)、\(0.1\)，且 \(\tau=0.5\)，則：</p>
-<p>\[
+<p>若正樣本相似度為 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.8</mn></mrow><annotation encoding="application/x-tex">0.8</annotation></semantics></math></span>，兩個負樣本為 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.2</mn></mrow><annotation encoding="application/x-tex">0.2</annotation></semantics></math></span>、<span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.1</mn></mrow><annotation encoding="application/x-tex">0.1</annotation></semantics></math></span>，且 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>τ</mi><mo>=</mo><mn>0.5</mn></mrow><annotation encoding="application/x-tex">\tau=0.5</annotation></semantics></math></span>，則：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>p</mi><mo>+</mo></msub><mo>=</mo><mfrac><msup><mi>e</mi><mn>1.6</mn></msup><mrow><msup><mi>e</mi><mn>1.6</mn></msup><mo>+</mo><msup><mi>e</mi><mn>0.4</mn></msup><mo>+</mo><msup><mi>e</mi><mn>0.2</mn></msup></mrow></mfrac><mo>≈</mo><mn>0.646</mn></mrow><annotation encoding="application/x-tex">
 p_+
 =
 \frac{e^{1.6}}
 {e^{1.6}+e^{0.4}+e^{0.2}}
 \approx0.646
-\]</p>
-<p>\[
+</annotation></semantics></math></span></p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi mathvariant="script">L</mi><mo>=</mo><mo>−</mo><mi>log</mi><mo>⁡</mo><mn>0.646</mn><mo>≈</mo><mn>0.437</mn></mrow><annotation encoding="application/x-tex">
 \mathcal L=-\log0.646\approx0.437
-\]</p>
+</annotation></semantics></math></span></p>
 <p>若正負樣本全部一樣相似：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>p</mi><mo>+</mo></msub><mo>=</mo><mfrac><mn>1</mn><mn>3</mn></mfrac><mo separator="true">,</mo><mspace width="2em"/><mi mathvariant="script">L</mi><mo>=</mo><mi>log</mi><mo>⁡</mo><mn>3</mn><mo>≈</mo><mn>1.099</mn></mrow><annotation encoding="application/x-tex">
 p_+=\frac13,\qquad
 \mathcal L=\log3\approx1.099
-\]</p>
+</annotation></semantics></math></span></p>
 <p>所以 loss 會鼓勵模型把正樣本與負樣本區分開。</p>
 <p>溫度的效果：</p>
 <ul>
-<li>\(\tau\) 小：softmax 較尖銳，較強調相似度最高的候選項。</li>
-<li>\(\tau\) 大：分布較平滑。</li>
+<li><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>τ</mi></mrow><annotation encoding="application/x-tex">\tau</annotation></semantics></math></span> 小：softmax 較尖銳，較強調相似度最高的候選項。</li>
+<li><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>τ</mi></mrow><annotation encoding="application/x-tex">\tau</annotation></semantics></math></span> 大：分布較平滑。</li>
 </ul>
 <p><strong>溫度不是越小越好。</strong> 太尖銳可能放大困難或錯誤負樣本的影響。</p>
 <p>也要注意「不同圖片」不代表「不同語意」。兩張不同的狗照片可能被當成負樣本，這是 instance discrimination 中的 false negative 問題。</p>
 <p>講義提到：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>I</mi><mo stretchy="false">(</mo><mi>X</mi><mo separator="true">;</mo><mi>C</mi><mo stretchy="false">)</mo><mo>≥</mo><mi>log</mi><mo>⁡</mo><mi>N</mi><mo>−</mo><msub><mi mathvariant="script">L</mi><mrow><mi mathvariant="normal">I</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">f</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">N</mi><mi mathvariant="normal">C</mi><mi mathvariant="normal">E</mi></mrow></msub></mrow><annotation encoding="application/x-tex">
 I(X;C)\geq\log N-\mathcal L_{\mathrm{InfoNCE}}
-\]</p>
+</annotation></semantics></math></span></p>
 <p>這是在特定正負樣本抽樣假設下，對<strong>期望 loss</strong> 的互資訊下界，不是任何對比 loss 都自動成立。另外，互資訊不等於通道容量；通道容量涉及對輸入分布取最大化。此處可對照 <a href="https://arxiv.org/abs/1807.03748">CPC 原始論文</a>。</p>
 <hr>
 <h2 id="section-9">九、MoCo 與 SimCLR：怎麼取得足夠的負樣本？</h2>
@@ -563,8 +561,8 @@ I(X;C)\geq\log N-\mathcal L_{\mathrm{InfoNCE}}
 <p><strong>MoCo：用佇列保存大量 key</strong></p>
 <p>MoCo 使用：</p>
 <ul>
-<li>Query encoder：參數 \(\theta_q\)。</li>
-<li>Key encoder：參數 \(\theta_k\)。</li>
+<li>Query encoder：參數 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>θ</mi><mi>q</mi></msub></mrow><annotation encoding="application/x-tex">\theta_q</annotation></semantics></math></span>。</li>
+<li>Key encoder：參數 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>θ</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">\theta_k</annotation></semantics></math></span>。</li>
 <li>保存過去 key 的 queue。</li>
 </ul>
 <p>Queue 的好處是：即使每次 batch 不大，也能提供大量負樣本。</p>
@@ -573,12 +571,12 @@ I(X;C)\geq\log N-\mathcal L_{\mathrm{InfoNCE}}
 <p>過去的 key 是舊編碼器產生的，如果編碼器快速變化，新舊特徵就難以比較。</p>
 </blockquote>
 <p>因此 key encoder 採用動量更新：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>θ</mi><mi>k</mi></msub><mo>←</mo><mi>m</mi><msub><mi>θ</mi><mi>k</mi></msub><mo>+</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>m</mi><mo stretchy="false">)</mo><msub><mi>θ</mi><mi>q</mi></msub></mrow><annotation encoding="application/x-tex">
 \theta_k
 \leftarrow
 m\theta_k+(1-m)\theta_q
-\]</p>
-<p>其中 \(m\) 接近 1，例如講義中的 \(0.999\)。</p>
+</annotation></semantics></math></span></p>
+<p>其中 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi></mrow><annotation encoding="application/x-tex">m</annotation></semantics></math></span> 接近 1，例如講義中的 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.999</mn></mrow><annotation encoding="application/x-tex">0.999</annotation></semantics></math></span>。</p>
 <p>每次只讓 key encoder 緩慢變動，降低 queue 內新舊特徵的不一致。</p>
 <p>訓練概念：</p>
 <ol>
@@ -590,24 +588,24 @@ m\theta_k+(1-m)\theta_q
 <li>新 key 入隊，最舊 key 出隊。</li>
 </ol>
 <p><strong>SimCLR：直接使用大 batch</strong></p>
-<p>假設一個 batch 有 \(N\) 張原始圖片，每張產生兩個視圖，共有 \(2N\) 個表示。</p>
+<p>假設一個 batch 有 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span> 張原始圖片，每張產生兩個視圖，共有 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>N</mi></mrow><annotation encoding="application/x-tex">2N</annotation></semantics></math></span> 個表示。</p>
 <p>對每個 anchor 而言：</p>
 <ul>
 <li>正樣本有 1 個。</li>
-<li>負樣本有 \(2N-2\) 個。</li>
-<li>排除自己後，分母共有 \(2N-1\) 個候選項。</li>
+<li>負樣本有 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>N</mi><mo>−</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">2N-2</annotation></semantics></math></span> 個。</li>
+<li>排除自己後，分母共有 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>N</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">2N-1</annotation></semantics></math></span> 個候選項。</li>
 </ul>
 <p>SimCLR 還加入 projection head：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>x</mi><mover><mo stretchy="true" minsize="3.0em">→</mo><mpadded width="+0.6em" lspace="0.3em"><msub><mi>f</mi><mi>θ</mi></msub></mpadded></mover><mi>h</mi><mover><mo stretchy="true" minsize="3.0em">→</mo><mpadded width="+0.6em" lspace="0.3em"><msub><mi>g</mi><mi>ϕ</mi></msub></mpadded></mover><mi>z</mi></mrow><annotation encoding="application/x-tex">
 x\xrightarrow{f_\theta}h
 \xrightarrow{g_\phi}z
-\]</p>
+</annotation></semantics></math></span></p>
 <p>其中：</p>
 <ul>
-<li>\(h\)：encoder 學到的表示。</li>
-<li>\(z\)：投影後、用於對比 loss 的表示。</li>
+<li><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi></mrow><annotation encoding="application/x-tex">h</annotation></semantics></math></span>：encoder 學到的表示。</li>
+<li><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi></mrow><annotation encoding="application/x-tex">z</annotation></semantics></math></span>：投影後、用於對比 loss 的表示。</li>
 </ul>
-<p>下游任務通常使用 \(h\)，不保留投影頭。</p>
+<p>下游任務通常使用 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi></mrow><annotation encoding="application/x-tex">h</annotation></semantics></math></span>，不保留投影頭。</p>
 <p>這樣可以讓「滿足對比訓練目標」與「保留適合其他任務的資訊」有一定分工。</p>
 <table>
 <thead>
@@ -643,13 +641,13 @@ x\xrightarrow{f_\theta}h
 <h2 id="section-10">十、怎麼知道表示真的學得好？</h2>
 <p>最重要的概念是 <strong>linear evaluation／linear probing</strong>。</p>
 <p>先固定 encoder：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>h</mi><mo>=</mo><msub><mi>f</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 h=f_\theta(x)
-\]</p>
+</annotation></semantics></math></span></p>
 <p>只訓練線性分類器：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mover accent="true"><mi>y</mi><mo>^</mo></mover><mo>=</mo><mi mathvariant="normal">softmax</mi><mo>⁡</mo><mo stretchy="false">(</mo><mi>W</mi><mi>h</mi><mo>+</mo><mi>b</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 \hat y=\operatorname{softmax}(Wh+b)
-\]</p>
+</annotation></semantics></math></span></p>
 <p>如果簡單分類器就能把類別分開，表示 encoder 已經把資料整理成容易使用的形式。</p>
 <p>但若把 encoder 也一起更新，測到的就是微調後的能力，不能再稱為標準的 frozen linear probe。</p>
 <p>還可以測：</p>
@@ -667,22 +665,22 @@ h=f_\theta(x)
 <p><strong>ViT、Swin 主要是網路架構；MAE 是一種自監督預訓練方法。</strong></p>
 </blockquote>
 <p><strong>1. ViT：把圖片切成 token</strong></p>
-<p>對一張 \(H\times W\) 的圖片，使用 \(P\times P\) patch，patch 數量為：</p>
-<p>\[
+<p>對一張 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo>×</mo><mi>W</mi></mrow><annotation encoding="application/x-tex">H\times W</annotation></semantics></math></span> 的圖片，使用 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo>×</mo><mi>P</mi></mrow><annotation encoding="application/x-tex">P\times P</annotation></semantics></math></span> patch，patch 數量為：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>N</mi><mo>=</mo><mfrac><mrow><mi>H</mi><mi>W</mi></mrow><msup><mi>P</mi><mn>2</mn></msup></mfrac></mrow><annotation encoding="application/x-tex">
 N=\frac{HW}{P^2}
-\]</p>
+</annotation></semantics></math></span></p>
 <p>例如：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>H</mi><mo>=</mo><mi>W</mi><mo>=</mo><mn>224</mn><mo separator="true">,</mo><mspace width="2em"/><mi>P</mi><mo>=</mo><mn>16</mn></mrow><annotation encoding="application/x-tex">
 H=W=224,\qquad P=16
-\]</p>
+</annotation></semantics></math></span></p>
 <p>則：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>N</mi><mo>=</mo><mn>14</mn><mo>×</mo><mn>14</mn><mo>=</mo><mn>196</mn></mrow><annotation encoding="application/x-tex">
 N=14\times14=196
-\]</p>
+</annotation></semantics></math></span></p>
 <p>若是 RGB 圖片，每個 patch 攤平成：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mn>16</mn><mo>×</mo><mn>16</mn><mo>×</mo><mn>3</mn><mo>=</mo><mn>768</mn></mrow><annotation encoding="application/x-tex">
 16\times16\times3=768
-\]</p>
+</annotation></semantics></math></span></p>
 <p>維向量，再線性投影成模型使用的 embedding。</p>
 <p>ViT 就像把一張圖片變成一段由 196 個 patch token 組成的「句子」。</p>
 <p>CNN 內建較強的局部性與權重共享偏好；原始 ViT 的相關歸納偏置較弱，因此原始研究中，大量預訓練資料很重要。但不能把某個歷史資料量當成所有 ViT 的硬性門檻。</p>
@@ -696,32 +694,32 @@ N=14\times14=196
 <li>重建被遮住的內容。</li>
 </ol>
 <p>概念上的 loss：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi mathvariant="script">L</mi><mrow><mi mathvariant="normal">M</mi><mi mathvariant="normal">A</mi><mi mathvariant="normal">E</mi></mrow></msub><mo>=</mo><mfrac><mn>1</mn><mrow><mi mathvariant="normal">∣</mi><mi mathvariant="script">M</mi><mi mathvariant="normal">∣</mi></mrow></mfrac><munder><mo>∑</mo><mrow><mi>i</mi><mo>∈</mo><mi mathvariant="script">M</mi></mrow></munder><mi mathvariant="normal">∥</mi><msub><mover accent="true"><mi>x</mi><mo>^</mo></mover><mi>i</mi></msub><mo>−</mo><msub><mi>x</mi><mi>i</mi></msub><msubsup><mi mathvariant="normal">∥</mi><mn>2</mn><mn>2</mn></msubsup></mrow><annotation encoding="application/x-tex">
 \mathcal L_{\mathrm{MAE}}
 =
 \frac1{|\mathcal M|}
 \sum_{i\in\mathcal M}
 \|\hat x_i-x_i\|_2^2
-\]</p>
-<p>其中 \(\mathcal M\) 是被遮住的 patch 集合。</p>
+</annotation></semantics></math></span></p>
+<p>其中 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="script">M</mi></mrow><annotation encoding="application/x-tex">\mathcal M</annotation></semantics></math></span> 是被遮住的 patch 集合。</p>
 <p>若有 196 個 patches，遮住 75%，encoder 約只需要處理：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mn>196</mn><mo>×</mo><mn>0.25</mn><mo>=</mo><mn>49</mn></mrow><annotation encoding="application/x-tex">
 196\times0.25=49
-\]</p>
+</annotation></semantics></math></span></p>
 <p>個可見 patches。</p>
 <p><strong>高遮罩率不只是增加難度，也讓 encoder 的計算量降低。</strong></p>
 <p>之所以可以遮這麼多，是因為圖片局部有大量冗餘。若只遮一點點，模型可能靠鄰近像素插補就完成任務，不一定需要理解整體內容。</p>
 <p>預訓練的重建 decoder 通常會移除；下游任務仍可能另外加入自己的分類頭或分割 decoder。</p>
 <p><strong>3. Swin：在局部視窗內計算 attention</strong></p>
 <p>全域 self-attention 的 token 兩兩互動成本約為：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>N</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 O(N^2)
-\]</p>
-<p>若每個視窗有固定 \(M\) 個 token，則 attention 的配對計算成本約為：</p>
-<p>\[
+</annotation></semantics></math></span></p>
+<p>若每個視窗有固定 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi></mrow><annotation encoding="application/x-tex">M</annotation></semantics></math></span> 個 token，則 attention 的配對計算成本約為：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mfrac><mi>N</mi><mi>M</mi></mfrac><mo>×</mo><mi>O</mi><mo stretchy="false">(</mo><msup><mi>M</mi><mn>2</mn></msup><mo stretchy="false">)</mo><mo>=</mo><mi>O</mi><mo stretchy="false">(</mo><mi>N</mi><mi>M</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 \frac{N}{M}\times O(M^2)=O(NM)
-\]</p>
-<p>固定 \(M\) 時，對 \(N\) 呈線性成長。</p>
+</annotation></semantics></math></span></p>
+<p>固定 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi></mrow><annotation encoding="application/x-tex">M</annotation></semantics></math></span> 時，對 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span> 呈線性成長。</p>
 <p>但固定視窗會限制跨視窗資訊交換，因此 Swin 在相鄰層移動視窗位置，讓原本不同視窗的 token 能互相交流。</p>
 <p>它也透過分層與 patch merging 建立不同解析度的特徵，適合多尺度視覺任務。</p>
 <hr>
@@ -756,7 +754,7 @@ O(N^2)
 </ul>
 <p>這<strong>不等於模型權重在每次聊天後都更新</strong>。</p>
 <p>Agent 則可形成：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>接收任務</mtext><mo>→</mo><mtext>決定動作</mtext><mo>→</mo><mtext>呼叫工具</mtext><mo>→</mo><mtext>觀察結果</mtext><mo>→</mo><mtext>繼續或結束</mtext></mrow><annotation encoding="application/x-tex">
 \text{接收任務}
 \rightarrow
 \text{決定動作}
@@ -766,26 +764,26 @@ O(N^2)
 \text{觀察結果}
 \rightarrow
 \text{繼續或結束}
-\]</p>
+</annotation></semantics></math></span></p>
 <p>例如查詢資料、計算，再整理答案。</p>
 <p>這也和下一章連接起來：兩者都涉及 agent 與外部世界互動，但<strong>使用工具的 LLM agent，不一定是透過強化學習訓練的</strong>。</p>
 <hr>
 <h2 id="section-13">十三、強化學習：先搞清楚互動順序</h2>
 <p><em>對應第 10 章，第 4–19 頁。</em></p>
 <p>以下統一採用：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>s</mi><mi>t</mi></msub><mover><mo stretchy="true" minsize="3.0em">→</mo><mpadded width="+0.6em" lspace="0.3em"><msub><mi>a</mi><mi>t</mi></msub></mpadded></mover><mo stretchy="false">(</mo><msub><mi>r</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo separator="true">,</mo><msub><mi>s</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 s_t
 \xrightarrow{a_t}
 (r_{t+1},s_{t+1})
-\]</p>
+</annotation></semantics></math></span></p>
 <p>意思是：</p>
 <ol>
-<li>Agent 觀察目前狀態 \(s_t\)。</li>
-<li>選擇動作 \(a_t\)。</li>
-<li>環境回傳獎勵 \(r_{t+1}\)。</li>
-<li>環境轉移到下一個狀態 \(s_{t+1}\)。</li>
+<li>Agent 觀察目前狀態 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>s</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">s_t</annotation></semantics></math></span>。</li>
+<li>選擇動作 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>a</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">a_t</annotation></semantics></math></span>。</li>
+<li>環境回傳獎勵 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>r</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub></mrow><annotation encoding="application/x-tex">r_{t+1}</annotation></semantics></math></span>。</li>
+<li>環境轉移到下一個狀態 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>s</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub></mrow><annotation encoding="application/x-tex">s_{t+1}</annotation></semantics></math></span>。</li>
 </ol>
-<p>講義有時使用 \(r_t\) 標記獎勵；這只是索引慣例不同，推導時一致即可。</p>
+<p>講義有時使用 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>r</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">r_t</annotation></semantics></math></span> 標記獎勵；這只是索引慣例不同，推導時一致即可。</p>
 <p>核心名詞：</p>
 <table>
 <thead>
@@ -833,69 +831,69 @@ s_t
 </ul>
 <p>例如單張遊戲截圖通常無法完整表示物體速度，因此 DQN 常堆疊多張影格，但這仍不保證所有環境都完全可觀測。</p>
 <p>策略可以是：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>a</mi><mo>=</mo><mi>π</mi><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 a=\pi(s)
-\]</p>
+</annotation></semantics></math></span></p>
 <p>的確定性策略，或：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>a</mi><mo>∼</mo><msub><mi>π</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><mo>⋅</mo><mo>∣</mo><mi>s</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 a\sim\pi_\theta(\cdot\mid s)
-\]</p>
+</annotation></semantics></math></span></p>
 <p>的隨機策略。</p>
 <p>例如：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>π</mi><mo stretchy="false">(</mo><mtext>左</mtext><mo>∣</mo><mi>s</mi><mo stretchy="false">)</mo><mo>=</mo><mn>0.7</mn><mo separator="true">,</mo><mspace width="2em"/><mi>π</mi><mo stretchy="false">(</mo><mtext>右</mtext><mo>∣</mo><mi>s</mi><mo stretchy="false">)</mo><mo>=</mo><mn>0.3</mn></mrow><annotation encoding="application/x-tex">
 \pi(\text{左}\mid s)=0.7,\qquad
 \pi(\text{右}\mid s)=0.3
-\]</p>
-<p>表示在狀態 \(s\) 下，依這個機率分布抽取動作。</p>
+</annotation></semantics></math></span></p>
+<p>表示在狀態 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi></mrow><annotation encoding="application/x-tex">s</annotation></semantics></math></span> 下，依這個機率分布抽取動作。</p>
 <hr>
 <h2 id="section-14">十四、Reward 與 Return：眼前好，不代表長期好</h2>
 <p><em>對應第 10 章，第 17–18 頁。</em></p>
 <p>Reward 是單一步驟的回饋。Return 是從某個時刻起，未來獎勵的累積：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>G</mi><mi>t</mi></msub><mo>=</mo><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>0</mn></mrow><mrow><mi>T</mi><mo>−</mo><mi>t</mi><mo>−</mo><mn>1</mn></mrow></munderover><msup><mi>γ</mi><mi>k</mi></msup><msub><mi>r</mi><mrow><mi>t</mi><mo>+</mo><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub></mrow><annotation encoding="application/x-tex">
 G_t
 =
 \sum_{k=0}^{T-t-1}
 \gamma^k r_{t+k+1}
-\]</p>
+</annotation></semantics></math></span></p>
 <p>其中：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mn>0</mn><mo>≤</mo><mi>γ</mi><mo>≤</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">
 0\leq\gamma\leq1
-\]</p>
+</annotation></semantics></math></span></p>
 <p>是折扣因子。</p>
 <p>若未來三步的獎勵為：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mn>2</mn><mo separator="true">,</mo><mspace width="1em"/><mn>0</mn><mo separator="true">,</mo><mspace width="1em"/><mn>10</mn></mrow><annotation encoding="application/x-tex">
 2,\quad0,\quad10
-\]</p>
-<p>而 \(\gamma=0.9\)，則：</p>
-<p>\[
+</annotation></semantics></math></span></p>
+<p>而 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>γ</mi><mo>=</mo><mn>0.9</mn></mrow><annotation encoding="application/x-tex">\gamma=0.9</annotation></semantics></math></span>，則：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>G</mi><mi>t</mi></msub><mo>=</mo><mn>2</mn><mo>+</mo><mn>0.9</mn><mo stretchy="false">(</mo><mn>0</mn><mo stretchy="false">)</mo><mo>+</mo><msup><mn>0.9</mn><mn>2</mn></msup><mo stretchy="false">(</mo><mn>10</mn><mo stretchy="false">)</mo><mo>=</mo><mn>10.1</mn></mrow><annotation encoding="application/x-tex">
 G_t=2+0.9(0)+0.9^2(10)=10.1
-\]</p>
-<p>\(\gamma\) 越小，越重視近期獎勵；越接近 1，越重視長期結果。</p>
-<p>對無限期任務，若獎勵有界且 \(\gamma<1\)，折扣也能確保回報和有界。</p>
+</annotation></semantics></math></span></p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>γ</mi></mrow><annotation encoding="application/x-tex">\gamma</annotation></semantics></math></span> 越小，越重視近期獎勵；越接近 1，越重視長期結果。</p>
+<p>對無限期任務，若獎勵有界且 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>γ</mi><mo>&lt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\gamma&lt;1</annotation></semantics></math></span>，折扣也能確保回報和有界。</p>
 <p>強化學習的目標是：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>J</mi><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo><mo>=</mo><msub><mi mathvariant="double-struck">E</mi><mrow><mi>τ</mi><mo>∼</mo><msub><mi>π</mi><mi>θ</mi></msub></mrow></msub><mo stretchy="false">[</mo><msub><mi>G</mi><mn>0</mn></msub><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">
 J(\theta)
 =
 \mathbb E_{\tau\sim\pi_\theta}[G_0]
-\]</p>
-<p>\[
+</annotation></semantics></math></span></p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msup><mi>θ</mi><mo>∗</mo></msup><mo>=</mo><mi>arg</mi><mo>⁡</mo><munder><mrow><mi>max</mi><mo>⁡</mo></mrow><mi>θ</mi></munder><mi>J</mi><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 \theta^*=\arg\max_\theta J(\theta)
-\]</p>
-<p>其中 \(\tau\) 是一次互動軌跡。</p>
+</annotation></semantics></math></span></p>
+<p>其中 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>τ</mi></mrow><annotation encoding="application/x-tex">\tau</annotation></semantics></math></span> 是一次互動軌跡。</p>
 <p><strong>目標是最大化期望長期回報，不是每一步都挑即時 reward 最大的動作。</strong></p>
 <hr>
 <h2 id="section-15">十五、MDP 與 Markov property</h2>
 <p>常見的 MDP 表示為：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mo stretchy="false">(</mo><mi mathvariant="script">S</mi><mo separator="true">,</mo><mi mathvariant="script">A</mi><mo separator="true">,</mo><mi>P</mi><mo separator="true">,</mo><mi>R</mi><mo separator="true">,</mo><mi>γ</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 (\mathcal S,\mathcal A,P,R,\gamma)
-\]</p>
-<p>也可以另外列出初始狀態分布 \(\rho_0\)。</p>
+</annotation></semantics></math></span></p>
+<p>也可以另外列出初始狀態分布 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ρ</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">\rho_0</annotation></semantics></math></span>。</p>
 <p>Markov property 表示：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><msub><mi>s</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>∣</mo><msub><mi>s</mi><mn>0</mn></msub><mo separator="true">,</mo><msub><mi>a</mi><mn>0</mn></msub><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>s</mi><mi>t</mi></msub><mo separator="true">,</mo><msub><mi>a</mi><mi>t</mi></msub><mo stretchy="false">)</mo><mo>=</mo><mi>P</mi><mo stretchy="false">(</mo><msub><mi>s</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>∣</mo><msub><mi>s</mi><mi>t</mi></msub><mo separator="true">,</mo><msub><mi>a</mi><mi>t</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 P(s_{t+1}\mid s_0,a_0,\ldots,s_t,a_t)
 =
 P(s_{t+1}\mid s_t,a_t)
-\]</p>
+</annotation></semantics></math></span></p>
 <p>也就是：</p>
 <blockquote>
 <p>已知目前狀態與動作後，更早的歷史不再提供額外的下一狀態預測資訊。</p>
@@ -903,116 +901,116 @@ P(s_{t+1}\mid s_t,a_t)
 <p>這不表示世界「沒有歷史」，而是目前的 state 已經包含所需資訊。</p>
 <p>例如預測球的下一個位置，只知道現在位置可能不夠，還要知道速度。因此把「位置＋速度」當 state，可能比只用位置更符合 Markov 假設。</p>
 <hr>
-<h2 id="section-16">十六、\(V\)、\(Q\)、\(A\)：三個一定要分清楚的函數</h2>
+<h2 id="section-16">十六、<span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi></mrow><annotation encoding="application/x-tex">V</annotation></semantics></math></span>、<span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi></mrow><annotation encoding="application/x-tex">Q</annotation></semantics></math></span>、<span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi></mrow><annotation encoding="application/x-tex">A</annotation></semantics></math></span>：三個一定要分清楚的函數</h2>
 <p><em>對應第 10 章，第 20–22 頁。</em></p>
-<p><strong>狀態價值 \(V^\pi(s)\)</strong>：</p>
-<p>\[
+<p><strong>狀態價值 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>V</mi><mi>π</mi></msup><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">V^\pi(s)</annotation></semantics></math></span></strong>：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msup><mi>V</mi><mi>π</mi></msup><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo><mo>=</mo><msub><mi mathvariant="double-struck">E</mi><mi>π</mi></msub><mo stretchy="false">[</mo><msub><mi>G</mi><mi>t</mi></msub><mo>∣</mo><msub><mi>s</mi><mi>t</mi></msub><mo>=</mo><mi>s</mi><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">
 V^\pi(s)
 =
 \mathbb E_\pi[G_t\mid s_t=s]
-\]</p>
+</annotation></semantics></math></span></p>
 <p>問題是：</p>
 <blockquote>
-<p>從狀態 \(s\) 出發，接下來遵守策略 \(\pi\)，平均能拿多少回報？</p>
+<p>從狀態 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi></mrow><annotation encoding="application/x-tex">s</annotation></semantics></math></span> 出發，接下來遵守策略 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi></mrow><annotation encoding="application/x-tex">\pi</annotation></semantics></math></span>，平均能拿多少回報？</p>
 </blockquote>
-<p><strong>動作價值 \(Q^\pi(s,a)\)</strong>：</p>
-<p>\[
+<p><strong>動作價值 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>Q</mi><mi>π</mi></msup><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">Q^\pi(s,a)</annotation></semantics></math></span></strong>：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msup><mi>Q</mi><mi>π</mi></msup><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo stretchy="false">)</mo><mo>=</mo><msub><mi mathvariant="double-struck">E</mi><mi>π</mi></msub><mo stretchy="false">[</mo><msub><mi>G</mi><mi>t</mi></msub><mo>∣</mo><msub><mi>s</mi><mi>t</mi></msub><mo>=</mo><mi>s</mi><mo separator="true">,</mo><msub><mi>a</mi><mi>t</mi></msub><mo>=</mo><mi>a</mi><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">
 Q^\pi(s,a)
 =
 \mathbb E_\pi[G_t\mid s_t=s,a_t=a]
-\]</p>
+</annotation></semantics></math></span></p>
 <p>問題是：</p>
 <blockquote>
-<p>在 \(s\) 先做動作 \(a\)，之後遵守 \(\pi\)，平均能拿多少回報？</p>
+<p>在 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi></mrow><annotation encoding="application/x-tex">s</annotation></semantics></math></span> 先做動作 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi></mrow><annotation encoding="application/x-tex">a</annotation></semantics></math></span>，之後遵守 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi></mrow><annotation encoding="application/x-tex">\pi</annotation></semantics></math></span>，平均能拿多少回報？</p>
 </blockquote>
 <p>兩者關係：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msup><mi>V</mi><mi>π</mi></msup><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo><mo>=</mo><munder><mo>∑</mo><mi>a</mi></munder><mi>π</mi><mo stretchy="false">(</mo><mi>a</mi><mo>∣</mo><mi>s</mi><mo stretchy="false">)</mo><msup><mi>Q</mi><mi>π</mi></msup><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 V^\pi(s)
 =
 \sum_a\pi(a\mid s)Q^\pi(s,a)
-\]</p>
-<p><strong>優勢函數 \(A^\pi(s,a)\)</strong>：</p>
-<p>\[
+</annotation></semantics></math></span></p>
+<p><strong>優勢函數 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>A</mi><mi>π</mi></msup><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">A^\pi(s,a)</annotation></semantics></math></span></strong>：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msup><mi>A</mi><mi>π</mi></msup><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo stretchy="false">)</mo><mo>=</mo><msup><mi>Q</mi><mi>π</mi></msup><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo stretchy="false">)</mo><mo>−</mo><msup><mi>V</mi><mi>π</mi></msup><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 A^\pi(s,a)
 =
 Q^\pi(s,a)-V^\pi(s)
-\]</p>
+</annotation></semantics></math></span></p>
 <p>問題是：</p>
 <blockquote>
 <p>這個動作比目前策略在這個狀態下的平均表現，好多少？</p>
 </blockquote>
 <p>例如：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>Q</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mtext>左</mtext><mo stretchy="false">)</mo><mo>=</mo><mn>8</mn><mo separator="true">,</mo><mspace width="2em"/><mi>Q</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mtext>右</mtext><mo stretchy="false">)</mo><mo>=</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">
 Q(s,\text{左})=8,\qquad
 Q(s,\text{右})=4
-\]</p>
+</annotation></semantics></math></span></p>
 <p>策略各以一半機率選左右，則：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>V</mi><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo><mo>=</mo><mn>0.5</mn><mo stretchy="false">(</mo><mn>8</mn><mo stretchy="false">)</mo><mo>+</mo><mn>0.5</mn><mo stretchy="false">(</mo><mn>4</mn><mo stretchy="false">)</mo><mo>=</mo><mn>6</mn></mrow><annotation encoding="application/x-tex">
 V(s)=0.5(8)+0.5(4)=6
-\]</p>
+</annotation></semantics></math></span></p>
 <p>因此：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>A</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mtext>左</mtext><mo stretchy="false">)</mo><mo>=</mo><mn>2</mn><mo separator="true">,</mo><mspace width="2em"/><mi>A</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mtext>右</mtext><mo stretchy="false">)</mo><mo>=</mo><mo>−</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">
 A(s,\text{左})=2,\qquad
 A(s,\text{右})=-2
-\]</p>
+</annotation></semantics></math></span></p>
 <p>負的 advantage 不代表動作的回報一定小於零；只表示它低於目前策略的平均水準。</p>
 <p>此外：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><munder><mo>∑</mo><mi>a</mi></munder><mi>π</mi><mo stretchy="false">(</mo><mi>a</mi><mo>∣</mo><mi>s</mi><mo stretchy="false">)</mo><msup><mi>A</mi><mi>π</mi></msup><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo stretchy="false">)</mo><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">
 \sum_a\pi(a\mid s)A^\pi(s,a)=0
-\]</p>
+</annotation></semantics></math></span></p>
 <p>這可由定義直接推得。</p>
 <hr>
 <h2 id="section-17">十七、Bellman equation：把長期問題拆成一步</h2>
 <p><em>對應第 10 章，第 23–24 頁。</em></p>
 <p>從 return 定義開始：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>G</mi><mi>t</mi></msub><mo>=</mo><msub><mi>r</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>+</mo><mi>γ</mi><msub><mi>G</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub></mrow><annotation encoding="application/x-tex">
 G_t=r_{t+1}+\gamma G_{t+1}
-\]</p>
+</annotation></semantics></math></span></p>
 <p>因此：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msup><mi>V</mi><mi>π</mi></msup><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo><mo>=</mo><msub><mi mathvariant="double-struck">E</mi><mrow><mi>a</mi><mo separator="true">,</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></mrow></msub><mrow><mo fence="true">[</mo><mi>r</mi><mo>+</mo><mi>γ</mi><msup><mi>V</mi><mi>π</mi></msup><mo stretchy="false">(</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">
 V^\pi(s)
 =
-\mathbb E_{a,s'}
+\mathbb E_{a,s&#x27;}
 \left[
-r+\gamma V^\pi(s')
+r+\gamma V^\pi(s&#x27;)
 \right]
-\]</p>
-<p>其中動作按照 \(\pi\) 選，下一狀態按照環境轉移產生。</p>
-<p>對 \(Q^\pi\)：</p>
-<p>\[
+</annotation></semantics></math></span></p>
+<p>其中動作按照 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi></mrow><annotation encoding="application/x-tex">\pi</annotation></semantics></math></span> 選，下一狀態按照環境轉移產生。</p>
+<p>對 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>Q</mi><mi>π</mi></msup></mrow><annotation encoding="application/x-tex">Q^\pi</annotation></semantics></math></span>：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msup><mi>Q</mi><mi>π</mi></msup><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo stretchy="false">)</mo><mo>=</mo><msub><mi mathvariant="double-struck">E</mi><mrow><mi>r</mi><mo separator="true">,</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></mrow></msub><mrow><mo fence="true">[</mo><mi>r</mi><mo>+</mo><mi>γ</mi><munder><mo>∑</mo><msup><mi>a</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></munder><mi>π</mi><mo stretchy="false">(</mo><msup><mi>a</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo>∣</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><msup><mi>Q</mi><mi>π</mi></msup><mo stretchy="false">(</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo separator="true">,</mo><msup><mi>a</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">
 Q^\pi(s,a)
 =
-\mathbb E_{r,s'}
+\mathbb E_{r,s&#x27;}
 \left[
 r+
 \gamma
-\sum_{a'}\pi(a'\mid s')Q^\pi(s',a')
+\sum_{a&#x27;}\pi(a&#x27;\mid s&#x27;)Q^\pi(s&#x27;,a&#x27;)
 \right]
-\]</p>
+</annotation></semantics></math></span></p>
 <p>如果考慮最優策略，就得到 Bellman optimality equation：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msup><mi>Q</mi><mo>∗</mo></msup><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo stretchy="false">)</mo><mo>=</mo><msub><mi mathvariant="double-struck">E</mi><mrow><mi>r</mi><mo separator="true">,</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></mrow></msub><mrow><mo fence="true">[</mo><mi>r</mi><mo>+</mo><mi>γ</mi><munder><mrow><mi>max</mi><mo>⁡</mo></mrow><msup><mi>a</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></munder><msup><mi>Q</mi><mo>∗</mo></msup><mo stretchy="false">(</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo separator="true">,</mo><msup><mi>a</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">
 Q^*(s,a)
 =
-\mathbb E_{r,s'}
+\mathbb E_{r,s&#x27;}
 \left[
-r+\gamma\max_{a'}Q^*(s',a')
+r+\gamma\max_{a&#x27;}Q^*(s&#x27;,a&#x27;)
 \right]
-\]</p>
+</annotation></semantics></math></span></p>
 <p>差別是：</p>
 <ul>
 <li>評估某個策略：未來按照該策略取平均。</li>
 <li>最優價值：未來選擇價值最大的動作。</li>
 </ul>
-<p>一旦知道 \(Q^*\)，就可以選：</p>
-<p>\[
+<p>一旦知道 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>Q</mi><mo>∗</mo></msup></mrow><annotation encoding="application/x-tex">Q^*</annotation></semantics></math></span>，就可以選：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msup><mi>π</mi><mo>∗</mo></msup><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo><mo>∈</mo><mi>arg</mi><mo>⁡</mo><munder><mrow><mi>max</mi><mo>⁡</mo></mrow><mi>a</mi></munder><msup><mi>Q</mi><mo>∗</mo></msup><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 \pi^*(s)\in\arg\max_aQ^*(s,a)
-\]</p>
+</annotation></semantics></math></span></p>
 <p>這是 Q-learning 的基礎。</p>
 <hr>
 <h2 id="section-18">十八、Q-learning：用一次經驗修正一格 Q-table</h2>
 <p><em>對應第 10 章，第 25–26 頁。</em></p>
 <p>Q-learning 更新式：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>Q</mi><mo stretchy="false">(</mo><msub><mi>s</mi><mi>t</mi></msub><mo separator="true">,</mo><msub><mi>a</mi><mi>t</mi></msub><mo stretchy="false">)</mo><mo>←</mo><mi>Q</mi><mo stretchy="false">(</mo><msub><mi>s</mi><mi>t</mi></msub><mo separator="true">,</mo><msub><mi>a</mi><mi>t</mi></msub><mo stretchy="false">)</mo><mo>+</mo><mi>α</mi><mrow><mo fence="true">[</mo><msub><mi>r</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>+</mo><mi>γ</mi><munder><mrow><mi>max</mi><mo>⁡</mo></mrow><msup><mi>a</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></munder><mi>Q</mi><mo stretchy="false">(</mo><msub><mi>s</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo separator="true">,</mo><msup><mi>a</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo>−</mo><mi>Q</mi><mo stretchy="false">(</mo><msub><mi>s</mi><mi>t</mi></msub><mo separator="true">,</mo><msub><mi>a</mi><mi>t</mi></msub><mo stretchy="false">)</mo><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">
 Q(s_t,a_t)
 \leftarrow
 Q(s_t,a_t)
@@ -1021,65 +1019,65 @@ Q(s_t,a_t)
 \left[
 r_{t+1}
 +
-\gamma\max_{a'}Q(s_{t+1},a')
+\gamma\max_{a&#x27;}Q(s_{t+1},a&#x27;)
 -
 Q(s_t,a_t)
 \right]
-\]</p>
+</annotation></semantics></math></span></p>
 <p>定義 TD error：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>δ</mi><mi>t</mi></msub><mo>=</mo><msub><mi>r</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>+</mo><mi>γ</mi><munder><mrow><mi>max</mi><mo>⁡</mo></mrow><msup><mi>a</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></munder><mi>Q</mi><mo stretchy="false">(</mo><msub><mi>s</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo separator="true">,</mo><msup><mi>a</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo>−</mo><mi>Q</mi><mo stretchy="false">(</mo><msub><mi>s</mi><mi>t</mi></msub><mo separator="true">,</mo><msub><mi>a</mi><mi>t</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 \delta_t=
 r_{t+1}
-+\gamma\max_{a'}Q(s_{t+1},a')
++\gamma\max_{a&#x27;}Q(s_{t+1},a&#x27;)
 -Q(s_t,a_t)
-\]</p>
+</annotation></semantics></math></span></p>
 <p>就能寫成：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>Q</mi><mrow><mi mathvariant="normal">n</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">w</mi></mrow></msub><mo>=</mo><msub><mi>Q</mi><mrow><mi mathvariant="normal">o</mi><mi mathvariant="normal">l</mi><mi mathvariant="normal">d</mi></mrow></msub><mo>+</mo><mi>α</mi><msub><mi>δ</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">
 Q_{\mathrm{new}}
 =
 Q_{\mathrm{old}}+\alpha\delta_t
-\]</p>
+</annotation></semantics></math></span></p>
 <p>意思是：</p>
 <blockquote>
 <p>根據新觀察建立一個較好的估計，再把舊估計往那個方向移動一小步。</p>
 </blockquote>
 <p>計算例子：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>Q</mi><mo stretchy="false">(</mo><msub><mi>s</mi><mi>t</mi></msub><mo separator="true">,</mo><msub><mi>a</mi><mi>t</mi></msub><mo stretchy="false">)</mo><mo>=</mo><mn>5</mn><mo separator="true">,</mo><mspace width="1em"/><msub><mi>r</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>2</mn><mo separator="true">,</mo><mspace width="1em"/><mi>γ</mi><mo>=</mo><mn>0.9</mn></mrow><annotation encoding="application/x-tex">
 Q(s_t,a_t)=5,\quad
 r_{t+1}=2,\quad
 \gamma=0.9
-\]</p>
-<p>\[
-\max_{a'}Q(s_{t+1},a')=8,\quad
+</annotation></semantics></math></span></p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><munder><mrow><mi>max</mi><mo>⁡</mo></mrow><msup><mi>a</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></munder><mi>Q</mi><mo stretchy="false">(</mo><msub><mi>s</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo separator="true">,</mo><msup><mi>a</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo>=</mo><mn>8</mn><mo separator="true">,</mo><mspace width="1em"/><mi>α</mi><mo>=</mo><mn>0.1</mn></mrow><annotation encoding="application/x-tex">
+\max_{a&#x27;}Q(s_{t+1},a&#x27;)=8,\quad
 \alpha=0.1
-\]</p>
+</annotation></semantics></math></span></p>
 <p>TD target：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>y</mi><mo>=</mo><mn>2</mn><mo>+</mo><mn>0.9</mn><mo stretchy="false">(</mo><mn>8</mn><mo stretchy="false">)</mo><mo>=</mo><mn>9.2</mn></mrow><annotation encoding="application/x-tex">
 y=2+0.9(8)=9.2
-\]</p>
+</annotation></semantics></math></span></p>
 <p>TD error：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>δ</mi><mo>=</mo><mn>9.2</mn><mo>−</mo><mn>5</mn><mo>=</mo><mn>4.2</mn></mrow><annotation encoding="application/x-tex">
 \delta=9.2-5=4.2
-\]</p>
+</annotation></semantics></math></span></p>
 <p>更新：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>Q</mi><mrow><mi mathvariant="normal">n</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">w</mi></mrow></msub><mo>=</mo><mn>5</mn><mo>+</mo><mn>0.1</mn><mo stretchy="false">(</mo><mn>4.2</mn><mo stretchy="false">)</mo><mo>=</mo><mn>5.42</mn></mrow><annotation encoding="application/x-tex">
 Q_{\mathrm{new}}=5+0.1(4.2)=5.42
-\]</p>
+</annotation></semantics></math></span></p>
 <p>若下一個狀態是真正的終止狀態，沒有後續回報，target 就是：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>y</mi><mo>=</mo><msub><mi>r</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub></mrow><annotation encoding="application/x-tex">
 y=r_{t+1}
-\]</p>
-<p><strong>探索與利用：\(\varepsilon\)-greedy</strong></p>
+</annotation></semantics></math></span></p>
+<p><strong>探索與利用：<span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ε</mi></mrow><annotation encoding="application/x-tex">\varepsilon</annotation></semantics></math></span>-greedy</strong></p>
 <p>常見選擇方式：</p>
 <ul>
-<li>機率 \(1-\varepsilon\)：選目前 Q 最大的動作。</li>
-<li>機率 \(\varepsilon\)：隨機選動作。</li>
+<li>機率 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mi>ε</mi></mrow><annotation encoding="application/x-tex">1-\varepsilon</annotation></semantics></math></span>：選目前 Q 最大的動作。</li>
+<li>機率 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ε</mi></mrow><annotation encoding="application/x-tex">\varepsilon</annotation></semantics></math></span>：隨機選動作。</li>
 </ul>
-<p>如果有 4 個動作、\(\varepsilon=0.2\)，而且唯一最佳動作也包含在隨機抽樣範圍內，那麼實際選到最佳動作的機率為：</p>
-<p>\[
+<p>如果有 4 個動作、<span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ε</mi><mo>=</mo><mn>0.2</mn></mrow><annotation encoding="application/x-tex">\varepsilon=0.2</annotation></semantics></math></span>，而且唯一最佳動作也包含在隨機抽樣範圍內，那麼實際選到最佳動作的機率為：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mn>0.8</mn><mo>+</mo><mfrac><mn>0.2</mn><mn>4</mn></mfrac><mo>=</mo><mn>0.85</mn></mrow><annotation encoding="application/x-tex">
 0.8+\frac{0.2}{4}=0.85
-\]</p>
-<p>不是只有 \(0.8\)。</p>
+</annotation></semantics></math></span></p>
+<p>不是只有 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.8</mn></mrow><annotation encoding="application/x-tex">0.8</annotation></semantics></math></span>。</p>
 <p>Q-learning 屬於 off-policy，因為收集經驗時可以用探索策略，但更新目標採用的是下一狀態的 greedy 動作。</p>
 <hr>
 <h2 id="section-19">十九、Monte Carlo、TD 與 model-based 是不同分類軸</h2>
@@ -1096,30 +1094,30 @@ y=r_{t+1}
 </thead>
 <tbody><tr>
 <td>Monte Carlo</td>
-<td>實際完整回報 \(G_t\)</td>
+<td>實際完整回報 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>G</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">G_t</annotation></semantics></math></span></td>
 <td align="right">標準 episodic MC 通常需要</td>
 <td align="right">否</td>
 </tr>
 <tr>
 <td>TD(0)</td>
-<td>\(r+\gamma V(s')\)</td>
+<td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>+</mo><mi>γ</mi><mi>V</mi><mo stretchy="false">(</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">r+\gamma V(s&#x27;)</annotation></semantics></math></span></td>
 <td align="right">不需要</td>
 <td align="right">是</td>
 </tr>
 </tbody></table>
 <p>Monte Carlo 更新：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>V</mi><mo stretchy="false">(</mo><msub><mi>s</mi><mi>t</mi></msub><mo stretchy="false">)</mo><mo>←</mo><mi>V</mi><mo stretchy="false">(</mo><msub><mi>s</mi><mi>t</mi></msub><mo stretchy="false">)</mo><mo>+</mo><mi>α</mi><mo stretchy="false">[</mo><msub><mi>G</mi><mi>t</mi></msub><mo>−</mo><mi>V</mi><mo stretchy="false">(</mo><msub><mi>s</mi><mi>t</mi></msub><mo stretchy="false">)</mo><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">
 V(s_t)
 \leftarrow
 V(s_t)+\alpha[G_t-V(s_t)]
-\]</p>
+</annotation></semantics></math></span></p>
 <p>TD(0) 更新：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>V</mi><mo stretchy="false">(</mo><msub><mi>s</mi><mi>t</mi></msub><mo stretchy="false">)</mo><mo>←</mo><mi>V</mi><mo stretchy="false">(</mo><msub><mi>s</mi><mi>t</mi></msub><mo stretchy="false">)</mo><mo>+</mo><mi>α</mi><mo stretchy="false">[</mo><msub><mi>r</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>+</mo><mi>γ</mi><mi>V</mi><mo stretchy="false">(</mo><msub><mi>s</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo><mo>−</mo><mi>V</mi><mo stretchy="false">(</mo><msub><mi>s</mi><mi>t</mi></msub><mo stretchy="false">)</mo><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">
 V(s_t)
 \leftarrow
 V(s_t)
 +\alpha[r_{t+1}+\gamma V(s_{t+1})-V(s_t)]
-\]</p>
+</annotation></semantics></math></span></p>
 <p>Bootstrap 的意思是：</p>
 <blockquote>
 <p>用自己目前對後續價值的估計，來更新目前的估計。</p>
@@ -1136,53 +1134,53 @@ V(s_t)
 <p><em>對應第 10 章，第 29–36 頁。</em></p>
 <p>如果 state 是圖片，可能狀態數量極大，Q-table 無法儲存。</p>
 <p>DQN 改用：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>Q</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo stretchy="false">)</mo><mo>≈</mo><msup><mi>Q</mi><mo>∗</mo></msup><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 Q_\theta(s,a)\approx Q^*(s,a)
-\]</p>
+</annotation></semantics></math></span></p>
 <p>對離散動作問題，網路通常輸入狀態，輸出各動作的 Q 值：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>Q</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo><mo>=</mo><mrow><mo fence="true">[</mo><mtable rowspacing="0.16em" columnalign="center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><msub><mi>Q</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><msub><mi>a</mi><mn>1</mn></msub><mo stretchy="false">)</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi mathvariant="normal">⋮</mi><mpadded height="0em" voffset="0em"><mspace mathbackground="black" width="0em" height="1.5em"></mspace></mpadded></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><msub><mi>Q</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><msub><mi>a</mi><mi>m</mi></msub><mo stretchy="false">)</mo></mrow></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">
 Q_\theta(s)=
 \begin{bmatrix}
 Q_\theta(s,a_1)\\
 \vdots\\
 Q_\theta(s,a_m)
 \end{bmatrix}
-\]</p>
+</annotation></semantics></math></span></p>
 <p>這些輸出是預期回報的估計，<strong>不是機率，不需要加總成 1，也不必介於 0 與 1</strong>。</p>
 <p>DQN 訓練目標可寫成：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>y</mi><mo>=</mo><mi>r</mi><mo>+</mo><mi>γ</mi><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>d</mi><mo stretchy="false">)</mo><munder><mrow><mi>max</mi><mo>⁡</mo></mrow><msup><mi>a</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></munder><msub><mi>Q</mi><msup><mi>θ</mi><mo>−</mo></msup></msub><mo stretchy="false">(</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo separator="true">,</mo><msup><mi>a</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 y=
-r+\gamma(1-d)\max_{a'}Q_{\theta^-}(s',a')
-\]</p>
+r+\gamma(1-d)\max_{a&#x27;}Q_{\theta^-}(s&#x27;,a&#x27;)
+</annotation></semantics></math></span></p>
 <p>其中：</p>
 <ul>
-<li>\(\theta\)：目前 online network 的參數。</li>
-<li>\(\theta^-\)：target network 的參數。</li>
-<li>\(d=1\)：真正終止；否則為 0。</li>
+<li><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>θ</mi></mrow><annotation encoding="application/x-tex">\theta</annotation></semantics></math></span>：目前 online network 的參數。</li>
+<li><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>θ</mi><mo>−</mo></msup></mrow><annotation encoding="application/x-tex">\theta^-</annotation></semantics></math></span>：target network 的參數。</li>
+<li><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">d=1</annotation></semantics></math></span>：真正終止；否則為 0。</li>
 </ul>
 <p>損失為：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi mathvariant="script">L</mi><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo><mo>=</mo><msub><mi mathvariant="double-struck">E</mi><mi mathvariant="script">D</mi></msub><mrow><mo fence="true">[</mo><msup><mrow><mo fence="true">(</mo><msub><mi>Q</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo stretchy="false">)</mo><mo>−</mo><mi>y</mi><mo fence="true">)</mo></mrow><mn>2</mn></msup><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">
 \mathcal L(\theta)
 =
 \mathbb E_{\mathcal D}
 \left[
 \left(Q_\theta(s,a)-y\right)^2
 \right]
-\]</p>
-<p>更新時把 \(y\) 當作固定目標，不對 target 分支反向傳播。</p>
+</annotation></semantics></math></span></p>
+<p>更新時把 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span> 當作固定目標，不對 target 分支反向傳播。</p>
 <p>DQN 有兩個關鍵穩定化設計。</p>
 <p><strong>1. Target network</strong></p>
 <p>如果預測值與 target 同時快速改變，就像一直追逐會移動的答案。</p>
 <p>因此 target network 暫時固定，過一段時間再：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msup><mi>θ</mi><mo>−</mo></msup><mo>←</mo><mi>θ</mi></mrow><annotation encoding="application/x-tex">
 \theta^-\leftarrow\theta
-\]</p>
+</annotation></semantics></math></span></p>
 <p>這可降低 target 的快速漂移。</p>
 <p><strong>2. Experience replay</strong></p>
 <p>把經驗：</p>
-<p>\[
-(s,a,r,s',d)
-\]</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo separator="true">,</mo><mi>r</mi><mo separator="true">,</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo separator="true">,</mo><mi>d</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
+(s,a,r,s&#x27;,d)
+</annotation></semantics></math></span></p>
 <p>存入 replay buffer，訓練時隨機抽樣。</p>
 <p>效果包括：</p>
 <ul>
@@ -1193,7 +1191,7 @@ r+\gamma(1-d)\max_{a'}Q_{\theta^-}(s',a')
 <p>Replay 不會讓樣本變成完美獨立，也不保證 DQN 一定收斂，但能改善訓練穩定性。</p>
 <p>完整流程：</p>
 <ol>
-<li>根據 \(\varepsilon\)-greedy 選動作。</li>
+<li>根據 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ε</mi></mrow><annotation encoding="application/x-tex">\varepsilon</annotation></semantics></math></span>-greedy 選動作。</li>
 <li>與環境互動。</li>
 <li>將 transition 存入 buffer。</li>
 <li>隨機抽取 minibatch。</li>
@@ -1207,21 +1205,21 @@ r+\gamma(1-d)\max_{a'}Q_{\theta^-}(s',a')
 <p><em>對應第 10 章，第 37–40 頁。</em></p>
 <p><strong>1. Double DQN：分開選動作與估計動作價值</strong></p>
 <p>當 Q 值帶有誤差時，取最大值容易挑到被高估的動作：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi mathvariant="double-struck">E</mi><mo stretchy="false">[</mo><munder><mrow><mi>max</mi><mo>⁡</mo></mrow><mi>a</mi></munder><mover accent="true"><mi>Q</mi><mo>^</mo></mover><mo stretchy="false">(</mo><mi>a</mi><mo stretchy="false">)</mo><mo stretchy="false">]</mo><mo>≥</mo><munder><mrow><mi>max</mi><mo>⁡</mo></mrow><mi>a</mi></munder><mi mathvariant="double-struck">E</mi><mo stretchy="false">[</mo><mover accent="true"><mi>Q</mi><mo>^</mo></mover><mo stretchy="false">(</mo><mi>a</mi><mo stretchy="false">)</mo><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">
 \mathbb E[\max_a\hat Q(a)]
 \geq
 \max_a\mathbb E[\hat Q(a)]
-\]</p>
+</annotation></semantics></math></span></p>
 <p>Double DQN 使用 online network 選動作：</p>
-<p>\[
-a^*=\arg\max_{a'}Q_\theta(s',a')
-\]</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msup><mi>a</mi><mo>∗</mo></msup><mo>=</mo><mi>arg</mi><mo>⁡</mo><munder><mrow><mi>max</mi><mo>⁡</mo></mrow><msup><mi>a</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></munder><msub><mi>Q</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo separator="true">,</mo><msup><mi>a</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
+a^*=\arg\max_{a&#x27;}Q_\theta(s&#x27;,a&#x27;)
+</annotation></semantics></math></span></p>
 <p>再用 target network 評估：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>y</mi><mrow><mi mathvariant="normal">D</mi><mi mathvariant="normal">D</mi><mi mathvariant="normal">Q</mi><mi mathvariant="normal">N</mi></mrow></msub><mo>=</mo><mi>r</mi><mo>+</mo><mi>γ</mi><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>d</mi><mo stretchy="false">)</mo><msub><mi>Q</mi><msup><mi>θ</mi><mo>−</mo></msup></msub><mo stretchy="false">(</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo separator="true">,</mo><msup><mi>a</mi><mo>∗</mo></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 y_{\mathrm{DDQN}}
 =
-r+\gamma(1-d)Q_{\theta^-}(s',a^*)
-\]</p>
+r+\gamma(1-d)Q_{\theta^-}(s&#x27;,a^*)
+</annotation></semantics></math></span></p>
 <p>重點：</p>
 <blockquote>
 <p>Online network 決定選誰，target network 評估它值多少。</p>
@@ -1229,100 +1227,100 @@ r+\gamma(1-d)Q_{\theta^-}(s',a^*)
 <p>原始 DQN 本來就有 online 與 target network；Double DQN 的差異不是單純「多一個網路」。</p>
 <p><strong>2. Prioritized experience replay：更常抽到有學習價值的經驗</strong></p>
 <p>以 TD error 建立 priority：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>p</mi><mi>i</mi></msub><mo>=</mo><mi mathvariant="normal">∣</mi><msub><mi>δ</mi><mi>i</mi></msub><mi mathvariant="normal">∣</mi><mo>+</mo><msub><mi>ϵ</mi><mrow><mi mathvariant="normal">P</mi><mi mathvariant="normal">E</mi><mi mathvariant="normal">R</mi></mrow></msub></mrow><annotation encoding="application/x-tex">
 p_i=|\delta_i|+\epsilon_{\mathrm{PER}}
-\]</p>
+</annotation></semantics></math></span></p>
 <p>抽樣機率：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo><mo>=</mo><mfrac><msubsup><mi>p</mi><mi>i</mi><mi>α</mi></msubsup><mrow><munder><mo>∑</mo><mi>j</mi></munder><msubsup><mi>p</mi><mi>j</mi><mi>α</mi></msubsup></mrow></mfrac></mrow><annotation encoding="application/x-tex">
 P(i)=
 \frac{p_i^\alpha}{\sum_jp_j^\alpha}
-\]</p>
-<p>這裡的 \(\alpha\) 是控制 prioritization 強度的超參數，不是前面 Q-learning 的學習率。</p>
+</annotation></semantics></math></span></p>
+<p>這裡的 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span> 是控制 prioritization 強度的超參數，不是前面 Q-learning 的學習率。</p>
 <p>因為不再均勻抽樣，可能加入重要性權重：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>w</mi><mi>i</mi></msub><mo>=</mo><msup><mrow><mo fence="true">(</mo><mfrac><mn>1</mn><mrow><mi>N</mi><mi>P</mi><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo></mrow></mfrac><mo fence="true">)</mo></mrow><mi>β</mi></msup></mrow><annotation encoding="application/x-tex">
 w_i=
 \left(\frac1{N P(i)}\right)^\beta
-\]</p>
+</annotation></semantics></math></span></p>
 <p>來減少抽樣偏差。</p>
 <p>大誤差只是「可能值得學習」的訊號，也可能來自雜訊，不能簡單理解成誤差越大就越重要。</p>
 <p><strong>3. Dueling network：分開估計狀態價值與動作差異</strong></p>
 <p>直覺形式是：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>Q</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo stretchy="false">)</mo><mo>=</mo><mi>V</mi><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo><mo>+</mo><mi>A</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 Q(s,a)=V(s)+A(s,a)
-\]</p>
+</annotation></semantics></math></span></p>
 <p>但直接相加有不唯一問題：</p>
-<p>\[
-V'(s)=V(s)+c,\qquad
-A'(s,a)=A(s,a)-c
-\]</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msup><mi>V</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo><mo>=</mo><mi>V</mi><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo><mo>+</mo><mi>c</mi><mo separator="true">,</mo><mspace width="2em"/><msup><mi>A</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo stretchy="false">)</mo><mo>=</mo><mi>A</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo stretchy="false">)</mo><mo>−</mo><mi>c</mi></mrow><annotation encoding="application/x-tex">
+V&#x27;(s)=V(s)+c,\qquad
+A&#x27;(s,a)=A(s,a)-c
+</annotation></semantics></math></span></p>
 <p>仍得到相同 Q。</p>
 <p>因此常用聚合方式：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>Q</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo stretchy="false">)</mo><mo>=</mo><mi>V</mi><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo><mo>+</mo><mrow><mo fence="true">[</mo><mi>A</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo stretchy="false">)</mo><mo>−</mo><mfrac><mn>1</mn><mrow><mi mathvariant="normal">∣</mi><mi mathvariant="script">A</mi><mi mathvariant="normal">∣</mi></mrow></mfrac><munder><mo>∑</mo><msup><mi>a</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></munder><mi>A</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><msup><mi>a</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">
 Q(s,a)
 =
 V(s)+
 \left[
 A(s,a)
 -\frac1{|\mathcal A|}
-\sum_{a'}A(s,a')
+\sum_{a&#x27;}A(s,a&#x27;)
 \right]
-\]</p>
+</annotation></semantics></math></span></p>
 <p>它特別適合某些狀態中「選哪個動作差異不大，但這個狀態本身好不好很重要」的情況。</p>
-<p>這裡的兩條分支是學習 Q 的參數化方式，不必把它們直接當成某個策略下精確的 \(V^\pi\) 與 \(A^\pi\)。</p>
+<p>這裡的兩條分支是學習 Q 的參數化方式，不必把它們直接當成某個策略下精確的 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>V</mi><mi>π</mi></msup></mrow><annotation encoding="application/x-tex">V^\pi</annotation></semantics></math></span> 與 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>A</mi><mi>π</mi></msup></mrow><annotation encoding="application/x-tex">A^\pi</annotation></semantics></math></span>。</p>
 <hr>
 <h2 id="section-22">二十二、Policy Gradient：直接調整動作機率</h2>
 <p><em>對應第 10 章，第 42–45 頁。</em></p>
 <p>DQN 先估計動作價值，再選擇價值最大的動作。</p>
 <p>Policy gradient 直接學：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>π</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><mi>a</mi><mo>∣</mo><mi>s</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 \pi_\theta(a\mid s)
-\]</p>
+</annotation></semantics></math></span></p>
 <p>如果是離散動作，可以輸出 softmax 機率；如果是連續動作，可以輸出高斯分布的均值與標準差：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>a</mi><mo>∼</mo><mi mathvariant="script">N</mi><mrow><mo fence="true">(</mo><msub><mi>μ</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><msubsup><mi>σ</mi><mi>θ</mi><mn>2</mn></msubsup><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo><mo fence="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">
 a\sim
 \mathcal N
 \left(\mu_\theta(s),\sigma_\theta^2(s)\right)
-\]</p>
+</annotation></semantics></math></span></p>
 <p>這使它適合處理連續控制等難以枚舉所有動作的問題。</p>
 <p>先看有限回合、未折扣的目標：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>J</mi><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo><mo>=</mo><msub><mi mathvariant="double-struck">E</mi><mrow><mi>τ</mi><mo>∼</mo><msub><mi>p</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><mi>τ</mi><mo stretchy="false">)</mo></mrow></msub><mo stretchy="false">[</mo><mi>R</mi><mo stretchy="false">(</mo><mi>τ</mi><mo stretchy="false">)</mo><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">
 J(\theta)
 =
 \mathbb E_{\tau\sim p_\theta(\tau)}[R(\tau)]
-\]</p>
+</annotation></semantics></math></span></p>
 <p>使用：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi mathvariant="normal">∇</mi><mi>θ</mi></msub><msub><mi>p</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><mi>τ</mi><mo stretchy="false">)</mo><mo>=</mo><msub><mi>p</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><mi>τ</mi><mo stretchy="false">)</mo><msub><mi mathvariant="normal">∇</mi><mi>θ</mi></msub><mi>log</mi><mo>⁡</mo><msub><mi>p</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><mi>τ</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 \nabla_\theta p_\theta(\tau)
 =
 p_\theta(\tau)\nabla_\theta\log p_\theta(\tau)
-\]</p>
+</annotation></semantics></math></span></p>
 <p>可得：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi mathvariant="normal">∇</mi><mi>θ</mi></msub><mi>J</mi><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo><mo>=</mo><msub><mi mathvariant="double-struck">E</mi><mi>τ</mi></msub><mrow><mo fence="true">[</mo><mi>R</mi><mo stretchy="false">(</mo><mi>τ</mi><mo stretchy="false">)</mo><msub><mi mathvariant="normal">∇</mi><mi>θ</mi></msub><mi>log</mi><mo>⁡</mo><msub><mi>p</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><mi>τ</mi><mo stretchy="false">)</mo><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">
 \nabla_\theta J(\theta)
 =
 \mathbb E_\tau
 \left[
 R(\tau)\nabla_\theta\log p_\theta(\tau)
 \right]
-\]</p>
+</annotation></semantics></math></span></p>
 <p>軌跡機率是：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>p</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><mi>τ</mi><mo stretchy="false">)</mo><mo>=</mo><msub><mi>ρ</mi><mn>0</mn></msub><mo stretchy="false">(</mo><msub><mi>s</mi><mn>0</mn></msub><mo stretchy="false">)</mo><munder><mo>∏</mo><mi>t</mi></munder><msub><mi>π</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><msub><mi>a</mi><mi>t</mi></msub><mo>∣</mo><msub><mi>s</mi><mi>t</mi></msub><mo stretchy="false">)</mo><mi>P</mi><mo stretchy="false">(</mo><msub><mi>s</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>∣</mo><msub><mi>s</mi><mi>t</mi></msub><mo separator="true">,</mo><msub><mi>a</mi><mi>t</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 p_\theta(\tau)
 =
 \rho_0(s_0)
 \prod_t
 \pi_\theta(a_t\mid s_t)
 P(s_{t+1}\mid s_t,a_t)
-\]</p>
-<p>假設環境不依賴策略參數 \(\theta\)，則：</p>
-<p>\[
+</annotation></semantics></math></span></p>
+<p>假設環境不依賴策略參數 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>θ</mi></mrow><annotation encoding="application/x-tex">\theta</annotation></semantics></math></span>，則：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi mathvariant="normal">∇</mi><mi>θ</mi></msub><mi>log</mi><mo>⁡</mo><msub><mi>p</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><mi>τ</mi><mo stretchy="false">)</mo><mo>=</mo><munder><mo>∑</mo><mi>t</mi></munder><msub><mi mathvariant="normal">∇</mi><mi>θ</mi></msub><mi>log</mi><mo>⁡</mo><msub><mi>π</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><msub><mi>a</mi><mi>t</mi></msub><mo>∣</mo><msub><mi>s</mi><mi>t</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 \nabla_\theta\log p_\theta(\tau)
 =
 \sum_t
 \nabla_\theta\log\pi_\theta(a_t\mid s_t)
-\]</p>
+</annotation></semantics></math></span></p>
 <p>因此：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi mathvariant="normal">∇</mi><mi>θ</mi></msub><mi>J</mi><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo><mo>=</mo><msub><mi mathvariant="double-struck">E</mi><mi>τ</mi></msub><mrow><mo fence="true">[</mo><munder><mo>∑</mo><mi>t</mi></munder><msub><mi mathvariant="normal">∇</mi><mi>θ</mi></msub><mi>log</mi><mo>⁡</mo><msub><mi>π</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><msub><mi>a</mi><mi>t</mi></msub><mo>∣</mo><msub><mi>s</mi><mi>t</mi></msub><mo stretchy="false">)</mo><mi>R</mi><mo stretchy="false">(</mo><mi>τ</mi><mo stretchy="false">)</mo><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">
 \nabla_\theta J(\theta)
 =
 \mathbb E_\tau
@@ -1331,19 +1329,19 @@ P(s_{t+1}\mid s_t,a_t)
 \nabla_\theta\log\pi_\theta(a_t\mid s_t)
 R(\tau)
 \right]
-\]</p>
+</annotation></semantics></math></span></p>
 <p>直覺是：</p>
 <blockquote>
 <p>回報高的軌跡，提高其中動作的發生機率。</p>
 </blockquote>
 <p>利用因果性，可將整段回報替換成該時刻之後的 reward-to-go，以減少無關噪音。</p>
 <p>若目標採：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>J</mi><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo><mo>=</mo><mi mathvariant="double-struck">E</mi><mrow><mo fence="true">[</mo><munder><mo>∑</mo><mi>t</mi></munder><msup><mi>γ</mi><mi>t</mi></msup><msub><mi>r</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">
 J(\theta)=
 \mathbb E\left[\sum_t\gamma^tr_{t+1}\right]
-\]</p>
-<p>且 \(G_t\) 使用從 \(t\) 開始的相對折扣，嚴格的有限回合形式為：</p>
-<p>\[
+</annotation></semantics></math></span></p>
+<p>且 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>G</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">G_t</annotation></semantics></math></span> 使用從 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi></mrow><annotation encoding="application/x-tex">t</annotation></semantics></math></span> 開始的相對折扣，嚴格的有限回合形式為：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi mathvariant="normal">∇</mi><mi>θ</mi></msub><mi>J</mi><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo><mo>=</mo><mi mathvariant="double-struck">E</mi><mrow><mo fence="true">[</mo><munder><mo>∑</mo><mi>t</mi></munder><msup><mi>γ</mi><mi>t</mi></msup><msub><mi mathvariant="normal">∇</mi><mi>θ</mi></msub><mi>log</mi><mo>⁡</mo><msub><mi>π</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><msub><mi>a</mi><mi>t</mi></msub><mo>∣</mo><msub><mi>s</mi><mi>t</mi></msub><mo stretchy="false">)</mo><msub><mi>G</mi><mi>t</mi></msub><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">
 \nabla_\theta J(\theta)
 =
 \mathbb E
@@ -1353,7 +1351,7 @@ J(\theta)=
 \nabla_\theta\log\pi_\theta(a_t\mid s_t)
 G_t
 \right]
-\]</p>
+</annotation></semantics></math></span></p>
 <p>不同教材可能使用折扣狀態分布等記法，因此公式外觀會不同，應先核對目標定義。推導可對照 <a href="https://spinningup.openai.com/en/latest/spinningup/rl_intro3.html">Policy Optimization 教學</a>。</p>
 <hr>
 <h2 id="section-23">二十三、Baseline 與 Actor-Critic：用「比預期好多少」學習</h2>
@@ -1361,31 +1359,31 @@ G_t
 <p>只用完整回報更新，可能有很高的變異。</p>
 <p>例如兩個動作分別得到 100 與 101 分，但這個狀態本來就很容易得到 100 分，真正有用的差異其實只有 1 分。</p>
 <p>因此可減去只依賴狀態、不依賴當前抽樣動作的 baseline：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>G</mi><mi>t</mi></msub><mo>−</mo><mi>b</mi><mo stretchy="false">(</mo><msub><mi>s</mi><mi>t</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 G_t-b(s_t)
-\]</p>
+</annotation></semantics></math></span></p>
 <p>常用：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>b</mi><mo stretchy="false">(</mo><msub><mi>s</mi><mi>t</mi></msub><mo stretchy="false">)</mo><mo>=</mo><msup><mi>V</mi><mi>π</mi></msup><mo stretchy="false">(</mo><msub><mi>s</mi><mi>t</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 b(s_t)=V^\pi(s_t)
-\]</p>
+</annotation></semantics></math></span></p>
 <p>得到 advantage 的估計：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mover accent="true"><mi>A</mi><mo>^</mo></mover><mi>t</mi></msub><mo>=</mo><msub><mi>G</mi><mi>t</mi></msub><mo>−</mo><msup><mi>V</mi><mi>π</mi></msup><mo stretchy="false">(</mo><msub><mi>s</mi><mi>t</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 \hat A_t=G_t-V^\pi(s_t)
-\]</p>
+</annotation></semantics></math></span></p>
 <p>為什麼不改變期望梯度？因為在固定狀態下：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable rowspacing="0.25em" columnalign="right left" columnspacing="0em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><msub><mi mathvariant="double-struck">E</mi><mrow><mi>a</mi><mo>∼</mo><mi>π</mi></mrow></msub><mo stretchy="false">[</mo><msub><mi mathvariant="normal">∇</mi><mi>θ</mi></msub><mi>log</mi><mo>⁡</mo><msub><mi>π</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><mi>a</mi><mo>∣</mo><mi>s</mi><mo stretchy="false">)</mo><mi>b</mi><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo><mo stretchy="false">]</mo></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><mi>b</mi><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo><munder><mo>∑</mo><mi>a</mi></munder><msub><mi mathvariant="normal">∇</mi><mi>θ</mi></msub><msub><mi>π</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><mi>a</mi><mo>∣</mo><mi>s</mi><mo stretchy="false">)</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><mi>b</mi><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo><msub><mi mathvariant="normal">∇</mi><mi>θ</mi></msub><mn>1</mn></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><mn>0</mn></mrow></mstyle></mtd></mtr></mtable><annotation encoding="application/x-tex">
 \begin{aligned}
 \mathbb E_{a\sim\pi}
 [
 \nabla_\theta\log\pi_\theta(a\mid s)b(s)
 ]
-&=
+&amp;=
 b(s)\sum_a\nabla_\theta\pi_\theta(a\mid s)\\
-&=
+&amp;=
 b(s)\nabla_\theta1\\
-&=0
+&amp;=0
 \end{aligned}
-\]</p>
+</annotation></semantics></math></span></p>
 <p>Actor-Critic 把這個想法做成兩個部分：</p>
 <table>
 <thead>
@@ -1397,54 +1395,54 @@ b(s)\nabla_\theta1\\
 </thead>
 <tbody><tr>
 <td>Actor</td>
-<td>\(\pi_\theta(a\mid s)\)</td>
+<td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>π</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><mi>a</mi><mo>∣</mo><mi>s</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\pi_\theta(a\mid s)</annotation></semantics></math></span></td>
 <td>選擇動作</td>
 </tr>
 <tr>
 <td>Critic</td>
-<td>\(V_\phi(s)\) 或 \(Q_\phi(s,a)\)</td>
+<td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>V</mi><mi>ϕ</mi></msub><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">V_\phi(s)</annotation></semantics></math></span> 或 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Q</mi><mi>ϕ</mi></msub><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">Q_\phi(s,a)</annotation></semantics></math></span></td>
 <td>評估表現</td>
 </tr>
 </tbody></table>
 <p>一個常見的一步 advantage 估計是 TD error：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>δ</mi><mi>t</mi></msub><mo>=</mo><msub><mi>r</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>+</mo><mi>γ</mi><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><msub><mi>d</mi><mi>t</mi></msub><mo stretchy="false">)</mo><msub><mi>V</mi><mi>ϕ</mi></msub><mo stretchy="false">(</mo><msub><mi>s</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo><mo>−</mo><msub><mi>V</mi><mi>ϕ</mi></msub><mo stretchy="false">(</mo><msub><mi>s</mi><mi>t</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 \delta_t=
 r_{t+1}
 +\gamma(1-d_t)V_\phi(s_{t+1})
 -V_\phi(s_t)
-\]</p>
+</annotation></semantics></math></span></p>
 <p>Actor 可以最小化：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi mathvariant="script">L</mi><mrow><mi mathvariant="normal">a</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">r</mi></mrow></msub><mo>=</mo><mo>−</mo><mi>log</mi><mo>⁡</mo><msub><mi>π</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><msub><mi>a</mi><mi>t</mi></msub><mo>∣</mo><msub><mi>s</mi><mi>t</mi></msub><mo stretchy="false">)</mo><mi mathvariant="normal">stopgrad</mi><mo>⁡</mo><mo stretchy="false">(</mo><msub><mi>δ</mi><mi>t</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 \mathcal L_{\mathrm{actor}}
 =
 -\log\pi_\theta(a_t\mid s_t)
 \operatorname{stopgrad}(\delta_t)
-\]</p>
+</annotation></semantics></math></span></p>
 <p>Critic 則擬合 TD target：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>y</mi><mi>t</mi></msub><mo>=</mo><msub><mi>r</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>+</mo><mi>γ</mi><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><msub><mi>d</mi><mi>t</mi></msub><mo stretchy="false">)</mo><msub><mi>V</mi><msup><mi>ϕ</mi><mo>−</mo></msup></msub><mo stretchy="false">(</mo><msub><mi>s</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 y_t=
 r_{t+1}
 +\gamma(1-d_t)V_{\phi^-}(s_{t+1})
-\]</p>
-<p>\[
+</annotation></semantics></math></span></p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi mathvariant="script">L</mi><mrow><mi mathvariant="normal">c</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">c</mi></mrow></msub><mo>=</mo><msup><mrow><mo fence="true">(</mo><msub><mi>V</mi><mi>ϕ</mi></msub><mo stretchy="false">(</mo><msub><mi>s</mi><mi>t</mi></msub><mo stretchy="false">)</mo><mo>−</mo><mi mathvariant="normal">stopgrad</mi><mo>⁡</mo><mo stretchy="false">(</mo><msub><mi>y</mi><mi>t</mi></msub><mo stretchy="false">)</mo><mo fence="true">)</mo></mrow><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">
 \mathcal L_{\mathrm{critic}}
 =
 \left(V_\phi(s_t)-\operatorname{stopgrad}(y_t)\right)^2
-\]</p>
+</annotation></semantics></math></span></p>
 <p>這裡寫出的固定／停止梯度 target 是示意穩定的更新方式；不同 Actor-Critic 演算法的 target 與更新細節會不同。</p>
 <p>核心直覺：</p>
 <ul>
-<li>\(\delta_t>0\)：結果比預期好，提高該動作的機率。</li>
-<li>\(\delta_t<0\)：結果比預期差，降低該動作的機率。</li>
+<li><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>δ</mi><mi>t</mi></msub><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\delta_t&gt;0</annotation></semantics></math></span>：結果比預期好，提高該動作的機率。</li>
+<li><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>δ</mi><mi>t</mi></msub><mo>&lt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\delta_t&lt;0</annotation></semantics></math></span>：結果比預期差，降低該動作的機率。</li>
 </ul>
 <p>Actor 與 Critic 可以共享特徵抽取網路，再接不同輸出頭。</p>
 <hr>
 <h2 id="section-24">二十四、Model-based RL、AlphaGo 與 MuZero</h2>
 <p><em>對應第 10 章，第 49–57 頁。</em></p>
 <p>Model-based RL 使用環境模型：</p>
-<p>\[
-\hat P(s'\mid s,a),\qquad \hat R(s,a)
-\]</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mover accent="true"><mi>P</mi><mo>^</mo></mover><mo stretchy="false">(</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo>∣</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><mspace width="2em"/><mover accent="true"><mi>R</mi><mo>^</mo></mover><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
+\hat P(s&#x27;\mid s,a),\qquad \hat R(s,a)
+</annotation></semantics></math></span></p>
 <p>讓 agent 在真正行動前，先預測不同動作的後果。</p>
 <p>優點是能利用模擬或規劃，改善真實互動樣本的使用效率；問題是模型誤差可能在多步預測中累積。</p>
 <p><strong>AlphaGo 系列：模型加搜尋</strong></p>
@@ -1483,54 +1481,54 @@ r_{t+1}
 </tbody></table>
 <p>「不依賴人類棋譜」不等於沒有任何人類提供的資訊：規則、合法動作、勝負判定仍然存在。</p>
 <p>AlphaGo Zero／AlphaZero 常以單一網路輸出：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>f</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo><mo>=</mo><mo stretchy="false">(</mo><msub><mi>p</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><msub><mi>v</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 f_\theta(s)=(p_\theta(s),v_\theta(s))
-\]</p>
-<p>其中 \(p\) 是策略，\(v\) 是價值。</p>
+</annotation></semantics></math></span></p>
+<p>其中 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi></mrow><annotation encoding="application/x-tex">p</annotation></semantics></math></span> 是策略，<span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi></mrow><annotation encoding="application/x-tex">v</annotation></semantics></math></span> 是價值。</p>
 <p>可用以下形式理解訓練：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi mathvariant="script">L</mi><mo>=</mo><mo stretchy="false">(</mo><mi>z</mi><mo>−</mo><msub><mi>v</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo><msup><mo stretchy="false">)</mo><mn>2</mn></msup><mo>−</mo><munder><mo>∑</mo><mi>a</mi></munder><msub><mi>π</mi><mrow><mi mathvariant="normal">s</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">h</mi></mrow></msub><mo stretchy="false">(</mo><mi>a</mi><mo>∣</mo><mi>s</mi><mo stretchy="false">)</mo><mi>log</mi><mo>⁡</mo><msub><mi>p</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><mi>a</mi><mo>∣</mo><mi>s</mi><mo stretchy="false">)</mo><mo>+</mo><mi>c</mi><mi mathvariant="normal">∥</mi><mi>θ</mi><msubsup><mi mathvariant="normal">∥</mi><mn>2</mn><mn>2</mn></msubsup></mrow><annotation encoding="application/x-tex">
 \mathcal L
 =
 (z-v_\theta(s))^2
 -\sum_a\pi_{\mathrm{search}}(a\mid s)\log p_\theta(a\mid s)
 +c\|\theta\|_2^2
-\]</p>
+</annotation></semantics></math></span></p>
 <ul>
-<li>\(z\)：對局結果。</li>
-<li>\(\pi_{\mathrm{search}}\)：搜尋得到的動作分布。</li>
+<li><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi></mrow><annotation encoding="application/x-tex">z</annotation></semantics></math></span>：對局結果。</li>
+<li><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>π</mi><mrow><mi mathvariant="normal">s</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">h</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\pi_{\mathrm{search}}</annotation></semantics></math></span>：搜尋得到的動作分布。</li>
 <li>第一項學價值。</li>
 <li>第二項讓網路模仿較強的搜尋策略。</li>
 </ul>
 <p>這形成循環：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>網路幫助搜尋</mtext><mo>→</mo><mtext>搜尋產生訓練目標</mtext><mo>→</mo><mtext>更新網路</mtext></mrow><annotation encoding="application/x-tex">
 \text{網路幫助搜尋}
 \rightarrow
 \text{搜尋產生訓練目標}
 \rightarrow
 \text{更新網路}
-\]</p>
+</annotation></semantics></math></span></p>
 <p><strong>MuZero：在學到的隱藏狀態中規劃</strong></p>
 <p>MuZero 的三個核心函數：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msup><mi>s</mi><mn>0</mn></msup><mo>=</mo><msub><mi>h</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><msub><mi>o</mi><mrow><mo>≤</mo><mi>t</mi></mrow></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 s^0=h_\theta(o_{\leq t})
-\]</p>
+</annotation></semantics></math></span></p>
 <p>將觀察歷史轉成隱藏狀態。</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mo stretchy="false">(</mo><msup><mover accent="true"><mi>r</mi><mo>^</mo></mover><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msup><mo separator="true">,</mo><msup><mi>s</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msup><mo stretchy="false">)</mo><mo>=</mo><msub><mi>g</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><msup><mi>s</mi><mi>k</mi></msup><mo separator="true">,</mo><msup><mi>a</mi><mi>k</mi></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 (\hat r^{k+1},s^{k+1})
 =
 g_\theta(s^k,a^k)
-\]</p>
+</annotation></semantics></math></span></p>
 <p>預測採取動作後的獎勵與下一個隱藏狀態。</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mo stretchy="false">(</mo><msup><mover accent="true"><mi>p</mi><mo>^</mo></mover><mi>k</mi></msup><mo separator="true">,</mo><msup><mover accent="true"><mi>v</mi><mo>^</mo></mover><mi>k</mi></msup><mo stretchy="false">)</mo><mo>=</mo><msub><mi>f</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><msup><mi>s</mi><mi>k</mi></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
 (\hat p^k,\hat v^k)=f_\theta(s^k)
-\]</p>
+</annotation></semantics></math></span></p>
 <p>預測策略與價值。</p>
 <p>它不一定要重建完整的下一張圖片，而是學到足以支援 reward、value、policy 預測與搜尋的內部表示。</p>
 <p>「不事先提供完整環境動態模型」也不代表沒有環境回饋。MuZero 仍需要互動資料、獎勵與訓練目標。</p>
 <hr>
 <h2 id="section-25">二十五、把兩章真正連起來</h2>
 <p>兩章其實可以組成同一條流程：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><menclose notation="box"><mstyle scriptlevel="0" displaystyle="false"><mstyle scriptlevel="0" displaystyle="false"><mstyle scriptlevel="0" displaystyle="true"><mrow><mtext>原始觀察</mtext><mover><mo stretchy="true" minsize="3.0em">→</mo><mpadded width="+0.6em" lspace="0.3em"><mtext>表示學習</mtext></mpadded></mover><mtext>有用的特徵</mtext><mover><mo stretchy="true" minsize="3.0em">→</mo><mpadded width="+0.6em" lspace="0.3em"><mtext>決策學習</mtext></mpadded></mover><mtext>動作</mtext></mrow></mstyle></mstyle></mstyle></menclose></mrow><annotation encoding="application/x-tex">
 \boxed{
 \text{原始觀察}
 \xrightarrow{\text{表示學習}}
@@ -1538,19 +1536,19 @@ g_\theta(s^k,a^k)
 \xrightarrow{\text{決策學習}}
 \text{動作}
 }
-\]</p>
+</annotation></semantics></math></span></p>
 <p>例如視覺機器人：</p>
-<p>\[
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>o</mi><mi>t</mi></msub><mover><mo stretchy="true" minsize="3.0em">→</mo><mpadded width="+0.6em" lspace="0.3em"><msub><mi>f</mi><mi>θ</mi></msub></mpadded></mover><msub><mi>h</mi><mi>t</mi></msub><mover><mo stretchy="true" minsize="3.0em">→</mo><mpadded width="+0.6em" lspace="0.3em"><msub><mi>π</mi><mi>ϕ</mi></msub></mpadded></mover><msub><mi>a</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">
 o_t
 \xrightarrow{f_\theta}
 h_t
 \xrightarrow{\pi_\phi}
 a_t
-\]</p>
+</annotation></semantics></math></span></p>
 <p>其中：</p>
 <ul>
-<li>\(f_\theta\) 可以先用自監督方法學習。</li>
-<li>\(\pi_\phi\) 再用強化學習最大化任務回報。</li>
+<li><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>f</mi><mi>θ</mi></msub></mrow><annotation encoding="application/x-tex">f_\theta</annotation></semantics></math></span> 可以先用自監督方法學習。</li>
+<li><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>π</mi><mi>ϕ</mi></msub></mrow><annotation encoding="application/x-tex">\pi_\phi</annotation></semantics></math></span> 再用強化學習最大化任務回報。</li>
 </ul>
 <p>但「看起來好的表示」未必就是「適合控制的表示」。</p>
 <p>例如圖片分類可能希望忽略細微位置差異；精密控制卻可能非常依賴位置、速度與幾何細節。因此，表示學習的目標仍需配合下游任務。</p>
@@ -1596,7 +1594,7 @@ a_t
 <td>它是架構，可以搭配不同訓練方法</td>
 </tr>
 <tr>
-<td>\(Q\) 值是不是動作機率？</td>
+<td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi></mrow><annotation encoding="application/x-tex">Q</annotation></semantics></math></span> 值是不是動作機率？</td>
 <td>不是，是預期回報</td>
 </tr>
 <tr>
@@ -1632,9 +1630,9 @@ a_t
 <ol>
 <li>先理解自監督目標、BERT／GPT、對比學習。</li>
 <li>再比較 MoCo／SimCLR，理解 MAE。</li>
-<li>進入 RL 後，先把 \(G\)、\(V\)、\(Q\)、\(A\) 分清楚。</li>
+<li>進入 RL 後，先把 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi></mrow><annotation encoding="application/x-tex">G</annotation></semantics></math></span>、<span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi></mrow><annotation encoding="application/x-tex">V</annotation></semantics></math></span>、<span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi></mrow><annotation encoding="application/x-tex">Q</annotation></semantics></math></span>、<span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi></mrow><annotation encoding="application/x-tex">A</annotation></semantics></math></span> 分清楚。</li>
 <li>親手算一次 Bellman target 與 Q-learning 更新。</li>
 <li>再看 DQN 的穩定化設計。</li>
 <li>最後讀 policy gradient、Actor-Critic 與搜尋規劃。</li>
 </ol>
-</main></div><footer>人工智慧課程學習筆記 · 公式需要網路載入 MathJax</footer></body></html>
+</main></div><footer>人工智慧課程學習筆記</footer></body></html>
