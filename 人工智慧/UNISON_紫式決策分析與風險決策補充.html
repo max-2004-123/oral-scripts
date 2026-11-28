@@ -1,0 +1,1237 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>UNISON 紫式決策分析與風險決策補充</title><style>
+:root{color-scheme:light;--ink:#213144;--muted:#617185;--blue:#215c95;--line:#dce6ee;--paper:#fff;--wash:#f2f6f8}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--wash);color:var(--ink);font:16px/1.85 'Microsoft JhengHei',system-ui,sans-serif}a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}.hero{background:#143b5d;color:white;padding:52px max(24px,calc((100vw - 1260px)/2));}.eyebrow{color:#a7d9d5;letter-spacing:.16em;font-size:.8rem;font-weight:700}.hero h1{font-size:clamp(1.8rem,4vw,3rem);line-height:1.3;margin:12px 0}.hero p{color:#d9e8ed;margin:0;max-width:700px}.layout{max-width:1300px;margin:0 auto;display:grid;grid-template-columns:260px minmax(0,1fr);gap:30px;padding:28px 24px 70px}nav{align-self:start;position:sticky;top:20px;max-height:calc(100vh - 40px);overflow:auto;background:white;border:1px solid var(--line);border-radius:14px;padding:20px}nav strong{font-size:1rem}nav ol{padding-left:1.3em;margin:8px 0 0;font-size:.84rem;line-height:1.6}nav li{padding:4px 0}main{min-width:0;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:clamp(22px,5vw,64px);box-shadow:0 12px 34px #1d42580a}main>h1{font-size:1.65rem;margin-top:0}h2{font-size:1.5rem;color:#164a73;border-top:1px solid var(--line);padding-top:36px;margin:48px 0 16px;scroll-margin-top:22px}h3{color:#245e7e;margin-top:28px}p{margin:1em 0}blockquote{margin:24px 0;border-left:4px solid #45a6a0;background:#eff9f7;padding:12px 20px;border-radius:0 10px 10px 0}blockquote p{margin:.4em 0}table{display:block;overflow-x:auto;border-collapse:collapse;max-width:100%;margin:24px 0;font-size:.94rem}th,td{border:1px solid var(--line);padding:10px 14px;text-align:left;vertical-align:top}th{background:#edf4f8;white-space:nowrap}tr:nth-child(even){background:#f8fafb}mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;padding:8px 0}code{background:#eef4f7;border-radius:4px;padding:.1em .3em}hr{border:0;border-top:1px solid var(--line);margin:34px 0}footer{text-align:center;color:var(--muted);font-size:.85rem;margin:20px}@media(max-width:800px){.hero{padding:34px 22px}.layout{display:block;padding:16px 12px 40px}nav{position:static;max-height:none;margin-bottom:16px}nav ol{columns:2;column-gap:20px}nav li{break-inside:avoid}main{padding:25px 20px}}@media(max-width:450px){nav ol{columns:1}body{font-size:15px}}
+
+math[display="block"]{display:block;overflow-x:auto;overflow-y:hidden;padding:10px 0;max-width:100%}math{font-size:1.04em}
+.back {color:#d8f1ed;display:inline-block;margin-bottom:18px} math[display="block"]{display:block;max-width:100%;overflow-x:auto;overflow-y:hidden;padding:10px 0} math{font-size:1.04em}
+.back{color:#d8f1ed;display:inline-block;margin-bottom:18px}pre{overflow-x:auto;background:#edf4f8;padding:16px;border-radius:8px;white-space:pre}math[display="block"]{display:block;overflow-x:auto;overflow-y:hidden;max-width:100%;padding:10px 0}</style></head><body><header class="hero"><a class="back" href="決策分析_期中統整.html">← 回到決策分析期中筆記</a><div class="eyebrow">DECISION ANALYSIS · UNISON</div><h1>UNISON 與風險決策</h1><p>六階段架構、SMART、AHP、貝氏更新與資訊價值，搭配逐步計算。</p></header><div class="layout"><nav aria-label="補充筆記目錄"><strong>筆記目錄</strong><ol><li><a href="#section-1">一、UNISON 紫式決策分析架構</a></li><li><a href="#section-2">二、U：瞭解問題與問題定義</a></li><li><a href="#section-3">三、N：利基發掘，界定決策範圍</a></li><li><a href="#section-4">四、I：架構影響關係</a></li><li><a href="#section-5">五、S：感受並客觀敘述方案結果</a></li><li><a href="#section-6">六、O：綜合判斷與權衡</a></li><li><a href="#section-7">七、N：做決策、執行與回饋</a></li><li><a href="#section-8">八、把 UNISON 和先前學過的方法接起來</a></li><li><a href="#section-9">九、值得補充 1：SMART 的權重不只是「重要性」</a></li><li><a href="#section-10">十、值得補充 2：AHP 除了算比較次數，還要檢查一致性</a></li><li><a href="#section-11">十一、值得補充 3：完全不確定與風險決策的差別</a></li><li><a href="#section-12">十二、期望貨幣價值 EMV</a></li><li><a href="#section-13">十三、貝氏定理：新資訊如何改變原本的判斷？</a></li><li><a href="#section-14">十四、用講義的鑽油例子，串起 Bayes 與資訊價值</a></li><li><a href="#section-15">十五、EVE／EVSI：不完美資訊值多少？</a></li><li><a href="#section-16">十六、EVPI：完美資訊的價值</a></li><li><a href="#section-17">十七、決策樹的解題順序</a></li><li><a href="#section-18">十八、貝氏網路：處理多個相互關聯的不確定因素</a></li><li><a href="#section-19">十九、DEA 還能補充什麼？</a></li><li><a href="#section-20">二十、建議補進原筆記的章節順序</a></li></ol></nav><main><h1>UNISON 紫式決策分析與風險決策補充</h1>
+<p>有，而且最值得補充的是：<strong>先前的筆記已經涵蓋決策陷阱、衡量尺度、AHP 比較次數和最小最大後悔值，但對「整個決策流程怎麼串起來」以及「有機率資訊時怎麼決策」還不夠完整。</strong></p>
+<p>你說的 <strong>UNISON</strong>，在這份教材中指的是<strong>紫式決策分析架構</strong>。它不是單一的計算公式，而是一套從釐清問題、建立模型，到執行與回饋的流程。</p>
+<p>這次對照後，建議補充：</p>
+<ol>
+<li>UNISON 六階段與各階段產出。</li>
+<li>SMART 的價值函數、擺動權重與敏感度分析。</li>
+<li>AHP 的成對比較矩陣、一致性檢查。</li>
+<li>風險決策：期望值、決策樹與貝氏更新。</li>
+<li>資訊價值：EVPI 與 EVE／EVSI。</li>
+<li>貝氏網路的基本觀念。</li>
+</ol>
+<p>以下先完整講 UNISON，再把其他重點接上去。</p>
+<hr>
+<h2 id="section-1">一、UNISON 紫式決策分析架構</h2>
+<p>「紫式」這個名稱來自講義中的 <strong>UNISON Framework for Decision Analysis</strong>。教材把它分成六個階段：</p>
+<table>
+<thead>
+<tr>
+<th>字母</th>
+<th>階段</th>
+<th>核心問題</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>U</strong></td>
+<td>Understand：瞭解問題</td>
+<td>我真正要解決什麼問題？</td>
+</tr>
+<tr>
+<td><strong>N</strong></td>
+<td>Niche：利基發掘</td>
+<td>決策範圍在哪裡？有哪些目標、方案與不確定因素？</td>
+</tr>
+<tr>
+<td><strong>I</strong></td>
+<td>Influence：架構影響關係</td>
+<td>目標、方案、因素彼此如何影響？</td>
+</tr>
+<tr>
+<td><strong>S</strong></td>
+<td>Sense and describe：感受與客觀敘述</td>
+<td>每個方案可能帶來什麼具體結果？</td>
+</tr>
+<tr>
+<td><strong>O</strong></td>
+<td>Overall judgment：綜合判斷與權衡</td>
+<td>我如何衡量結果好壞，並取捨不同目標？</td>
+</tr>
+<tr>
+<td><strong>N</strong></td>
+<td>Decisio<strong>N</strong>：決策與執行</td>
+<td>應選哪個方案？怎麼執行與回饋？</td>
+</tr>
+</tbody></table>
+<p>最後一個 N 取自 decisio<strong>N</strong> 的字尾。講義在不同頁面對各階段的英文文字略有簡化，但六階段的概念一致。</p>
+<p>來源：《Ch04–Ch07 紫式分析決策架構》，PDF 第 3–4 頁。</p>
+<p>整個流程可以先記成：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><menclose notation="box"><mstyle scriptlevel="0" displaystyle="false"><mstyle scriptlevel="0" displaystyle="false"><mstyle scriptlevel="0" displaystyle="true"><mrow><mtext>定義問題</mtext><mo>→</mo><mtext>界定範圍</mtext><mo>→</mo><mtext>建立關係</mtext><mo>→</mo><mtext>描述結果</mtext><mo>→</mo><mtext>衡量權衡</mtext><mo>→</mo><mtext>決策與執行</mtext></mrow></mstyle></mstyle></mstyle></menclose></mrow><annotation encoding="application/x-tex">
+\boxed{
+\text{定義問題}
+\rightarrow
+\text{界定範圍}
+\rightarrow
+\text{建立關係}
+\rightarrow
+\text{描述結果}
+\rightarrow
+\text{衡量權衡}
+\rightarrow
+\text{決策與執行}
+}
+</annotation></semantics></math></span></p>
+<p>下面用一個例子走過六階段。</p>
+<blockquote>
+<p><strong>例子：研究生想選擇通勤方式。</strong><br>可選擇騎車、搭火車或租屋步行上課。</p>
+</blockquote>
+<hr>
+<h2 id="section-2">二、U：瞭解問題與問題定義</h2>
+<h3>1. 一開始看到的現象，不一定是真正的問題</h3>
+<p>假設你說：</p>
+<blockquote>
+<p>「我每天都很晚到學校，所以我要買一台新機車。」</p>
+</blockquote>
+<p>這裡的「買機車」可能是你想到的<strong>方案</strong>，但真正的問題還沒確定。</p>
+<p>遲到可能是因為：</p>
+<ul>
+<li>起床時間太晚。</li>
+<li>通勤路線不穩定。</li>
+<li>火車班次銜接不好。</li>
+<li>上課時間不固定。</li>
+<li>住得太遠。</li>
+<li>偶爾有課程需要提早到。</li>
+</ul>
+<p>如果沒有先釐清原因，買了新車也未必能解決問題。</p>
+<p>因此，問題可以重新表述為：</p>
+<blockquote>
+<p>在預算限制下，如何選擇能讓我穩定上課、兼顧成本與安全的通勤方式？</p>
+</blockquote>
+<p>這樣的敘述有兩個好處：</p>
+<ol>
+<li>沒有預先把答案鎖定為「買機車」。</li>
+<li>開始看得出真正要兼顧的目標。</li>
+</ol>
+<h3>2. 講義的四類決策元素</h3>
+<p>講義將決策元素整理成：</p>
+<table>
+<thead>
+<tr>
+<th>類別</th>
+<th>要思考的事情</th>
+<th>通勤例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>決策情境</td>
+<td>外部環境與趨勢</td>
+<td>天氣、交通、租屋市場</td>
+</tr>
+<tr>
+<td>決策限制</td>
+<td>哪些條件不能超過</td>
+<td>預算、時間、法規</td>
+</tr>
+<tr>
+<td>決策關係人</td>
+<td>誰決定、執行或受影響</td>
+<td>自己、家人、室友</td>
+</tr>
+<tr>
+<td>決策定義域</td>
+<td>分析哪些目標、方案與不確定因子</td>
+<td>成本、安全、時間、雨天狀況</td>
+</tr>
+</tbody></table>
+<p>講義也提到可以用 <strong>5W1H</strong>：</p>
+<ul>
+<li>Who：誰決策？誰受影響？</li>
+<li>What：真正的問題是什麼？</li>
+<li>When：何時要決定？影響多久？</li>
+<li>Where：決策的範圍在哪裡？</li>
+<li>Why：為什麼需要處理？</li>
+<li>How：現況如何形成？可以如何改變？</li>
+</ul>
+<p><strong>U 階段的產出：一句清楚、沒有預先指定答案的問題定義。</strong></p>
+<hr>
+<h2 id="section-3">三、N：利基發掘，界定決策範圍</h2>
+<p>這裡的 <strong>niche</strong> 可以理解成：</p>
+<blockquote>
+<p>在特定情境與限制下，找出真正值得處理、而且決策者能影響的範圍。</p>
+</blockquote>
+<p>它不是單純問「哪個市場有利可圖」，也包括把決策問題圈定清楚。</p>
+<p>講義特別強調三個元素：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><menclose notation="box"><mstyle scriptlevel="0" displaystyle="false"><mstyle scriptlevel="0" displaystyle="false"><mstyle scriptlevel="0" displaystyle="true"><mtext>目標、方案、不確定因子</mtext></mstyle></mstyle></mstyle></menclose></mrow><annotation encoding="application/x-tex">
+\boxed{\text{目標、方案、不確定因子}}
+</annotation></semantics></math></span></p>
+<h3>1. 目標：你在乎什麼？</h3>
+<p>例如：</p>
+<ul>
+<li>降低通勤時間。</li>
+<li>降低費用。</li>
+<li>提高安全性。</li>
+<li>降低時間的不確定性。</li>
+<li>保留彈性。</li>
+</ul>
+<h3>2. 方案：你可以採取什麼行動？</h3>
+<p>例如：</p>
+<ul>
+<li>A：騎車。</li>
+<li>B：搭火車。</li>
+<li>C：在學校附近租屋並步行。</li>
+</ul>
+<h3>3. 不確定因子：哪些結果事前不確定？</h3>
+<p>例如：</p>
+<ul>
+<li>是否下雨。</li>
+<li>火車是否誤點。</li>
+<li>尖峰時段交通是否壅塞。</li>
+<li>租屋價格是否變動。</li>
+</ul>
+<p>最重要的是分清楚：</p>
+<table>
+<thead>
+<tr>
+<th>類別</th>
+<th>問自己</th>
+<th>通勤例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>目標</td>
+<td>我想達成什麼？</td>
+<td>安全抵達</td>
+</tr>
+<tr>
+<td>方案</td>
+<td>我能選什麼？</td>
+<td>騎車、火車、租屋</td>
+</tr>
+<tr>
+<td>不確定因子</td>
+<td>哪些事不完全由我控制？</td>
+<td>下雨、誤點</td>
+</tr>
+<tr>
+<td>屬性</td>
+<td>用什麼衡量？</td>
+<td>每月費用、通勤分鐘數</td>
+</tr>
+<tr>
+<td>結果</td>
+<td>方案實際會帶來什麼？</td>
+<td>每月約 4,000 元</td>
+</tr>
+</tbody></table>
+<p><strong>N 階段的產出：決策範圍、目標、可行方案和重要不確定因素。</strong></p>
+<p>講義位置：《Ch04–Ch07》，PDF 第 23–25 頁。</p>
+<hr>
+<h2 id="section-4">四、I：架構影響關係</h2>
+<p>這個階段要處理的是：</p>
+<blockquote>
+<p>各個決策元素不是孤立的，它們怎麼互相影響？</p>
+</blockquote>
+<p>例如：</p>
+<ul>
+<li>通勤方式影響費用、時間與安全。</li>
+<li>天氣影響騎車時間與安全。</li>
+<li>住處影響可用的通勤方式。</li>
+<li>課表影響可接受的通勤時間。</li>
+</ul>
+<p>可以畫成簡單的概念圖：</p>
+<pre><code class="language-text">通勤方案 → 通勤時間、每月費用、安全與舒適
+天氣 → 通勤時間、安全與舒適
+課表 → 可接受的到校時間
+上述結果 → 整體通勤品質
+</code></pre>
+<h3>1. 根本目標階層</h3>
+<p>根本目標之間通常可以整理成階層：</p>
+<pre><code class="language-text">整體目標：選擇適合的通勤方式
+│
+├─ 時間表現
+│  ├─ 平均通勤時間
+│  └─ 抵達時間穩定性
+│
+├─ 經濟負擔
+│  ├─ 每月交通費
+│  └─ 額外住宿費
+│
+└─ 安全與舒適
+   ├─ 通勤安全
+   └─ 天氣影響
+</code></pre>
+<p>建立這種階層時，可以：</p>
+<ul>
+<li><strong>由上而下</strong>：從整體目標拆解成較具體的子目標。</li>
+<li><strong>由下而上</strong>：從具體在意的事情歸納出較高層次的目標。</li>
+</ul>
+<h3>2. 工具目標網路</h3>
+<p>工具目標偏向「怎麼做到」，因此未必是一棵單純的樹。</p>
+<p>例如：</p>
+<ul>
+<li>提早出門，有助於降低遲到風險。</li>
+<li>購買雨衣，有助於降低雨天騎車的不便。</li>
+<li>租屋，可能同時改善時間與抵達穩定性。</li>
+</ul>
+<p>一個方法可能影響多個目標，所以比較適合畫成<strong>網路</strong>。</p>
+<h3>3. 為什麼這步很重要？</h3>
+<p>如果把重複的項目都獨立計分，可能造成重複計算。</p>
+<p>例如：</p>
+<ul>
+<li>「每月交通費」已包含油錢。</li>
+<li>又另外列一項「每月油錢」。</li>
+</ul>
+<p>如果沒有處理重疊，就可能讓費用影響被算兩次。</p>
+<p><strong>I 階段的產出：目標階層、工具目標網路，以及因素之間的關係圖。</strong></p>
+<hr>
+<h2 id="section-5">五、S：感受並客觀敘述方案結果</h2>
+<p>講義中的 <strong>Sense and describe the results</strong>，可以理解為：</p>
+<blockquote>
+<p>對每個方案可能造成的後果，盡量用可觀察、可比較的方式描述。</p>
+</blockquote>
+<p>這一步先建立<strong>結果表</strong>，不要急著說哪個最好。</p>
+<p>假設：</p>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th align="right">每月費用</th>
+<th align="right">單程時間</th>
+<th align="right">準時抵達比例</th>
+<th>安全評估</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A 騎車</td>
+<td align="right">2,500 元</td>
+<td align="right">35 分鐘</td>
+<td align="right">85%</td>
+<td>中</td>
+</tr>
+<tr>
+<td>B 火車</td>
+<td align="right">3,500 元</td>
+<td align="right">50 分鐘</td>
+<td align="right">95%</td>
+<td>高</td>
+</tr>
+<tr>
+<td>C 租屋步行</td>
+<td align="right">8,000 元</td>
+<td align="right">10 分鐘</td>
+<td align="right">98%</td>
+<td>高</td>
+</tr>
+</tbody></table>
+<p>這些數字只是<strong>示範用假設</strong>。</p>
+<p>可以看到：</p>
+<ul>
+<li>C 最快，但費用最高。</li>
+<li>A 最便宜，但準時比例較低。</li>
+<li>B 介於兩者之間。</li>
+</ul>
+<p>這裡有個重要區分：</p>
+<h3>客觀結果</h3>
+<p>例如：</p>
+<blockquote>
+<p>方案 A 每月約 2,500 元。</p>
+</blockquote>
+<h3>主觀價值判斷</h3>
+<p>例如：</p>
+<blockquote>
+<p>每月少花 1,000 元，對我有多重要？</p>
+</blockquote>
+<p>前者描述結果；後者需要結合決策者的偏好。</p>
+<p>但「客觀敘述」不代表資料一定完全準確。像通勤時間可能是估計值，需要說明來源、期間與不確定性。</p>
+<p><strong>S 階段的產出：方案在各屬性、各可能狀態下的結果表。</strong></p>
+<hr>
+<h2 id="section-6">六、O：綜合判斷與權衡</h2>
+<p>通常不會有一個方案在所有面向都最好。</p>
+<p>因此，要回答：</p>
+<blockquote>
+<p>我願意為了節省時間，多付多少費用？<br>我願意為了安全，接受多長的通勤時間？</p>
+</blockquote>
+<p>這叫做 <strong>tradeoff，權衡</strong>。</p>
+<h3>1. 價值函數</h3>
+<p>不同屬性的單位不同：</p>
+<ul>
+<li>時間：分鐘。</li>
+<li>費用：元。</li>
+<li>安全：高、中、低。</li>
+</ul>
+<p>所以通常需要先轉換成可比較的價值尺度：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>v</mi><mi>i</mi></msub><mo stretchy="false">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
+v_i(x_i)
+</annotation></semantics></math></span></p>
+<p>其中：</p>
+<ul>
+<li><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">x_i</annotation></semantics></math></span>：第 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span> 個屬性的實際結果。</li>
+<li><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mi>i</mi></msub><mo stretchy="false">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">v_i(x_i)</annotation></semantics></math></span>：決策者對該結果的價值評分。</li>
+</ul>
+<p>例如，對通勤時間設一個示範規則：</p>
+<ul>
+<li>10 分鐘 → 100 分。</li>
+<li>60 分鐘 → 0 分。</li>
+<li>中間採線性變化。</li>
+</ul>
+<p>則：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>v</mi><mtext>時間</mtext></msub><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mo>=</mo><mn>100</mn><mfrac><mrow><mn>60</mn><mo>−</mo><mi>t</mi></mrow><mrow><mn>60</mn><mo>−</mo><mn>10</mn></mrow></mfrac></mrow><annotation encoding="application/x-tex">
+v_{\text{時間}}(t)
+=
+100\frac{60-t}{60-10}
+</annotation></semantics></math></span></p>
+<p>當 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>=</mo><mn>35</mn></mrow><annotation encoding="application/x-tex">t=35</annotation></semantics></math></span> 分鐘：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>v</mi><mtext>時間</mtext></msub><mo stretchy="false">(</mo><mn>35</mn><mo stretchy="false">)</mo><mo>=</mo><mn>100</mn><mfrac><mrow><mn>60</mn><mo>−</mo><mn>35</mn></mrow><mn>50</mn></mfrac><mo>=</mo><mn>50</mn></mrow><annotation encoding="application/x-tex">
+v_{\text{時間}}(35)
+=
+100\frac{60-35}{50}
+=
+50
+</annotation></semantics></math></span></p>
+<p><strong>35 分鐘得到 50 分，不是自然規律，而是基於這個例子假設的線性價值函數。</strong></p>
+<p>實際決策者可能覺得：</p>
+<ul>
+<li>從 60 分鐘減到 40 分鐘非常重要。</li>
+<li>從 20 分鐘減到 10 分鐘差異不大。</li>
+</ul>
+<p>這時，線性函數就未必適合。</p>
+<h3>2. 權重</h3>
+<p>假設已將各屬性轉換為 0～100 分，並設定：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>w</mi><mtext>時間</mtext></msub><mo>=</mo><mn>0.4</mn><mo separator="true">,</mo><mspace width="2em"/><msub><mi>w</mi><mtext>費用</mtext></msub><mo>=</mo><mn>0.35</mn><mo separator="true">,</mo><mspace width="2em"/><msub><mi>w</mi><mtext>安全</mtext></msub><mo>=</mo><mn>0.25</mn></mrow><annotation encoding="application/x-tex">
+w_{\text{時間}}=0.4,\qquad
+w_{\text{費用}}=0.35,\qquad
+w_{\text{安全}}=0.25
+</annotation></semantics></math></span></p>
+<p>假設三個方案的價值分數為：</p>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th align="right">時間</th>
+<th align="right">費用</th>
+<th align="right">安全</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A 騎車</td>
+<td align="right">60</td>
+<td align="right">90</td>
+<td align="right">50</td>
+</tr>
+<tr>
+<td>B 火車</td>
+<td align="right">40</td>
+<td align="right">70</td>
+<td align="right">90</td>
+</tr>
+<tr>
+<td>C 租屋步行</td>
+<td align="right">100</td>
+<td align="right">20</td>
+<td align="right">90</td>
+</tr>
+</tbody></table>
+<p>在適合使用加法模型的前提下：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>V</mi><mo stretchy="false">(</mo><mi>a</mi><mo stretchy="false">)</mo><mo>=</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><msub><mi>w</mi><mi>i</mi></msub><msub><mi>v</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>a</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
+V(a)=\sum_{i=1}^{n}w_i v_i(a)
+</annotation></semantics></math></span></p>
+<p>因此：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>V</mi><mo stretchy="false">(</mo><mi>A</mi><mo stretchy="false">)</mo><mo>=</mo><mn>0.4</mn><mo stretchy="false">(</mo><mn>60</mn><mo stretchy="false">)</mo><mo>+</mo><mn>0.35</mn><mo stretchy="false">(</mo><mn>90</mn><mo stretchy="false">)</mo><mo>+</mo><mn>0.25</mn><mo stretchy="false">(</mo><mn>50</mn><mo stretchy="false">)</mo><mo>=</mo><mn>68</mn></mrow><annotation encoding="application/x-tex">
+V(A)=0.4(60)+0.35(90)+0.25(50)=68
+</annotation></semantics></math></span></p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>V</mi><mo stretchy="false">(</mo><mi>B</mi><mo stretchy="false">)</mo><mo>=</mo><mn>0.4</mn><mo stretchy="false">(</mo><mn>40</mn><mo stretchy="false">)</mo><mo>+</mo><mn>0.35</mn><mo stretchy="false">(</mo><mn>70</mn><mo stretchy="false">)</mo><mo>+</mo><mn>0.25</mn><mo stretchy="false">(</mo><mn>90</mn><mo stretchy="false">)</mo><mo>=</mo><mn>63</mn></mrow><annotation encoding="application/x-tex">
+V(B)=0.4(40)+0.35(70)+0.25(90)=63
+</annotation></semantics></math></span></p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>V</mi><mo stretchy="false">(</mo><mi>C</mi><mo stretchy="false">)</mo><mo>=</mo><mn>0.4</mn><mo stretchy="false">(</mo><mn>100</mn><mo stretchy="false">)</mo><mo>+</mo><mn>0.35</mn><mo stretchy="false">(</mo><mn>20</mn><mo stretchy="false">)</mo><mo>+</mo><mn>0.25</mn><mo stretchy="false">(</mo><mn>90</mn><mo stretchy="false">)</mo><mo>=</mo><mn>69.5</mn></mrow><annotation encoding="application/x-tex">
+V(C)=0.4(100)+0.35(20)+0.25(90)=69.5
+</annotation></semantics></math></span></p>
+<p>按照這組假設：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>C</mi><mo>&gt;</mo><mi>A</mi><mo>&gt;</mo><mi>B</mi></mrow><annotation encoding="application/x-tex">
+C&gt;A&gt;B
+</annotation></semantics></math></span></p>
+<p>但要注意：<strong>這是模型在這組權重與分數下的排序，不是任何人都應該租屋的結論。</strong></p>
+<h3>3. 為什麼要做敏感度分析？</h3>
+<p>因為 C 的 69.5 分和 A 的 68 分很接近。</p>
+<p>如果：</p>
+<ul>
+<li>租金比預期高。</li>
+<li>你比原本更在意費用。</li>
+<li>A 的安全評分比原本高。</li>
+</ul>
+<p>排序就可能改變。</p>
+<p>所以不應只看「誰第一名」，還要看：</p>
+<blockquote>
+<p>參數稍微改變時，結論會不會反轉？</p>
+</blockquote>
+<p><strong>O 階段的產出：各方案價值、權衡結果，以及對假設的敏感度分析。</strong></p>
+<hr>
+<h2 id="section-7">七、N：做決策、執行與回饋</h2>
+<p>分析完不代表事情結束。</p>
+<p>即使 C 在模型中第一，也還要考慮：</p>
+<ul>
+<li>預算是否真的足夠？</li>
+<li>是否有合適房源？</li>
+<li>租約長度與搬家成本是否可接受？</li>
+<li>如果找不到房子，有沒有備案？</li>
+<li>開始執行後，如何檢查效果？</li>
+</ul>
+<p>例如：</p>
+<ol>
+<li>先確認每月可支配預算。</li>
+<li>搜尋兩週內的房源。</li>
+<li>若沒有符合條件的房子，暫用火車通勤。</li>
+<li>一個月後檢查實際通勤時間與費用。</li>
+<li>如果結果與預估差距很大，重新評估。</li>
+</ol>
+<p>因此，UNISON 雖然畫成階段，實際上可以<strong>反覆回頭修正</strong>。</p>
+<p>例如：</p>
+<ul>
+<li>發現所有方案都太貴 → 回到 N，重新找方案。</li>
+<li>發現安全資料不足 → 回到 S，補資料。</li>
+<li>發現權重不符合自己的想法 → 回到 O，重新衡量。</li>
+</ul>
+<p>講義也明確提到執行、配套與回饋的重要性：《Ch04–Ch07》，PDF 第 110 頁。</p>
+<hr>
+<h2 id="section-8">八、把 UNISON 和先前學過的方法接起來</h2>
+<table>
+<thead>
+<tr>
+<th>方法或概念</th>
+<th>主要在幫助 UNISON 哪個階段？</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>5W1H、決策元素分析</td>
+<td>U：理解及定義問題</td>
+</tr>
+<tr>
+<td>目標、方案、不確定因素</td>
+<td>N：利基與範圍</td>
+</tr>
+<tr>
+<td>根本目標階層、工具目標網路</td>
+<td>I：建立影響關係</td>
+</tr>
+<tr>
+<td>結果表、衡量尺度</td>
+<td>S：客觀描述</td>
+</tr>
+<tr>
+<td>SMART、AHP、等值交換</td>
+<td>O：價值判斷與權衡</td>
+</tr>
+<tr>
+<td>期望值、決策樹、貝氏分析</td>
+<td>有風險時協助 S、O、N 的分析</td>
+</tr>
+<tr>
+<td>執行方案、回饋與修正</td>
+<td>最後的 N</td>
+</tr>
+</tbody></table>
+<p>所以這些方法之間的關係是：</p>
+<blockquote>
+<p><strong>UNISON 是整體架構；SMART、AHP、決策樹、貝氏分析等，是架構中可使用的工具。</strong></p>
+</blockquote>
+<p>例如：</p>
+<ul>
+<li>方案有很多不同屬性，要比較權衡 → 可以考慮 SMART。</li>
+<li>準則與方案適合成對比較 → 可以考慮 AHP。</li>
+<li>有明確的投入與產出，希望分析相對效率 → 可以考慮 DEA。</li>
+<li>結果受自然狀態與機率影響 → 可以考慮決策樹、期望值或貝氏分析。</li>
+</ul>
+<hr>
+<h2 id="section-9">九、值得補充 1：SMART 的權重不只是「重要性」</h2>
+<p>先前筆記有加權總分：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>V</mi><mo stretchy="false">(</mo><mi>a</mi><mo stretchy="false">)</mo><mo>=</mo><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>w</mi><mi>i</mi></msub><msub><mi>v</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>a</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
+V(a)
+=
+\sum_iw_i v_i(a)
+</annotation></semantics></math></span></p>
+<p>但還要補一個很重要的觀念：</p>
+<blockquote>
+<p>權重的意義，要和各屬性價值尺度的範圍一起看。</p>
+</blockquote>
+<h3>例子</h3>
+<p>假設比較兩個屬性：</p>
+<ul>
+<li>通勤時間：10～60 分鐘。</li>
+<li>每月花費：2,000～8,000 元。</li>
+</ul>
+<p>如果兩個屬性都被標準化到 0～100 分，那麼權重不是單純回答：</p>
+<blockquote>
+<p>「時間和金錢哪個比較重要？」</p>
+</blockquote>
+<p>而更接近：</p>
+<blockquote>
+<p>「時間從 60 分鐘改善到 10 分鐘」與「費用從 8,000 元降低到 2,000 元」，哪一個改善對你更重要？</p>
+</blockquote>
+<p>這就是 <strong>swing weight，擺動權重</strong> 的直覺。</p>
+<h3>擺動權重步驟</h3>
+<ol>
+<li>想像所有屬性都處於最差水準。</li>
+<li>如果只能把一個屬性改善到最好，你先選哪個？</li>
+<li>給第一順位 100 分。</li>
+<li>把其他屬性的改善幅度相對評分。</li>
+<li>正規化成權重。</li>
+</ol>
+<p>例如：</p>
+<table>
+<thead>
+<tr>
+<th>屬性從最差改善到最好</th>
+<th align="right">擺動分數</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>通勤時間</td>
+<td align="right">100</td>
+</tr>
+<tr>
+<td>每月費用</td>
+<td align="right">80</td>
+</tr>
+<tr>
+<td>安全性</td>
+<td align="right">70</td>
+</tr>
+</tbody></table>
+<p>總和：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mn>100</mn><mo>+</mo><mn>80</mn><mo>+</mo><mn>70</mn><mo>=</mo><mn>250</mn></mrow><annotation encoding="application/x-tex">
+100+80+70=250
+</annotation></semantics></math></span></p>
+<p>正規化：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>w</mi><mtext>時間</mtext></msub><mo>=</mo><mfrac><mn>100</mn><mn>250</mn></mfrac><mo>=</mo><mn>0.40</mn></mrow><annotation encoding="application/x-tex">
+w_{\text{時間}}=\frac{100}{250}=0.40
+</annotation></semantics></math></span></p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>w</mi><mtext>費用</mtext></msub><mo>=</mo><mfrac><mn>80</mn><mn>250</mn></mfrac><mo>=</mo><mn>0.32</mn></mrow><annotation encoding="application/x-tex">
+w_{\text{費用}}=\frac{80}{250}=0.32
+</annotation></semantics></math></span></p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>w</mi><mtext>安全</mtext></msub><mo>=</mo><mfrac><mn>70</mn><mn>250</mn></mfrac><mo>=</mo><mn>0.28</mn></mrow><annotation encoding="application/x-tex">
+w_{\text{安全}}=\frac{70}{250}=0.28
+</annotation></semantics></math></span></p>
+<p>權重合計：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mn>0.40</mn><mo>+</mo><mn>0.32</mn><mo>+</mo><mn>0.28</mn><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">
+0.40+0.32+0.28=1
+</annotation></semantics></math></span></p>
+<p>如果屬性範圍改變，例如通勤時間不再是 10～60 分鐘，而是 40～50 分鐘，那麼原本的 swing weight 不一定還適用。</p>
+<p>講義位置：《Ch08–Ch10》，PDF 第 30、61 頁；《Ch08–Ch09 handout》，PDF 第 23、54 頁。</p>
+<hr>
+<h2 id="section-10">十、值得補充 2：AHP 除了算比較次數，還要檢查一致性</h2>
+<p>之前的筆記講過：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mrow><mo fence="true">(</mo><mfrac linethickness="0px"><mi>n</mi><mn>2</mn></mfrac><mo fence="true">)</mo></mrow><mo>=</mo><mfrac><mrow><mi>n</mi><mo stretchy="false">(</mo><mi>n</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><mn>2</mn></mfrac></mrow><annotation encoding="application/x-tex">
+\binom n2=\frac{n(n-1)}2
+</annotation></semantics></math></span></p>
+<p>它回答的是：</p>
+<blockquote>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span> 個準則需要幾次不重複的兩兩比較？</p>
+</blockquote>
+<p>例如 3 個準則：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mrow><mo fence="true">(</mo><mfrac linethickness="0px"><mn>3</mn><mn>2</mn></mfrac><mo fence="true">)</mo></mrow><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">
+\binom32=3
+</annotation></semantics></math></span></p>
+<p>但做完比較後，還要看判斷是否前後矛盾。</p>
+<h3>1. 成對比較矩陣</h3>
+<p>假設有：</p>
+<ul>
+<li>時間 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>T</mi></mrow><annotation encoding="application/x-tex">T</annotation></semantics></math></span></li>
+<li>費用 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi></mrow><annotation encoding="application/x-tex">C</annotation></semantics></math></span></li>
+<li>安全 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi></mrow><annotation encoding="application/x-tex">S</annotation></semantics></math></span></li>
+</ul>
+<p>如果認為：</p>
+<ul>
+<li>時間是費用的 3 倍重要。</li>
+<li>費用是安全的 2 倍重要。</li>
+<li>時間是安全的 6 倍重要。</li>
+</ul>
+<p>矩陣為：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>A</mi><mo>=</mo><mrow><mo fence="true">[</mo><mtable rowspacing="0.16em" columnalign="center center center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>1</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>3</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>6</mn></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mn>1</mn><mi mathvariant="normal">/</mi><mn>3</mn></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>1</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>2</mn></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mn>1</mn><mi mathvariant="normal">/</mi><mn>6</mn></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mn>1</mn><mi mathvariant="normal">/</mi><mn>2</mn></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>1</mn></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">
+A=
+\begin{bmatrix}
+1 &amp; 3 &amp; 6\\
+1/3 &amp; 1 &amp; 2\\
+1/6 &amp; 1/2 &amp; 1
+\end{bmatrix}
+</annotation></semantics></math></span></p>
+<p>對角線都是 1，因為自己和自己一樣重要。</p>
+<p>而：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>a</mi><mrow><mi>j</mi><mi>i</mi></mrow></msub><mo>=</mo><mfrac><mn>1</mn><msub><mi>a</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mfrac></mrow><annotation encoding="application/x-tex">
+a_{ji}=\frac1{a_{ij}}
+</annotation></semantics></math></span></p>
+<p>這是倒數關係。</p>
+<p>此例也符合：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mn>3</mn><mo>×</mo><mn>2</mn><mo>=</mo><mn>6</mn></mrow><annotation encoding="application/x-tex">
+3\times2=6
+</annotation></semantics></math></span></p>
+<p>所以判斷是完全一致的。</p>
+<p>它對應的權重比例為：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>T</mi><mo>:</mo><mi>C</mi><mo>:</mo><mi>S</mi><mo>=</mo><mn>6</mn><mo>:</mo><mn>2</mn><mo>:</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">
+T:C:S=6:2:1
+</annotation></semantics></math></span></p>
+<p>正規化：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>w</mi><mo>=</mo><mrow><mo fence="true">[</mo><mfrac><mn>6</mn><mn>9</mn></mfrac><mo separator="true">,</mo><mfrac><mn>2</mn><mn>9</mn></mfrac><mo separator="true">,</mo><mfrac><mn>1</mn><mn>9</mn></mfrac><mo fence="true">]</mo></mrow><mo>≈</mo><mo stretchy="false">[</mo><mn>0.667</mn><mo separator="true">,</mo><mn>0.222</mn><mo separator="true">,</mo><mn>0.111</mn><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">
+w=
+\left[
+\frac69,\frac29,\frac19
+\right]
+\approx
+[0.667,0.222,0.111]
+</annotation></semantics></math></span></p>
+<h3>2. 完全一致與部分不一致</h3>
+<p>如果你說：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>T</mi><mo>:</mo><mi>C</mi><mo>=</mo><mn>3</mn><mo separator="true">,</mo><mspace width="2em"/><mi>C</mi><mo>:</mo><mi>S</mi><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">
+T:C=3,\qquad C:S=2
+</annotation></semantics></math></span></p>
+<p>但又說：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>T</mi><mo>:</mo><mi>S</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">
+T:S=1
+</annotation></semantics></math></span></p>
+<p>就和前兩個判斷有明顯衝突。</p>
+<p>實際問卷難免不完全一致，因此 AHP 使用：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>C</mi><mi>I</mi><mo>=</mo><mfrac><mrow><msub><mi>λ</mi><mi>max</mi><mo>⁡</mo></msub><mo>−</mo><mi>n</mi></mrow><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></mfrac></mrow><annotation encoding="application/x-tex">
+CI
+=
+\frac{\lambda_{\max}-n}{n-1}
+</annotation></semantics></math></span></p>
+<p>以及：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>C</mi><mi>R</mi><mo>=</mo><mfrac><mrow><mi>C</mi><mi>I</mi></mrow><mrow><mi>R</mi><mi>I</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex">
+CR=\frac{CI}{RI}
+</annotation></semantics></math></span></p>
+<p>其中：</p>
+<ul>
+<li><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>λ</mi><mi>max</mi><mo>⁡</mo></msub></mrow><annotation encoding="application/x-tex">\lambda_{\max}</annotation></semantics></math></span>：最大特徵值。</li>
+<li><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span>：矩陣階數。</li>
+<li><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>I</mi></mrow><annotation encoding="application/x-tex">RI</annotation></semantics></math></span>：對應階數的隨機指標。</li>
+<li><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mi>R</mi></mrow><annotation encoding="application/x-tex">CR</annotation></semantics></math></span>：一致性比率。</li>
+</ul>
+<p>教材採用的常見判準是：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>C</mi><mi>R</mi><mo>≤</mo><mn>0.1</mn></mrow><annotation encoding="application/x-tex">
+CR\leq0.1
+</annotation></semantics></math></span></p>
+<p>代表一致性通常可接受。</p>
+<p>但：</p>
+<ul>
+<li><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mi>R</mi></mrow><annotation encoding="application/x-tex">CR</annotation></semantics></math></span> 小，不代表答案一定正確。</li>
+<li><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mi>R</mi></mrow><annotation encoding="application/x-tex">CR</annotation></semantics></math></span> 大，通常應檢查並重新討論成對比較。</li>
+<li>一致性只能檢查判斷之間的協調程度，不能保證準則選得完整。</li>
+</ul>
+<p>**補充：**當矩陣階數為 1 或 2 時，常見 RI 表沒有適合直接計算的分母，通常不按上述方式計算 CR。</p>
+<p>講義位置：《Ch08–Ch10》，PDF 第 102–104 頁。</p>
+<hr>
+<h2 id="section-11">十一、值得補充 3：完全不確定與風險決策的差別</h2>
+<p>先前筆記主要講了：</p>
+<ul>
+<li>Maximin。</li>
+<li>Maximax。</li>
+<li>Hurwicz。</li>
+<li>Laplace。</li>
+<li>Minimax regret。</li>
+</ul>
+<p>這些對應到講義第 11 章的<strong>完全不確定決策</strong>。</p>
+<p>接下來第 12、13 章進一步討論：</p>
+<blockquote>
+<p>如果能替不同自然狀態給定機率，或獲得新的資訊，決策怎麼改變？</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>情況</th>
+<th>是否使用狀態機率？</th>
+<th>常見工具</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>完全不確定</td>
+<td>沒有可採用的機率資訊</td>
+<td>Maximin、最小最大後悔等</td>
+</tr>
+<tr>
+<td>風險下決策</td>
+<td>有可採用的狀態機率</td>
+<td>期望報酬、決策樹</td>
+</tr>
+<tr>
+<td>有新證據後</td>
+<td>以新資訊更新原本機率</td>
+<td>貝氏定理、資訊價值</td>
+</tr>
+<tr>
+<td>多個相關不確定因素</td>
+<td>要表示條件依賴與更新</td>
+<td>貝氏網路</td>
+</tr>
+</tbody></table>
+<p>這裡的「有機率」不一定代表機率是客觀且精準的；也可能是決策者根據資料與判斷給定的主觀機率。</p>
+<hr>
+<h2 id="section-12">十二、期望貨幣價值 EMV</h2>
+<p>如果方案 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>a</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">a_i</annotation></semantics></math></span> 在自然狀態 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>θ</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">\theta_j</annotation></semantics></math></span> 下的報酬是 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>u</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow><annotation encoding="application/x-tex">u_{ij}</annotation></semantics></math></span>，且狀態機率是 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">p_j</annotation></semantics></math></span>，那麼：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>E</mi><mi>M</mi><mi>V</mi><mo stretchy="false">(</mo><msub><mi>a</mi><mi>i</mi></msub><mo stretchy="false">)</mo><mo>=</mo><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>m</mi></munderover><msub><mi>p</mi><mi>j</mi></msub><msub><mi>u</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow><annotation encoding="application/x-tex">
+EMV(a_i)
+=
+\sum_{j=1}^{m}
+p_j u_{ij}
+</annotation></semantics></math></span></p>
+<p>其中：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><munder><mo>∑</mo><mi>j</mi></munder><msub><mi>p</mi><mi>j</mi></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">
+\sum_jp_j=1
+</annotation></semantics></math></span></p>
+<h3>例子</h3>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th align="right">景氣好，機率 0.4</th>
+<th align="right">景氣差，機率 0.6</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>擴張</td>
+<td align="right">100</td>
+<td align="right">-60</td>
+</tr>
+<tr>
+<td>維持</td>
+<td align="right">20</td>
+<td align="right">20</td>
+</tr>
+</tbody></table>
+<p>以相同金額單位計：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>E</mi><mi>M</mi><mi>V</mi><mo stretchy="false">(</mo><mtext>擴張</mtext><mo stretchy="false">)</mo><mo>=</mo><mn>0.4</mn><mo stretchy="false">(</mo><mn>100</mn><mo stretchy="false">)</mo><mo>+</mo><mn>0.6</mn><mo stretchy="false">(</mo><mo>−</mo><mn>60</mn><mo stretchy="false">)</mo><mo>=</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">
+EMV(\text{擴張})
+=
+0.4(100)+0.6(-60)
+=
+4
+</annotation></semantics></math></span></p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>E</mi><mi>M</mi><mi>V</mi><mo stretchy="false">(</mo><mtext>維持</mtext><mo stretchy="false">)</mo><mo>=</mo><mn>0.4</mn><mo stretchy="false">(</mo><mn>20</mn><mo stretchy="false">)</mo><mo>+</mo><mn>0.6</mn><mo stretchy="false">(</mo><mn>20</mn><mo stretchy="false">)</mo><mo>=</mo><mn>20</mn></mrow><annotation encoding="application/x-tex">
+EMV(\text{維持})
+=
+0.4(20)+0.6(20)
+=
+20
+</annotation></semantics></math></span></p>
+<p>如果目標是最大化期望貨幣報酬：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mn>20</mn><mo>&gt;</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">
+20&gt;4
+</annotation></semantics></math></span></p>
+<p>選擇「維持」。</p>
+<p>但要注意：</p>
+<blockquote>
+<p>最大期望貨幣值適合特定決策假設；如果決策者在乎風險偏好，還可能需要比較期望效用。</p>
+</blockquote>
+<p>因此，<strong>最大 EMV 和最大期望效用不一定選出同一個方案</strong>。</p>
+<hr>
+<h2 id="section-13">十三、貝氏定理：新資訊如何改變原本的判斷？</h2>
+<p>基本公式：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><mi>H</mi><mo>∣</mo><mi>E</mi><mo stretchy="false">)</mo><mo>=</mo><mfrac><mrow><mi>P</mi><mo stretchy="false">(</mo><mi>E</mi><mo>∣</mo><mi>H</mi><mo stretchy="false">)</mo><mi>P</mi><mo stretchy="false">(</mo><mi>H</mi><mo stretchy="false">)</mo></mrow><mrow><mi>P</mi><mo stretchy="false">(</mo><mi>E</mi><mo stretchy="false">)</mo></mrow></mfrac></mrow><annotation encoding="application/x-tex">
+P(H\mid E)
+=
+\frac{P(E\mid H)P(H)}
+{P(E)}
+</annotation></semantics></math></span></p>
+<p>其中：</p>
+<ul>
+<li><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi></mrow><annotation encoding="application/x-tex">H</annotation></semantics></math></span>：想判斷的狀態。</li>
+<li><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi></mrow><annotation encoding="application/x-tex">E</annotation></semantics></math></span>：觀察到的證據。</li>
+<li><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><mi>H</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">P(H)</annotation></semantics></math></span>：事前機率。</li>
+<li><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><mi>E</mi><mo>∣</mo><mi>H</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">P(E\mid H)</annotation></semantics></math></span>：在 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi></mrow><annotation encoding="application/x-tex">H</annotation></semantics></math></span> 成立時看到證據的機率。</li>
+<li><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><mi>H</mi><mo>∣</mo><mi>E</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">P(H\mid E)</annotation></semantics></math></span>：觀察證據後的事後機率。</li>
+</ul>
+<p>若只有 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi></mrow><annotation encoding="application/x-tex">H</annotation></semantics></math></span> 與非 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi></mrow><annotation encoding="application/x-tex">H</annotation></semantics></math></span> 兩個狀態：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><mi>H</mi><mo>∣</mo><mi>E</mi><mo stretchy="false">)</mo><mo>=</mo><mfrac><mrow><mi>P</mi><mo stretchy="false">(</mo><mi>E</mi><mo>∣</mo><mi>H</mi><mo stretchy="false">)</mo><mi>P</mi><mo stretchy="false">(</mo><mi>H</mi><mo stretchy="false">)</mo></mrow><mrow><mi>P</mi><mo stretchy="false">(</mo><mi>E</mi><mo>∣</mo><mi>H</mi><mo stretchy="false">)</mo><mi>P</mi><mo stretchy="false">(</mo><mi>H</mi><mo stretchy="false">)</mo><mo>+</mo><mi>P</mi><mo stretchy="false">(</mo><mi>E</mi><mo>∣</mo><mi mathvariant="normal">¬</mi><mi>H</mi><mo stretchy="false">)</mo><mi>P</mi><mo stretchy="false">(</mo><mi mathvariant="normal">¬</mi><mi>H</mi><mo stretchy="false">)</mo></mrow></mfrac></mrow><annotation encoding="application/x-tex">
+P(H\mid E)
+=
+\frac{
+P(E\mid H)P(H)
+}{
+P(E\mid H)P(H)
++
+P(E\mid \neg H)P(\neg H)
+}
+</annotation></semantics></math></span></p>
+<p>要特別注意：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><mi>E</mi><mo>∣</mo><mi>H</mi><mo stretchy="false">)</mo><mo mathvariant="normal">≠</mo><mi>P</mi><mo stretchy="false">(</mo><mi>H</mi><mo>∣</mo><mi>E</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
+P(E\mid H)
+\neq
+P(H\mid E)
+</annotation></semantics></math></span></p>
+<p>例如：</p>
+<blockquote>
+<p>「有油時，檢測呈陽性的機率」<br>不等於<br>「檢測呈陽性時，真的有油的機率」。</p>
+</blockquote>
+<hr>
+<h2 id="section-14">十四、用講義的鑽油例子，串起 Bayes 與資訊價值</h2>
+<p>以下沿用講義的鑽油數值，並以<strong>千美元</strong>作為單位。</p>
+<p>假設：</p>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th align="right">有油</th>
+<th align="right">沒油</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>鑽井</td>
+<td align="right">700</td>
+<td align="right">-100</td>
+</tr>
+<tr>
+<td>賣地</td>
+<td align="right">90</td>
+<td align="right">90</td>
+</tr>
+</tbody></table>
+<p>事前機率：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><mtext>有油</mtext><mo stretchy="false">)</mo><mo>=</mo><mn>0.25</mn></mrow><annotation encoding="application/x-tex">
+P(\text{有油})=0.25
+</annotation></semantics></math></span></p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><mtext>沒油</mtext><mo stretchy="false">)</mo><mo>=</mo><mn>0.75</mn></mrow><annotation encoding="application/x-tex">
+P(\text{沒油})=0.75
+</annotation></semantics></math></span></p>
+<h3>步驟一：沒有實驗，先算 EMV</h3>
+<p>鑽井：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>E</mi><mi>M</mi><mi>V</mi><mo stretchy="false">(</mo><mtext>鑽井</mtext><mo stretchy="false">)</mo><mo>=</mo><mn>0.25</mn><mo stretchy="false">(</mo><mn>700</mn><mo stretchy="false">)</mo><mo>+</mo><mn>0.75</mn><mo stretchy="false">(</mo><mo>−</mo><mn>100</mn><mo stretchy="false">)</mo><mo>=</mo><mn>100</mn></mrow><annotation encoding="application/x-tex">
+EMV(\text{鑽井})
+=
+0.25(700)+0.75(-100)
+=
+100
+</annotation></semantics></math></span></p>
+<p>賣地：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>E</mi><mi>M</mi><mi>V</mi><mo stretchy="false">(</mo><mtext>賣地</mtext><mo stretchy="false">)</mo><mo>=</mo><mn>90</mn></mrow><annotation encoding="application/x-tex">
+EMV(\text{賣地})=90
+</annotation></semantics></math></span></p>
+<p>因此，不做實驗時選擇鑽井：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>E</mi><mi>M</mi><msub><mi>V</mi><mtext>無實驗</mtext></msub><mo>=</mo><mn>100</mn></mrow><annotation encoding="application/x-tex">
+EMV_{\text{無實驗}}=100
+</annotation></semantics></math></span></p>
+<h3>步驟二：假設可以進行震測</h3>
+<p>令 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">S=1</annotation></semantics></math></span> 表示震測結果「有利」，<span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">S=0</annotation></semantics></math></span> 表示「不利」。</p>
+<p>講義給定：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><mi>S</mi><mo>=</mo><mn>1</mn><mo>∣</mo><mtext>有油</mtext><mo stretchy="false">)</mo><mo>=</mo><mn>0.6</mn></mrow><annotation encoding="application/x-tex">
+P(S=1\mid \text{有油})=0.6
+</annotation></semantics></math></span></p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><mi>S</mi><mo>=</mo><mn>1</mn><mo>∣</mo><mtext>沒油</mtext><mo stretchy="false">)</mo><mo>=</mo><mn>0.2</mn></mrow><annotation encoding="application/x-tex">
+P(S=1\mid \text{沒油})=0.2
+</annotation></semantics></math></span></p>
+<p>先求震測有利的機率：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable rowspacing="0.25em" columnalign="right left" columnspacing="0em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mi>P</mi><mo stretchy="false">(</mo><mi>S</mi><mo>=</mo><mn>1</mn><mo stretchy="false">)</mo></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><mi>P</mi><mo stretchy="false">(</mo><mi>S</mi><mo>=</mo><mn>1</mn><mo>∣</mo><mtext>有油</mtext><mo stretchy="false">)</mo><mi>P</mi><mo stretchy="false">(</mo><mtext>有油</mtext><mo stretchy="false">)</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mspace width="1em"/><mo>+</mo><mi>P</mi><mo stretchy="false">(</mo><mi>S</mi><mo>=</mo><mn>1</mn><mo>∣</mo><mtext>沒油</mtext><mo stretchy="false">)</mo><mi>P</mi><mo stretchy="false">(</mo><mtext>沒油</mtext><mo stretchy="false">)</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><mn>0.6</mn><mo stretchy="false">(</mo><mn>0.25</mn><mo stretchy="false">)</mo><mo>+</mo><mn>0.2</mn><mo stretchy="false">(</mo><mn>0.75</mn><mo stretchy="false">)</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><mn>0.30</mn></mrow></mstyle></mtd></mtr></mtable><annotation encoding="application/x-tex">
+\begin{aligned}
+P(S=1)
+&amp;=P(S=1\mid\text{有油})P(\text{有油})\\
+&amp;\quad+P(S=1\mid\text{沒油})P(\text{沒油})\\
+&amp;=0.6(0.25)+0.2(0.75)\\
+&amp;=0.30
+\end{aligned}
+</annotation></semantics></math></span></p>
+<p>因此：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><mi>S</mi><mo>=</mo><mn>0</mn><mo stretchy="false">)</mo><mo>=</mo><mn>0.70</mn></mrow><annotation encoding="application/x-tex">
+P(S=0)=0.70
+</annotation></semantics></math></span></p>
+<h3>步驟三：求震測有利時，真的有油的事後機率</h3>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable rowspacing="0.25em" columnalign="right left" columnspacing="0em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mi>P</mi><mo stretchy="false">(</mo><mtext>有油</mtext><mo>∣</mo><mi>S</mi><mo>=</mo><mn>1</mn><mo stretchy="false">)</mo></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><mfrac><mrow><mn>0.6</mn><mo stretchy="false">(</mo><mn>0.25</mn><mo stretchy="false">)</mo></mrow><mn>0.30</mn></mfrac></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><mn>0.5</mn></mrow></mstyle></mtd></mtr></mtable><annotation encoding="application/x-tex">
+\begin{aligned}
+P(\text{有油}\mid S=1)
+&amp;=
+\frac{0.6(0.25)}{0.30}\\
+&amp;=0.5
+\end{aligned}
+</annotation></semantics></math></span></p>
+<p>所以：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><mtext>有油</mtext><mo>∣</mo><mi>S</mi><mo>=</mo><mn>1</mn><mo stretchy="false">)</mo><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac></mrow><annotation encoding="application/x-tex">
+P(\text{有油}\mid S=1)=\frac12
+</annotation></semantics></math></span></p>
+<p>同理，在震測不利時：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><mtext>有油</mtext><mo>∣</mo><mi>S</mi><mo>=</mo><mn>0</mn><mo stretchy="false">)</mo><mo>=</mo><mfrac><mrow><mn>0.4</mn><mo stretchy="false">(</mo><mn>0.25</mn><mo stretchy="false">)</mo></mrow><mn>0.70</mn></mfrac><mo>=</mo><mfrac><mn>1</mn><mn>7</mn></mfrac></mrow><annotation encoding="application/x-tex">
+P(\text{有油}\mid S=0)
+=
+\frac{0.4(0.25)}{0.70}
+=
+\frac17
+</annotation></semantics></math></span></p>
+<p>結果是：</p>
+<table>
+<thead>
+<tr>
+<th>震測結果</th>
+<th align="right">結果出現機率</th>
+<th align="right">此時有油的事後機率</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>有利 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">S=1</annotation></semantics></math></span></td>
+<td align="right">0.30</td>
+<td align="right"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi mathvariant="normal">/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">1/2</annotation></semantics></math></span></td>
+</tr>
+<tr>
+<td>不利 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">S=0</annotation></semantics></math></span></td>
+<td align="right">0.70</td>
+<td align="right"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi mathvariant="normal">/</mi><mn>7</mn></mrow><annotation encoding="application/x-tex">1/7</annotation></semantics></math></span></td>
+</tr>
+</tbody></table>
+<h3>步驟四：根據震測結果分別決策</h3>
+<h4>若 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">S=1</annotation></semantics></math></span></h4>
+<p>鑽井：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>E</mi><mi>M</mi><mi>V</mi><mo stretchy="false">(</mo><mtext>鑽井</mtext><mo>∣</mo><mi>S</mi><mo>=</mo><mn>1</mn><mo stretchy="false">)</mo><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo stretchy="false">(</mo><mn>700</mn><mo stretchy="false">)</mo><mo>+</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo stretchy="false">(</mo><mo>−</mo><mn>100</mn><mo stretchy="false">)</mo><mo>=</mo><mn>300</mn></mrow><annotation encoding="application/x-tex">
+EMV(\text{鑽井}\mid S=1)
+=
+\frac12(700)+\frac12(-100)
+=
+300
+</annotation></semantics></math></span></p>
+<p>賣地：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>E</mi><mi>M</mi><mi>V</mi><mo stretchy="false">(</mo><mtext>賣地</mtext><mo>∣</mo><mi>S</mi><mo>=</mo><mn>1</mn><mo stretchy="false">)</mo><mo>=</mo><mn>90</mn></mrow><annotation encoding="application/x-tex">
+EMV(\text{賣地}\mid S=1)=90
+</annotation></semantics></math></span></p>
+<p>所以選鑽井。</p>
+<h4>若 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">S=0</annotation></semantics></math></span></h4>
+<p>鑽井：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>E</mi><mi>M</mi><mi>V</mi><mo stretchy="false">(</mo><mtext>鑽井</mtext><mo>∣</mo><mi>S</mi><mo>=</mo><mn>0</mn><mo stretchy="false">)</mo><mo>=</mo><mfrac><mn>1</mn><mn>7</mn></mfrac><mo stretchy="false">(</mo><mn>700</mn><mo stretchy="false">)</mo><mo>+</mo><mfrac><mn>6</mn><mn>7</mn></mfrac><mo stretchy="false">(</mo><mo>−</mo><mn>100</mn><mo stretchy="false">)</mo><mo>≈</mo><mn>14.29</mn></mrow><annotation encoding="application/x-tex">
+EMV(\text{鑽井}\mid S=0)
+=
+\frac17(700)+\frac67(-100)
+\approx14.29
+</annotation></semantics></math></span></p>
+<p>賣地：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>E</mi><mi>M</mi><mi>V</mi><mo stretchy="false">(</mo><mtext>賣地</mtext><mo>∣</mo><mi>S</mi><mo>=</mo><mn>0</mn><mo stretchy="false">)</mo><mo>=</mo><mn>90</mn></mrow><annotation encoding="application/x-tex">
+EMV(\text{賣地}\mid S=0)=90
+</annotation></semantics></math></span></p>
+<p>所以選賣地。</p>
+<p>因此，震測後的決策規則是：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><menclose notation="box"><mstyle scriptlevel="0" displaystyle="false"><mstyle scriptlevel="0" displaystyle="false"><mstyle scriptlevel="0" displaystyle="true"><mrow><mo fence="true">{</mo><mtable rowspacing="0.36em" columnalign="left left" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>S</mi><mo>=</mo><mn>1</mn><mtext>：鑽井</mtext></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>S</mi><mo>=</mo><mn>0</mn><mtext>：賣地</mtext></mrow></mstyle></mtd></mtr></mtable></mrow></mstyle></mstyle></mstyle></menclose></mrow><annotation encoding="application/x-tex">
+\boxed{
+\begin{cases}
+S=1：鑽井\\
+S=0：賣地
+\end{cases}
+}
+</annotation></semantics></math></span></p>
+<hr>
+<h2 id="section-15">十五、EVE／EVSI：不完美資訊值多少？</h2>
+<p>講義稱為 <strong>EVE，實驗的期望價值</strong>。在其他教材中，類似概念也常稱 <strong>EVSI，樣本資訊的期望價值</strong>。</p>
+<p>先算「有實驗，但尚未扣實驗成本」的期望報酬：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable rowspacing="0.25em" columnalign="right left" columnspacing="0em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mi>E</mi><mi>M</mi><msub><mi>V</mi><mtext>實驗</mtext></msub></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><mi>P</mi><mo stretchy="false">(</mo><mi>S</mi><mo>=</mo><mn>1</mn><mo stretchy="false">)</mo><munder><mrow><mi>max</mi><mo>⁡</mo></mrow><mi>a</mi></munder><mi>E</mi><mi>M</mi><mi>V</mi><mo stretchy="false">(</mo><mi>a</mi><mo>∣</mo><mi>S</mi><mo>=</mo><mn>1</mn><mo stretchy="false">)</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mspace width="1em"/><mo>+</mo><mi>P</mi><mo stretchy="false">(</mo><mi>S</mi><mo>=</mo><mn>0</mn><mo stretchy="false">)</mo><munder><mrow><mi>max</mi><mo>⁡</mo></mrow><mi>a</mi></munder><mi>E</mi><mi>M</mi><mi>V</mi><mo stretchy="false">(</mo><mi>a</mi><mo>∣</mo><mi>S</mi><mo>=</mo><mn>0</mn><mo stretchy="false">)</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><mn>0.3</mn><mo stretchy="false">(</mo><mn>300</mn><mo stretchy="false">)</mo><mo>+</mo><mn>0.7</mn><mo stretchy="false">(</mo><mn>90</mn><mo stretchy="false">)</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><mn>153</mn></mrow></mstyle></mtd></mtr></mtable><annotation encoding="application/x-tex">
+\begin{aligned}
+EMV_{\text{實驗}}
+&amp;=
+P(S=1)\max_a EMV(a\mid S=1)\\
+&amp;\quad+
+P(S=0)\max_a EMV(a\mid S=0)\\
+&amp;=
+0.3(300)+0.7(90)\\
+&amp;=153
+\end{aligned}
+</annotation></semantics></math></span></p>
+<p>無實驗時：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>E</mi><mi>M</mi><msub><mi>V</mi><mtext>無實驗</mtext></msub><mo>=</mo><mn>100</mn></mrow><annotation encoding="application/x-tex">
+EMV_{\text{無實驗}}=100
+</annotation></semantics></math></span></p>
+<p>所以：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>E</mi><mi>V</mi><mi>E</mi><mo>=</mo><mn>153</mn><mo>−</mo><mn>100</mn><mo>=</mo><mn>53</mn></mrow><annotation encoding="application/x-tex">
+EVE=153-100=53
+</annotation></semantics></math></span></p>
+<p>單位是千美元。</p>
+<p>意思是：</p>
+<blockquote>
+<p>在這個模型下，震測提供的資訊，在尚未扣成本前，能讓期望報酬增加 53 千美元。</p>
+</blockquote>
+<p>假設實驗成本是 30 千美元：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mn>53</mn><mo>−</mo><mn>30</mn><mo>=</mo><mn>23</mn></mrow><annotation encoding="application/x-tex">
+53-30=23
+</annotation></semantics></math></span></p>
+<p>因此：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><menclose notation="box"><mstyle scriptlevel="0" displaystyle="false"><mstyle scriptlevel="0" displaystyle="false"><mstyle scriptlevel="0" displaystyle="true"><mrow><mtext>淨資訊價值</mtext><mo>=</mo><mn>23</mn><mtext> 千美元</mtext></mrow></mstyle></mstyle></mstyle></menclose></mrow><annotation encoding="application/x-tex">
+\boxed{\text{淨資訊價值}=23\text{ 千美元}}
+</annotation></semantics></math></span></p>
+<p>在模型假設下值得做實驗。</p>
+<p><strong>常見錯誤：</strong></p>
+<p>不是用：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mn>153</mn><mo>−</mo><mn>30</mn><mo>=</mo><mn>123</mn></mrow><annotation encoding="application/x-tex">
+153-30=123
+</annotation></semantics></math></span></p>
+<p>就說「資訊價值是 123」。</p>
+<p>因為 123 是<strong>扣成本後的總期望報酬</strong>；真正與不實驗相比的增量是：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mn>123</mn><mo>−</mo><mn>100</mn><mo>=</mo><mn>23</mn></mrow><annotation encoding="application/x-tex">
+123-100=23
+</annotation></semantics></math></span></p>
+<hr>
+<h2 id="section-16">十六、EVPI：完美資訊的價值</h2>
+<p>假設在做決策之前，能 100% 知道土地是否有油：</p>
+<ul>
+<li>有油時選鑽井，得到 700。</li>
+<li>沒油時選賣地，得到 90。</li>
+</ul>
+<p>因此：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable rowspacing="0.25em" columnalign="right left" columnspacing="0em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mi>E</mi><mi>M</mi><msub><mi>V</mi><mtext>完美資訊</mtext></msub></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><mn>0.25</mn><mo stretchy="false">(</mo><mn>700</mn><mo stretchy="false">)</mo><mo>+</mo><mn>0.75</mn><mo stretchy="false">(</mo><mn>90</mn><mo stretchy="false">)</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><mn>242.5</mn></mrow></mstyle></mtd></mtr></mtable><annotation encoding="application/x-tex">
+\begin{aligned}
+EMV_{\text{完美資訊}}
+&amp;=
+0.25(700)+0.75(90)\\
+&amp;=242.5
+\end{aligned}
+</annotation></semantics></math></span></p>
+<p>無資訊時的最佳期望報酬是 100：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>E</mi><mi>V</mi><mi>P</mi><mi>I</mi><mo>=</mo><mn>242.5</mn><mo>−</mo><mn>100</mn><mo>=</mo><mn>142.5</mn></mrow><annotation encoding="application/x-tex">
+EVPI=242.5-100=142.5
+</annotation></semantics></math></span></p>
+<p>所以：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><menclose notation="box"><mstyle scriptlevel="0" displaystyle="false"><mstyle scriptlevel="0" displaystyle="false"><mstyle scriptlevel="0" displaystyle="true"><mrow><mi>E</mi><mi>V</mi><mi>P</mi><mi>I</mi><mo>=</mo><mn>142.5</mn><mtext> 千美元</mtext></mrow></mstyle></mstyle></mstyle></menclose></mrow><annotation encoding="application/x-tex">
+\boxed{EVPI=142.5\text{ 千美元}}
+</annotation></semantics></math></span></p>
+<p>在相同決策模型、可免費忽略資訊與沒有額外限制的假設下：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mn>0</mn><mo>≤</mo><mi>E</mi><mi>V</mi><mi>S</mi><mi>I</mi><mo>≤</mo><mi>E</mi><mi>V</mi><mi>P</mi><mi>I</mi></mrow><annotation encoding="application/x-tex">
+0\leq EVSI\leq EVPI
+</annotation></semantics></math></span></p>
+<p>本例：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mn>0</mn><mo>≤</mo><mn>53</mn><mo>≤</mo><mn>142.5</mn></mrow><annotation encoding="application/x-tex">
+0\leq53\leq142.5
+</annotation></semantics></math></span></p>
+<p>因此完美資訊價值可視為一般不完美資訊價值的上限。</p>
+<h3>一個教材單位要注意的地方</h3>
+<p>講義 PDF 第 91 頁與第 92 頁呈現的金額位數不一致；第 97 頁標明決策樹使用「千美元」，上面的計算依照<strong>千美元</strong>統一表示。考試作答時最好先在答案旁明確寫出單位，再以老師給定的題目為準。</p>
+<p>來源：《Ch11–Ch13 風險下的決策》，PDF 第 76–97 頁。</p>
+<hr>
+<h2 id="section-17">十七、決策樹的解題順序</h2>
+<p>這也很適合補進筆記。</p>
+<h3>從左到右：畫出發生順序</h3>
+<p>先想：</p>
+<ol>
+<li>先決定要不要做實驗。</li>
+<li>實驗結果出現。</li>
+<li>根據結果決定鑽井或賣地。</li>
+<li>自然狀態揭曉。</li>
+<li>得到報酬。</li>
+</ol>
+<h3>從右到左：計算最佳決策</h3>
+<p>這叫做 <strong>rollback，回推法</strong>：</p>
+<ul>
+<li>遇到機會節點：用機率算期望值。</li>
+<li>遇到決策節點：依目標選最大報酬或最小成本。</li>
+<li>最後回推到一開始要做的決定。</li>
+</ul>
+<p>注意：</p>
+<blockquote>
+<p>在某個決策節點，只能使用那個時間點已知的資訊。</p>
+</blockquote>
+<p>不能在選方案時偷看還沒有發生的自然狀態；這也是「無資訊」「樣本資訊」「完美資訊」有不同價值的原因。</p>
+<hr>
+<h2 id="section-18">十八、貝氏網路：處理多個相互關聯的不確定因素</h2>
+<p>如果只有「有油／沒油」和「震測結果」兩個變數，直接用貝氏公式通常就夠。</p>
+<p>如果有很多變數，例如：</p>
+<ul>
+<li>天氣。</li>
+<li>設備狀態。</li>
+<li>油田地質條件。</li>
+<li>偵測結果。</li>
+<li>設備故障。</li>
+<li>實際開採收益。</li>
+</ul>
+<p>就可以用<strong>貝氏網路</strong>表達它們的條件依賴關係。</p>
+<p>例如：</p>
+<pre><code class="language-text">地質條件 → 是否有油 → 震測結果
+                    → 開採收益
+設備狀態 → 開採收益
+</code></pre>
+<p>數學上，若網路結構假設如圖，聯合分布可分解為：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><mi>G</mi><mo separator="true">,</mo><mi>O</mi><mo separator="true">,</mo><mi>T</mi><mo separator="true">,</mo><mi>E</mi><mo separator="true">,</mo><mi>R</mi><mo stretchy="false">)</mo><mo>=</mo><mi>P</mi><mo stretchy="false">(</mo><mi>G</mi><mo stretchy="false">)</mo><mtext> </mtext><mi>P</mi><mo stretchy="false">(</mo><mi>O</mi><mo>∣</mo><mi>G</mi><mo stretchy="false">)</mo><mtext> </mtext><mi>P</mi><mo stretchy="false">(</mo><mi>T</mi><mo>∣</mo><mi>O</mi><mo stretchy="false">)</mo><mtext> </mtext><mi>P</mi><mo stretchy="false">(</mo><mi>E</mi><mo stretchy="false">)</mo><mtext> </mtext><mi>P</mi><mo stretchy="false">(</mo><mi>R</mi><mo>∣</mo><mi>O</mi><mo separator="true">,</mo><mi>E</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">
+P(G,O,T,E,R)
+=
+P(G)\,
+P(O\mid G)\,
+P(T\mid O)\,
+P(E)\,
+P(R\mid O,E)
+</annotation></semantics></math></span></p>
+<p>這個分解依賴圖中所表達的條件獨立假設。</p>
+<p>得到震測結果後，可以更新對「是否有油」的判斷，再影響對開採收益的預測。</p>
+<p>**要小心：**圖上的箭頭可以表示機率依賴或模型結構；除非另外有足夠的因果假設與證據，不能只因為畫了箭頭就斷言因果關係。</p>
+<p>講義位置：《Ch11–Ch13》，PDF 第 155–158 頁。</p>
+<hr>
+<h2 id="section-19">十九、DEA 還能補充什麼？</h2>
+<p>先前只簡單比較 SMART、AHP、DEA。根據第 10 章，可以再補上：</p>
+<h3>1. DEA 的評估對象是 DMU</h3>
+<p>DMU 是 <strong>Decision Making Unit，決策單位</strong>。</p>
+<p>例如：</p>
+<ul>
+<li>多家銀行分行。</li>
+<li>多間醫院。</li>
+<li>多個工廠。</li>
+<li>多所學校。</li>
+</ul>
+<p>這些單位通常要有<strong>可比較性與同質性</strong>，例如承擔類似任務、具有可比較的投入與產出。</p>
+<h3>2. 它關心的是投入與產出的相對效率</h3>
+<p>例如：</p>
+<table>
+<thead>
+<tr>
+<th>分行</th>
+<th align="right">投入：員工數</th>
+<th align="right">產出：完成業務量</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A</td>
+<td align="right">10</td>
+<td align="right">100</td>
+</tr>
+<tr>
+<td>B</td>
+<td align="right">10</td>
+<td align="right">80</td>
+</tr>
+<tr>
+<td>C</td>
+<td align="right">20</td>
+<td align="right">180</td>
+</tr>
+</tbody></table>
+<p>在只看單一投入、單一產出的簡化情境下：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>生產力</mtext><mo>=</mo><mfrac><mtext>產出</mtext><mtext>投入</mtext></mfrac></mrow><annotation encoding="application/x-tex">
+\text{生產力}
+=
+\frac{\text{產出}}{\text{投入}}
+</annotation></semantics></math></span></p>
+<p>例如：</p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>A</mi><mo>=</mo><mfrac><mn>100</mn><mn>10</mn></mfrac><mo>=</mo><mn>10</mn></mrow><annotation encoding="application/x-tex">
+A=\frac{100}{10}=10
+</annotation></semantics></math></span></p>
+<p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>B</mi><mo>=</mo><mfrac><mn>80</mn><mn>10</mn></mfrac><mo>=</mo><mn>8</mn></mrow><annotation encoding="application/x-tex">
+B=\frac{80}{10}=8
+</annotation></semantics></math></span></p>
+<p>但真實 DEA 可以同時處理<strong>多投入、多產出</strong>，並利用樣本形成效率前緣。</p>
+<h3>3. 效率是「相對於樣本」</h3>
+<p>DEA 的效率值為 1，通常表示：</p>
+<blockquote>
+<p>在所選模型與比較樣本下，該 DMU 位於相對有效率的前緣。</p>
+</blockquote>
+<p>它<strong>不代表</strong>：</p>
+<ul>
+<li>絕對沒有改善空間。</li>
+<li>一定比所有未納入分析的機構好。</li>
+<li>方案符合所有決策者的政策偏好。</li>
+</ul>
+<p>DEA 也對投入、產出指標、異常值與模型假設敏感。</p>
+<p>講義中的 DEA 會涉及 CCR、BCC 等模型；不同模型對規模報酬的假設不同，不能把所有 DEA 的結論混在一起。</p>
+<p>來源：《Ch08–Ch10》，PDF 第 128 頁以後。</p>
+<hr>
+<h2 id="section-20">二十、建議補進原筆記的章節順序</h2>
+<p>原本的期中統整已有決策陷阱、尺度、AHP、等值交換與不確定決策。若要把這五份講義納入，我會建議擴充成：</p>
+<ol>
+<li><p><strong>UNISON 六階段總覽</strong><br>先知道所有工具在整個決策流程中的位置。</p>
+</li>
+<li><p><strong>決策問題與決策陷阱</strong><br>結構化程度、規範／敘述／處方，以及常見偏誤。<br>參考：《Ch02–Ch03》。</p>
+</li>
+<li><p><strong>目標、屬性、結果表</strong><br>根本與工具目標、效度、尺度與支配關係。</p>
+</li>
+<li><p><strong>SMART、價值函數與擺動權重</strong><br>特別補上權重與屬性範圍的關係。</p>
+</li>
+<li><p><strong>AHP</strong><br>補上矩陣、特徵向量與一致性檢查。</p>
+</li>
+<li><p><strong>DEA</strong><br>補上 DMU、效率前緣、相對效率與模型假設。</p>
+</li>
+<li><p><strong>完全不確定決策</strong><br>保留原有的五個準則與後悔值例題。</p>
+</li>
+<li><p><strong>風險下決策與決策樹</strong><br>加入機率、EMV 與回推法。</p>
+</li>
+<li><p><strong>貝氏定理與資訊價值</strong><br>用講義的鑽油例題串起先驗、後驗、EVE 與 EVPI。</p>
+</li>
+<li><p><strong>貝氏網路與敏感度分析</strong><br>理解多個不確定因素如何相互關聯，以及結論何時會改變。</p>
+</li>
+</ol>
+</main></div><footer>根據使用者提供的決策分析講義整理</footer></body></html>
