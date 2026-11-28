@@ -3,7 +3,23 @@
 
 math[display="block"]{display:block;overflow-x:auto;overflow-y:hidden;padding:10px 0;max-width:100%}math{font-size:1.04em}
 .back {color:#d8f1ed;display:inline-block;margin-bottom:18px} math[display="block"]{display:block;max-width:100%;overflow-x:auto;overflow-y:hidden;padding:10px 0} math{font-size:1.04em}
-.back{color:#d8f1ed;display:inline-block;margin-bottom:18px}pre{overflow-x:auto;background:#edf4f8;padding:16px;border-radius:8px;white-space:pre}math[display="block"]{display:block;overflow-x:auto;overflow-y:hidden;max-width:100%;padding:10px 0}</style></head><body><header class="hero"><a class="back" href="決策分析_期中統整.html">← 回到決策分析期中筆記</a><div class="eyebrow">DECISION ANALYSIS · UNISON</div><h1>UNISON 與風險決策</h1><p>六階段架構、SMART、AHP、貝氏更新與資訊價值，搭配逐步計算。</p></header><div class="layout"><nav aria-label="補充筆記目錄"><strong>筆記目錄</strong><ol><li><a href="#section-1">一、UNISON 紫式決策分析架構</a></li><li><a href="#section-2">二、U：瞭解問題與問題定義</a></li><li><a href="#section-3">三、N：利基發掘，界定決策範圍</a></li><li><a href="#section-4">四、I：架構影響關係</a></li><li><a href="#section-5">五、S：感受並客觀敘述方案結果</a></li><li><a href="#section-6">六、O：綜合判斷與權衡</a></li><li><a href="#section-7">七、N：做決策、執行與回饋</a></li><li><a href="#section-8">八、把 UNISON 和先前學過的方法接起來</a></li><li><a href="#section-9">九、值得補充 1：SMART 的權重不只是「重要性」</a></li><li><a href="#section-10">十、值得補充 2：AHP 除了算比較次數，還要檢查一致性</a></li><li><a href="#section-11">十一、值得補充 3：完全不確定與風險決策的差別</a></li><li><a href="#section-12">十二、期望貨幣價值 EMV</a></li><li><a href="#section-13">十三、貝氏定理：新資訊如何改變原本的判斷？</a></li><li><a href="#section-14">十四、用講義的鑽油例子，串起 Bayes 與資訊價值</a></li><li><a href="#section-15">十五、EVE／EVSI：不完美資訊值多少？</a></li><li><a href="#section-16">十六、EVPI：完美資訊的價值</a></li><li><a href="#section-17">十七、決策樹的解題順序</a></li><li><a href="#section-18">十八、貝氏網路：處理多個相互關聯的不確定因素</a></li><li><a href="#section-19">十九、DEA 還能補充什麼？</a></li><li><a href="#section-20">二十、建議補進原筆記的章節順序</a></li></ol></nav><main><h1>UNISON 紫式決策分析與風險決策補充</h1>
+.back{color:#d8f1ed;display:inline-block;margin-bottom:18px}pre{overflow-x:auto;background:#edf4f8;padding:16px;border-radius:8px;white-space:pre}math[display="block"]{display:block;overflow-x:auto;overflow-y:hidden;max-width:100%;padding:10px 0}</style><style>
+main { position:relative; }
+.draw-overlay { position:absolute; inset:0; width:100%; height:100%; overflow:visible; pointer-events:none; z-index:4; }
+.draw-overlay.enabled { pointer-events:auto; touch-action:none; cursor:crosshair; }
+.draw-toolbar { position:fixed; z-index:10; right:12px; bottom:12px; left:12px; display:flex; flex-wrap:wrap; align-items:center; gap:6px; width:fit-content; max-width:calc(100% - 24px); margin:auto; padding:8px; color:#173748; background:#fff; border:1px solid #b9cfcc; border-radius:12px; box-shadow:0 5px 24px #132f3f33; font:14px/1.4 system-ui,sans-serif; }
+.draw-toolbar button { border:1px solid #b9cfcc; border-radius:7px; padding:7px 10px; color:#173748; background:#fff; font:inherit; cursor:pointer; }
+.draw-toolbar button[aria-pressed="true"] { color:white; background:#116f6c; border-color:#116f6c; }
+.draw-toolbar button:focus-visible,.draw-toolbar input:focus-visible { outline:3px solid #e7a94d; outline-offset:2px; }
+.draw-controls:not([hidden]) { display:flex; flex-wrap:wrap; gap:6px; align-items:center; }
+.draw-controls label { display:flex; align-items:center; gap:4px; }
+.draw-controls input[type="color"] { width:32px; height:32px; padding:0; border:0; background:transparent; }
+.draw-controls input[type="range"] { width:70px; }
+.draw-status { color:#405c66; font-size:12px; }
+body { padding-bottom:80px; }
+@media(max-width:600px) { .draw-toolbar { width:calc(100% - 16px); left:8px; right:8px; bottom:8px; } .draw-toolbar button { padding:7px; } .draw-controls input[type="range"] { width:54px; } body { padding-bottom:130px; } }
+
+</style><style>.note-figure{display:block;padding:20px 0 8px}.note-figure svg{display:block;width:100%;height:auto;border:1px solid #d6e5e3;border-radius:18px}</style></head><body><header class="hero"><a class="back" href="決策分析_期中統整.html">← 回到決策分析期中筆記</a><div class="eyebrow">DECISION ANALYSIS · UNISON</div><h1>UNISON 與風險決策</h1><p>六階段架構、SMART、AHP、貝氏更新與資訊價值，搭配逐步計算。</p></header><div class="layout"><nav aria-label="補充筆記目錄"><strong>筆記目錄</strong><ol><li><a href="#section-1">一、UNISON 紫式決策分析架構</a></li><li><a href="#section-2">二、U：瞭解問題與問題定義</a></li><li><a href="#section-3">三、N：利基發掘，界定決策範圍</a></li><li><a href="#section-4">四、I：架構影響關係</a></li><li><a href="#section-5">五、S：感受並客觀敘述方案結果</a></li><li><a href="#section-6">六、O：綜合判斷與權衡</a></li><li><a href="#section-7">七、N：做決策、執行與回饋</a></li><li><a href="#section-8">八、把 UNISON 和先前學過的方法接起來</a></li><li><a href="#section-9">九、值得補充 1：SMART 的權重不只是「重要性」</a></li><li><a href="#section-10">十、值得補充 2：AHP 除了算比較次數，還要檢查一致性</a></li><li><a href="#section-11">十一、值得補充 3：完全不確定與風險決策的差別</a></li><li><a href="#section-12">十二、期望貨幣價值 EMV</a></li><li><a href="#section-13">十三、貝氏定理：新資訊如何改變原本的判斷？</a></li><li><a href="#section-14">十四、用講義的鑽油例子，串起 Bayes 與資訊價值</a></li><li><a href="#section-15">十五、EVE／EVSI：不完美資訊值多少？</a></li><li><a href="#section-16">十六、EVPI：完美資訊的價值</a></li><li><a href="#section-17">十七、決策樹的解題順序</a></li><li><a href="#section-18">十八、貝氏網路：處理多個相互關聯的不確定因素</a></li><li><a href="#section-19">十九、DEA 還能補充什麼？</a></li><li><a href="#section-20">二十、建議補進原筆記的章節順序</a></li></ol></nav><main><h1>UNISON 紫式決策分析與風險決策補充</h1>
 <p>有，而且最值得補充的是：<strong>先前的筆記已經涵蓋決策陷阱、衡量尺度、AHP 比較次數和最小最大後悔值，但對「整個決策流程怎麼串起來」以及「有機率資訊時怎麼決策」還不夠完整。</strong></p>
 <p>你說的 <strong>UNISON</strong>，在這份教材中指的是<strong>紫式決策分析架構</strong>。它不是單一的計算公式，而是一套從釐清問題、建立模型，到執行與回饋的流程。</p>
 <p>這次對照後，建議補充：</p>
@@ -60,7 +76,7 @@ math[display="block"]{display:block;overflow-x:auto;overflow-y:hidden;padding:10
 </tbody></table>
 <p>最後一個 N 取自 decisio<strong>N</strong> 的字尾。講義在不同頁面對各階段的英文文字略有簡化，但六階段的概念一致。</p>
 <p>來源：《Ch04–Ch07 紫式分析決策架構》，PDF 第 3–4 頁。</p>
-<p>整個流程可以先記成：</p>
+<p>整個流程可以先記成：<span class="note-figure"><svg viewBox="0 0 720 260" role="img" aria-label="UNISON 六階段依序為瞭解問題、利基發掘、架構影響關係、客觀描述、綜合判斷、決策與執行"><rect width="720" height="260" rx="18" fill="#edf6f5"/><text x="32" y="38" fill="#20596d" font-size="19" font-weight="700">UNISON · 從問題到行動</text><g font-size="17" text-anchor="middle" font-family="sans-serif"><g fill="#fff" stroke="#bad8d4" stroke-width="2"><rect x="30" y="60" width="200" height="70" rx="10"/><rect x="260" y="60" width="200" height="70" rx="10"/><rect x="490" y="60" width="200" height="70" rx="10"/><rect x="30" y="160" width="200" height="70" rx="10"/><rect x="260" y="160" width="200" height="70" rx="10"/><rect x="490" y="160" width="200" height="70" rx="10"/></g><g fill="#126f6a" font-weight="700"><text x="130" y="88">U · 瞭解問題</text><text x="360" y="88">N · 利基發掘</text><text x="590" y="88">I · 影響關係</text><text x="130" y="188">S · 客觀描述</text><text x="360" y="188">O · 綜合判斷</text><text x="590" y="188">N · 決策執行</text></g><g fill="#516d76" font-size="14"><text x="130" y="112">定義真正的問題</text><text x="360" y="112">目標、方案、不確定性</text><text x="590" y="112">整理元素如何連結</text><text x="130" y="212">建立方案結果表</text><text x="360" y="212">比較價值與權衡</text><text x="590" y="212">執行、追蹤與修正</text></g></g></svg></span></p>
 <p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><menclose notation="box"><mstyle scriptlevel="0" displaystyle="false"><mstyle scriptlevel="0" displaystyle="false"><mstyle scriptlevel="0" displaystyle="true"><mrow><mtext>定義問題</mtext><mo>→</mo><mtext>界定範圍</mtext><mo>→</mo><mtext>建立關係</mtext><mo>→</mo><mtext>描述結果</mtext><mo>→</mo><mtext>衡量權衡</mtext><mo>→</mo><mtext>決策與執行</mtext></mrow></mstyle></mstyle></mstyle></menclose></mrow><annotation encoding="application/x-tex">
 \boxed{
 \text{定義問題}
@@ -639,7 +655,7 @@ w_{\text{安全}}=\frac{70}{250}=0.28
 <li>費用是安全的 2 倍重要。</li>
 <li>時間是安全的 6 倍重要。</li>
 </ul>
-<p>矩陣為：</p>
+<p>矩陣為：<span class="note-figure"><svg viewBox="0 0 720 235" role="img" aria-label="AHP 範例：同一目標下的時間、費用、安全，權重分別約為百分之六十七、二十二和十一"><rect width="720" height="235" rx="18" fill="#edf6f5"/><text x="30" y="36" fill="#20596d" font-size="19" font-weight="700">AHP：比較之後得到的相對權重</text><path d="M360 93 V118 M140 118 H580 M140 118 V142 M360 118 V142 M580 118 V142" fill="none" stroke="#7caeaa" stroke-width="3"/><rect x="250" y="55" width="220" height="40" rx="8" fill="#185c6c"/><text x="360" y="82" text-anchor="middle" fill="white" font-size="16">選擇通勤方式</text><g font-family="sans-serif" text-anchor="middle"><rect x="50" y="142" width="180" height="64" rx="10" fill="#fff" stroke="#bad8d4"/><rect x="270" y="142" width="180" height="64" rx="10" fill="#fff" stroke="#bad8d4"/><rect x="490" y="142" width="180" height="64" rx="10" fill="#fff" stroke="#bad8d4"/><g fill="#126f6a" font-size="17" font-weight="700"><text x="140" y="170">時間</text><text x="360" y="170">費用</text><text x="580" y="170">安全</text></g><g fill="#516d76" font-size="15"><text x="140" y="192">約 66.7%</text><text x="360" y="192">約 22.2%</text><text x="580" y="192">約 11.1%</text></g></g></svg></span></p>
 <p><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>A</mi><mo>=</mo><mrow><mo fence="true">[</mo><mtable rowspacing="0.16em" columnalign="center center center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>1</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>3</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>6</mn></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mn>1</mn><mi mathvariant="normal">/</mi><mn>3</mn></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>1</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>2</mn></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mn>1</mn><mi mathvariant="normal">/</mi><mn>6</mn></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mn>1</mn><mi mathvariant="normal">/</mi><mn>2</mn></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>1</mn></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">
 A=
 \begin{bmatrix}
@@ -1234,4 +1250,120 @@ B=\frac{80}{10}=8
 <li><p><strong>貝氏網路與敏感度分析</strong><br>理解多個不確定因素如何相互關聯，以及結論何時會改變。</p>
 </li>
 </ol>
-</main></div><footer>根據使用者提供的決策分析講義整理</footer></body></html>
+</main></div><footer>根據使用者提供的決策分析講義整理</footer><script>
+(() => {
+  const main = document.querySelector('main');
+  const key = 'notebook-draw-v1:' + decodeURIComponent(location.pathname.split('/').pop());
+  const blocks = Array.from(main.children);
+  const toolbar = document.createElement('div');
+  toolbar.className = 'draw-toolbar';
+  toolbar.setAttribute('aria-label', '手寫筆記工具');
+  toolbar.innerHTML = `<button type="button" data-action="toggle" aria-pressed="false">開始畫畫</button><span class="draw-controls" hidden><button type="button" data-tool="pen" aria-pressed="true">畫筆</button><button type="button" data-tool="highlighter" aria-pressed="false">螢光筆</button><button type="button" data-tool="eraser" aria-pressed="false">橡皮擦</button><label>顏色 <input type="color" value="#d63235" aria-label="畫筆顏色"></label><label>粗細 <input type="range" min="2" max="16" value="4" aria-label="畫筆粗細"></label><button type="button" data-action="clear">清除全部</button></span><span class="draw-status" role="status" aria-live="polite">閱讀模式</span>`;
+  const overlay = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  overlay.setAttribute('class', 'draw-overlay');
+  overlay.setAttribute('aria-hidden', 'true');
+  main.appendChild(overlay);
+  document.body.appendChild(toolbar);
+  const status = toolbar.querySelector('.draw-status');
+  const controls = toolbar.querySelector('.draw-controls');
+  const toggle = toolbar.querySelector('[data-action="toggle"]');
+  const color = toolbar.querySelector('input[type="color"]');
+  const size = toolbar.querySelector('input[type="range"]');
+  let enabled = false, tool = 'pen', active = null, strokes = [], storageAvailable = true;
+  try {
+    const saved = localStorage.getItem(key);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (!Array.isArray(parsed)) throw new Error('Invalid data');
+      strokes = parsed;
+    }
+  } catch (_) { storageAvailable = false; status.textContent = '無法讀取瀏覽器儲存空間，請勿依賴自動保存'; }
+  function save() {
+    if (!storageAvailable) { status.textContent = '無法自動保存，請檢查瀏覽器儲存權限'; return; }
+    try { localStorage.setItem(key, JSON.stringify(strokes)); status.textContent = '已自動保存於此瀏覽器'; }
+    catch (_) { status.textContent = '儲存失敗，筆跡尚未保存'; }
+  }
+  // Illustrations added inside a paragraph must not move earlier saved strokes.
+  function anchorHeight(block, box) {
+    const figures = block.querySelectorAll('.note-figure');
+    return Math.max(box.height - Array.from(figures).reduce((sum, figure) => sum + figure.getBoundingClientRect().height, 0), 1);
+  }
+  function position(point) {
+    const rect = main.getBoundingClientRect();
+    const box = blocks[point.b]?.getBoundingClientRect();
+    if (!box) return null;
+    return { x: point.x * rect.width, y: box.top - rect.top + point.y * anchorHeight(blocks[point.b], box) };
+  }
+  function pointAt(event) {
+    const rect = main.getBoundingClientRect();
+    let index = 0;
+    for (let i = 1; i < blocks.length; i++) {
+      if (blocks[i].getBoundingClientRect().top > event.clientY) break;
+      index = i;
+    }
+    const box = blocks[index].getBoundingClientRect();
+    return {b:index, x:Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width)), y:(event.clientY - box.top) / anchorHeight(blocks[index], box)};
+  }
+  function redraw() {
+    overlay.replaceChildren();
+    for (const stroke of strokes) {
+      if (!Array.isArray(stroke.points) || !stroke.points.length) continue;
+      const points = stroke.points.map(position).filter(Boolean);
+      if (!points.length) continue;
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+      path.setAttribute('points', points.map(p => `${p.x},${p.y}`).join(' ') + (points.length === 1 ? ` ${points[0].x + 0.01},${points[0].y}` : ''));
+      path.setAttribute('fill', 'none');
+      path.setAttribute('stroke', stroke.color);
+      path.setAttribute('stroke-width', stroke.width);
+      path.setAttribute('stroke-opacity', stroke.opacity);
+      path.setAttribute('stroke-linecap', 'round');
+      path.setAttribute('stroke-linejoin', 'round');
+      overlay.appendChild(path);
+    }
+  }
+  function eraseAt(event) {
+    const rect = main.getBoundingClientRect(), x = event.clientX - rect.left, y = event.clientY - rect.top;
+    let hit = -1;
+    const distance = (p,a,b) => { const dx=b.x-a.x, dy=b.y-a.y, d=dx*dx+dy*dy; const t=d ? Math.max(0,Math.min(1,((p.x-a.x)*dx+(p.y-a.y)*dy)/d)) : 0; return Math.hypot(p.x-a.x-t*dx,p.y-a.y-t*dy); };
+    for (let i=strokes.length-1; i>=0 && hit<0; i--) {
+      const pts = strokes[i].points.map(position).filter(Boolean);
+      for (let j=0; j<pts.length; j++) if (distance({x,y}, pts[j], pts[j+1] || pts[j]) <= 12 + strokes[i].width/2) { hit=i; break; }
+    }
+    if (hit>=0) { strokes.splice(hit,1); redraw(); save(); }
+  }
+  toggle.addEventListener('click', () => {
+    enabled = !enabled;
+    overlay.classList.toggle('enabled',enabled);
+    controls.hidden = !enabled;
+    toggle.textContent = enabled ? '完成畫畫' : '開始畫畫';
+    toggle.setAttribute('aria-pressed', String(enabled));
+    if (storageAvailable) status.textContent = enabled ? '畫畫模式：完成後可繼續捲動' : '閱讀模式';
+  });
+  toolbar.querySelectorAll('[data-tool]').forEach(button => button.addEventListener('click', () => {
+    tool = button.dataset.tool;
+    toolbar.querySelectorAll('[data-tool]').forEach(b => b.setAttribute('aria-pressed',String(b===button)));
+  }));
+  toolbar.querySelector('[data-action="clear"]').addEventListener('click', () => {
+    if (strokes.length && confirm('確定清除這篇筆記的所有筆跡？此操作無法復原。')) { strokes=[]; redraw(); save(); }
+  });
+  overlay.addEventListener('pointerdown', event => {
+    if (!enabled || (event.pointerType === 'mouse' && event.button !== 0)) return;
+    event.preventDefault(); overlay.setPointerCapture(event.pointerId);
+    if (tool === 'eraser') { active = {eraser:true}; eraseAt(event); return; }
+    active = {color:color.value, width:Number(size.value)*(tool === 'highlighter' ? 3 : 1), opacity:tool === 'highlighter' ? 0.28 : 1, points:[pointAt(event)]};
+    strokes.push(active); redraw();
+  });
+  overlay.addEventListener('pointermove', event => {
+    if (!active) return;
+    event.preventDefault();
+    if (active.eraser) eraseAt(event); else { active.points.push(pointAt(event)); redraw(); }
+  });
+  function finish() { if (active && !active.eraser) save(); active=null; }
+  overlay.addEventListener('pointerup', finish);
+  overlay.addEventListener('pointercancel', finish);
+  window.addEventListener('resize', redraw);
+  window.addEventListener('pagehide', finish);
+  redraw();
+})();
+
+</script></body></html>
