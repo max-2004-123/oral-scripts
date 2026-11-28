@@ -2,7 +2,23 @@
 :root{color-scheme:light;--ink:#213144;--muted:#617185;--blue:#215c95;--line:#dce6ee;--paper:#fff;--wash:#f2f6f8}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--wash);color:var(--ink);font:16px/1.85 'Microsoft JhengHei',system-ui,sans-serif}a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}.hero{background:#143b5d;color:white;padding:52px max(24px,calc((100vw - 1260px)/2));}.eyebrow{color:#a7d9d5;letter-spacing:.16em;font-size:.8rem;font-weight:700}.hero h1{font-size:clamp(1.8rem,4vw,3rem);line-height:1.3;margin:12px 0}.hero p{color:#d9e8ed;margin:0;max-width:700px}.layout{max-width:1300px;margin:0 auto;display:grid;grid-template-columns:260px minmax(0,1fr);gap:30px;padding:28px 24px 70px}nav{align-self:start;position:sticky;top:20px;max-height:calc(100vh - 40px);overflow:auto;background:white;border:1px solid var(--line);border-radius:14px;padding:20px}nav strong{font-size:1rem}nav ol{padding-left:1.3em;margin:8px 0 0;font-size:.84rem;line-height:1.6}nav li{padding:4px 0}main{min-width:0;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:clamp(22px,5vw,64px);box-shadow:0 12px 34px #1d42580a}main>h1{font-size:1.65rem;margin-top:0}h2{font-size:1.5rem;color:#164a73;border-top:1px solid var(--line);padding-top:36px;margin:48px 0 16px;scroll-margin-top:22px}h3{color:#245e7e;margin-top:28px}p{margin:1em 0}blockquote{margin:24px 0;border-left:4px solid #45a6a0;background:#eff9f7;padding:12px 20px;border-radius:0 10px 10px 0}blockquote p{margin:.4em 0}table{display:block;overflow-x:auto;border-collapse:collapse;max-width:100%;margin:24px 0;font-size:.94rem}th,td{border:1px solid var(--line);padding:10px 14px;text-align:left;vertical-align:top}th{background:#edf4f8;white-space:nowrap}tr:nth-child(even){background:#f8fafb}mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;padding:8px 0}code{background:#eef4f7;border-radius:4px;padding:.1em .3em}hr{border:0;border-top:1px solid var(--line);margin:34px 0}footer{text-align:center;color:var(--muted);font-size:.85rem;margin:20px}@media(max-width:800px){.hero{padding:34px 22px}.layout{display:block;padding:16px 12px 40px}nav{position:static;max-height:none;margin-bottom:16px}nav ol{columns:2;column-gap:20px}nav li{break-inside:avoid}main{padding:25px 20px}}@media(max-width:450px){nav ol{columns:1}body{font-size:15px}}
 
 math[display="block"]{display:block;overflow-x:auto;overflow-y:hidden;padding:10px 0;max-width:100%}math{font-size:1.04em}
-.back {color:#d8f1ed;display:inline-block;margin-bottom:18px} math[display="block"]{display:block;max-width:100%;overflow-x:auto;overflow-y:hidden;padding:10px 0} math{font-size:1.04em}</style></head><body><header class="hero"><div class="eyebrow">DECISION ANALYSIS · STUDY NOTES</div><h1>決策分析期中統整</h1><p>從決策架構、衡量尺度到 AHP 與最小最大後悔值，整理觀念並逐步計算。</p><p><a style="color:#d8f1ed;text-decoration:underline" href="UNISON_紫式決策分析與風險決策補充.html">閱讀 UNISON 與風險決策補充</a></p></header><div class="layout"><nav aria-label="筆記目錄"><strong>筆記目錄</strong><ol><li><a href="#decision-1">一、決策問題的三種結構</a></li><li><a href="#decision-2">二、規範、敘述與處方三種研究</a></li><li><a href="#decision-3">三、決策陷阱</a></li><li><a href="#decision-4">四、效度：你量到的是想量的東西嗎？</a></li><li><a href="#decision-5">五、衡量尺度與允許的轉換</a></li><li><a href="#decision-6">六、策略性、根本性與工具性目標</a></li><li><a href="#decision-7">七、AHP 成對比較</a></li><li><a href="#decision-8">八、SMART、AHP、DEA 比較</a></li><li><a href="#decision-9">九、Even swap 等值交換：汽車題</a></li><li><a href="#decision-10">十、完全不確定下的決策準則</a></li><li><a href="#decision-11">十一、考前自我檢查</a></li></ol></nav><main><h1>決策分析期中統整</h1>
+.back {color:#d8f1ed;display:inline-block;margin-bottom:18px} math[display="block"]{display:block;max-width:100%;overflow-x:auto;overflow-y:hidden;padding:10px 0} math{font-size:1.04em}</style><style>
+main { position:relative; }
+.draw-overlay { position:absolute; inset:0; width:100%; height:100%; overflow:visible; pointer-events:none; z-index:4; }
+.draw-overlay.enabled { pointer-events:auto; touch-action:none; cursor:crosshair; }
+.draw-toolbar { position:fixed; z-index:10; right:12px; bottom:12px; left:12px; display:flex; flex-wrap:wrap; align-items:center; gap:6px; width:fit-content; max-width:calc(100% - 24px); margin:auto; padding:8px; color:#173748; background:#fff; border:1px solid #b9cfcc; border-radius:12px; box-shadow:0 5px 24px #132f3f33; font:14px/1.4 system-ui,sans-serif; }
+.draw-toolbar button { border:1px solid #b9cfcc; border-radius:7px; padding:7px 10px; color:#173748; background:#fff; font:inherit; cursor:pointer; }
+.draw-toolbar button[aria-pressed="true"] { color:white; background:#116f6c; border-color:#116f6c; }
+.draw-toolbar button:focus-visible,.draw-toolbar input:focus-visible { outline:3px solid #e7a94d; outline-offset:2px; }
+.draw-controls:not([hidden]) { display:flex; flex-wrap:wrap; gap:6px; align-items:center; }
+.draw-controls label { display:flex; align-items:center; gap:4px; }
+.draw-controls input[type="color"] { width:32px; height:32px; padding:0; border:0; background:transparent; }
+.draw-controls input[type="range"] { width:70px; }
+.draw-status { color:#405c66; font-size:12px; }
+body { padding-bottom:80px; }
+@media(max-width:600px) { .draw-toolbar { width:calc(100% - 16px); left:8px; right:8px; bottom:8px; } .draw-toolbar button { padding:7px; } .draw-controls input[type="range"] { width:54px; } body { padding-bottom:130px; } }
+
+</style><style>.note-figure{display:block;padding:20px 0 8px}.note-figure svg{display:block;width:100%;height:auto;border:1px solid #d6e5e3;border-radius:18px}</style></head><body><header class="hero"><div class="eyebrow">DECISION ANALYSIS · STUDY NOTES</div><h1>決策分析期中統整</h1><p>從決策架構、衡量尺度到 AHP 與最小最大後悔值，整理觀念並逐步計算。</p><p><a style="color:#d8f1ed;text-decoration:underline" href="UNISON_紫式決策分析與風險決策補充.html">閱讀 UNISON 與風險決策補充</a></p></header><div class="layout"><nav aria-label="筆記目錄"><strong>筆記目錄</strong><ol><li><a href="#decision-1">一、決策問題的三種結構</a></li><li><a href="#decision-2">二、規範、敘述與處方三種研究</a></li><li><a href="#decision-3">三、決策陷阱</a></li><li><a href="#decision-4">四、效度：你量到的是想量的東西嗎？</a></li><li><a href="#decision-5">五、衡量尺度與允許的轉換</a></li><li><a href="#decision-6">六、策略性、根本性與工具性目標</a></li><li><a href="#decision-7">七、AHP 成對比較</a></li><li><a href="#decision-8">八、SMART、AHP、DEA 比較</a></li><li><a href="#decision-9">九、Even swap 等值交換：汽車題</a></li><li><a href="#decision-10">十、完全不確定下的決策準則</a></li><li><a href="#decision-11">十一、考前自我檢查</a></li></ol></nav><main><h1>決策分析期中統整</h1>
 <p>根據《統整.docx》中的 14 張考題、答案與教材照片整理。內容重組成可複習的觀念、公式與例題；推導與部分更正是補充說明，並非原文件逐字內容。原件圖片中的個人姓名與學號不列入筆記。</p>
 <h2 id="decision-1">一、決策問題的三種結構</h2>
 <p>結構化程度描述的是：目標、方案、限制、資料與評估規則是否清楚，並非問題難不難。</p>
@@ -430,7 +446,7 @@ math[display="block"]{display:block;overflow-x:auto;overflow-y:hidden;padding:10
 <td align="right">15</td>
 </tr>
 </tbody></table>
-<p>例如 A4 在 15°C 的後悔值是 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>27</mn><mo>−</mo><mn>15</mn><mo>=</mo><mn>12</mn></mrow><annotation encoding="application/x-tex">27-15=12</annotation></semantics></math></span>。各列最大值為 15、17、22、12、15，因此選 <strong>A4 七股鹽山</strong>，最壞後悔值為 12。這是依此準則得到的選擇，並非對所有風險偏好都最優。</p>
+<p>例如 A4 在 15°C 的後悔值是 <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>27</mn><mo>−</mo><mn>15</mn><mo>=</mo><mn>12</mn></mrow><annotation encoding="application/x-tex">27-15=12</annotation></semantics></math></span>。各列最大值為 15、17、22、12、15，因此選 <strong>A4 七股鹽山</strong>，最壞後悔值為 12。這是依此準則得到的選擇，並非對所有風險偏好都最優。<span class="note-figure"><svg viewBox="0 0 720 225" role="img" aria-label="後悔值計算示例：15 度時最高報酬 27 減去 A4 報酬 15，後悔值為 12；A4 四個後悔值分別為 12、2、0、7，最大值為 12"><rect width="720" height="225" rx="18" fill="#edf6f5"/><text x="30" y="36" fill="#20596d" font-size="19" font-weight="700">最小最大後悔值：以 A4 為例</text><g text-anchor="middle" font-family="sans-serif"><rect x="30" y="56" width="660" height="62" rx="10" fill="#fff" stroke="#bad8d4"/><text x="360" y="82" fill="#526f78" font-size="15">15°C 時：該狀態的最高報酬 − A4 的報酬</text><text x="360" y="108" fill="#126f6a" font-size="23" font-weight="700">27 − 15 = 12</text><text x="130" y="153" fill="#526f78" font-size="16">A4 各狀態後悔值</text><text x="400" y="153" fill="#20596d" font-size="19">12　 2　 0　 7</text><text x="360" y="195" fill="#126f6a" font-size="18" font-weight="700">取最大值 12，再與其他方案比較</text></g></svg></span></p>
 <h2 id="decision-11">十一、考前自我檢查</h2>
 <ol>
 <li>結構化是容易求解的同義詞嗎？為什麼？</li>
@@ -442,4 +458,120 @@ math[display="block"]{display:block;overflow-x:auto;overflow-y:hidden;padding:10
 <li>Even swap 的等值判斷從哪裡來？何時能刪除受支配方案？</li>
 <li>報酬表的後悔值如何由每一欄的最佳報酬求出？</li>
 </ol>
-</main></div><footer>根據使用者提供的課堂資料整理</footer></body></html>
+</main></div><footer>根據使用者提供的課堂資料整理</footer><script>
+(() => {
+  const main = document.querySelector('main');
+  const key = 'notebook-draw-v1:' + decodeURIComponent(location.pathname.split('/').pop());
+  const blocks = Array.from(main.children);
+  const toolbar = document.createElement('div');
+  toolbar.className = 'draw-toolbar';
+  toolbar.setAttribute('aria-label', '手寫筆記工具');
+  toolbar.innerHTML = `<button type="button" data-action="toggle" aria-pressed="false">開始畫畫</button><span class="draw-controls" hidden><button type="button" data-tool="pen" aria-pressed="true">畫筆</button><button type="button" data-tool="highlighter" aria-pressed="false">螢光筆</button><button type="button" data-tool="eraser" aria-pressed="false">橡皮擦</button><label>顏色 <input type="color" value="#d63235" aria-label="畫筆顏色"></label><label>粗細 <input type="range" min="2" max="16" value="4" aria-label="畫筆粗細"></label><button type="button" data-action="clear">清除全部</button></span><span class="draw-status" role="status" aria-live="polite">閱讀模式</span>`;
+  const overlay = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  overlay.setAttribute('class', 'draw-overlay');
+  overlay.setAttribute('aria-hidden', 'true');
+  main.appendChild(overlay);
+  document.body.appendChild(toolbar);
+  const status = toolbar.querySelector('.draw-status');
+  const controls = toolbar.querySelector('.draw-controls');
+  const toggle = toolbar.querySelector('[data-action="toggle"]');
+  const color = toolbar.querySelector('input[type="color"]');
+  const size = toolbar.querySelector('input[type="range"]');
+  let enabled = false, tool = 'pen', active = null, strokes = [], storageAvailable = true;
+  try {
+    const saved = localStorage.getItem(key);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (!Array.isArray(parsed)) throw new Error('Invalid data');
+      strokes = parsed;
+    }
+  } catch (_) { storageAvailable = false; status.textContent = '無法讀取瀏覽器儲存空間，請勿依賴自動保存'; }
+  function save() {
+    if (!storageAvailable) { status.textContent = '無法自動保存，請檢查瀏覽器儲存權限'; return; }
+    try { localStorage.setItem(key, JSON.stringify(strokes)); status.textContent = '已自動保存於此瀏覽器'; }
+    catch (_) { status.textContent = '儲存失敗，筆跡尚未保存'; }
+  }
+  // Illustrations added inside a paragraph must not move earlier saved strokes.
+  function anchorHeight(block, box) {
+    const figures = block.querySelectorAll('.note-figure');
+    return Math.max(box.height - Array.from(figures).reduce((sum, figure) => sum + figure.getBoundingClientRect().height, 0), 1);
+  }
+  function position(point) {
+    const rect = main.getBoundingClientRect();
+    const box = blocks[point.b]?.getBoundingClientRect();
+    if (!box) return null;
+    return { x: point.x * rect.width, y: box.top - rect.top + point.y * anchorHeight(blocks[point.b], box) };
+  }
+  function pointAt(event) {
+    const rect = main.getBoundingClientRect();
+    let index = 0;
+    for (let i = 1; i < blocks.length; i++) {
+      if (blocks[i].getBoundingClientRect().top > event.clientY) break;
+      index = i;
+    }
+    const box = blocks[index].getBoundingClientRect();
+    return {b:index, x:Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width)), y:(event.clientY - box.top) / anchorHeight(blocks[index], box)};
+  }
+  function redraw() {
+    overlay.replaceChildren();
+    for (const stroke of strokes) {
+      if (!Array.isArray(stroke.points) || !stroke.points.length) continue;
+      const points = stroke.points.map(position).filter(Boolean);
+      if (!points.length) continue;
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+      path.setAttribute('points', points.map(p => `${p.x},${p.y}`).join(' ') + (points.length === 1 ? ` ${points[0].x + 0.01},${points[0].y}` : ''));
+      path.setAttribute('fill', 'none');
+      path.setAttribute('stroke', stroke.color);
+      path.setAttribute('stroke-width', stroke.width);
+      path.setAttribute('stroke-opacity', stroke.opacity);
+      path.setAttribute('stroke-linecap', 'round');
+      path.setAttribute('stroke-linejoin', 'round');
+      overlay.appendChild(path);
+    }
+  }
+  function eraseAt(event) {
+    const rect = main.getBoundingClientRect(), x = event.clientX - rect.left, y = event.clientY - rect.top;
+    let hit = -1;
+    const distance = (p,a,b) => { const dx=b.x-a.x, dy=b.y-a.y, d=dx*dx+dy*dy; const t=d ? Math.max(0,Math.min(1,((p.x-a.x)*dx+(p.y-a.y)*dy)/d)) : 0; return Math.hypot(p.x-a.x-t*dx,p.y-a.y-t*dy); };
+    for (let i=strokes.length-1; i>=0 && hit<0; i--) {
+      const pts = strokes[i].points.map(position).filter(Boolean);
+      for (let j=0; j<pts.length; j++) if (distance({x,y}, pts[j], pts[j+1] || pts[j]) <= 12 + strokes[i].width/2) { hit=i; break; }
+    }
+    if (hit>=0) { strokes.splice(hit,1); redraw(); save(); }
+  }
+  toggle.addEventListener('click', () => {
+    enabled = !enabled;
+    overlay.classList.toggle('enabled',enabled);
+    controls.hidden = !enabled;
+    toggle.textContent = enabled ? '完成畫畫' : '開始畫畫';
+    toggle.setAttribute('aria-pressed', String(enabled));
+    if (storageAvailable) status.textContent = enabled ? '畫畫模式：完成後可繼續捲動' : '閱讀模式';
+  });
+  toolbar.querySelectorAll('[data-tool]').forEach(button => button.addEventListener('click', () => {
+    tool = button.dataset.tool;
+    toolbar.querySelectorAll('[data-tool]').forEach(b => b.setAttribute('aria-pressed',String(b===button)));
+  }));
+  toolbar.querySelector('[data-action="clear"]').addEventListener('click', () => {
+    if (strokes.length && confirm('確定清除這篇筆記的所有筆跡？此操作無法復原。')) { strokes=[]; redraw(); save(); }
+  });
+  overlay.addEventListener('pointerdown', event => {
+    if (!enabled || (event.pointerType === 'mouse' && event.button !== 0)) return;
+    event.preventDefault(); overlay.setPointerCapture(event.pointerId);
+    if (tool === 'eraser') { active = {eraser:true}; eraseAt(event); return; }
+    active = {color:color.value, width:Number(size.value)*(tool === 'highlighter' ? 3 : 1), opacity:tool === 'highlighter' ? 0.28 : 1, points:[pointAt(event)]};
+    strokes.push(active); redraw();
+  });
+  overlay.addEventListener('pointermove', event => {
+    if (!active) return;
+    event.preventDefault();
+    if (active.eraser) eraseAt(event); else { active.points.push(pointAt(event)); redraw(); }
+  });
+  function finish() { if (active && !active.eraser) save(); active=null; }
+  overlay.addEventListener('pointerup', finish);
+  overlay.addEventListener('pointercancel', finish);
+  window.addEventListener('resize', redraw);
+  window.addEventListener('pagehide', finish);
+  redraw();
+})();
+
+</script></body></html>
